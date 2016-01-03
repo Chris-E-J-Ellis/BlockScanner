@@ -13,7 +13,7 @@ namespace BlockScanner
     {
         static void Main(string[] args)
         {
-            var playField = Scanner.LoadBMP("Images/Tetris.bmp");
+            var playField = Scanner.LoadBMP("Images/Tetris.Real.bmp");
 
             Rectangle rect = new Rectangle(0, 0, playField.Width, playField.Height);
 
@@ -21,6 +21,9 @@ namespace BlockScanner
 
             // Get the address of the first line.
             IntPtr ptr = data.Scan0;
+
+            //data.Width = 240;
+            //data.Height = 480;
 
             // Declare an array to hold the bytes of the bitmap.
             int bytes = Math.Abs(data.Stride) * data.Height;
@@ -32,24 +35,26 @@ namespace BlockScanner
             // Approximate block locations. 
             var pixelSize = 3;
             var padding = data.Stride - (data.Width * pixelSize);
+            var additionalPlayfieldW = data.Width % 20;
+            var additionalPlayfieldH = data.Height % 10;
 
             var gridWidth = 10;
             var gridHeight = 20;
             var sampleWidth = data.Width / gridWidth;
             var sampleHeight = data.Height / gridHeight;
 
-            Console.WriteLine(sampleWidth);
-
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
             // Start from midpoint.
-            var index = (sampleWidth/2)*pixelSize + (sampleHeight/2 * data.Width * pixelSize);
+            var index = (sampleWidth / 2) * pixelSize
+                + (sampleHeight / 2 * data.Stride);
+
             var builder = new StringBuilder();
 
-            for (var y = 1; y < data.Height; y += sampleHeight)
+            for (var y = 1; y < data.Height - additionalPlayfieldH; y += sampleHeight)
             {
-                for (var x = 1; x < data.Width; x += sampleWidth)
+                for (var x = 1; x < data.Width - additionalPlayfieldW; x += sampleWidth)
                 {
                     Color pixelColor = Color.FromArgb(
                         pixelSize == 3 ? 255 : rgbValues[index + 3], // A component if present
@@ -58,20 +63,27 @@ namespace BlockScanner
                         rgbValues[index]      // B component
                         );
 
+                    if (pixelColor.R > 230
+                        || pixelColor.B > 210
+                        || pixelColor.G > 210
+                        || pixelColor.R + pixelColor.G > 300 && pixelColor.B < 50)
+                    {
+                        builder.Append("1");
+                    }
+                    else
+                        builder.Append("0");
+
                     rgbValues[index] = 255;
                     rgbValues[index + 2] = 255;
                     rgbValues[index + 1] = 255;
-
-                    if (pixelColor.R > 180)
-                        builder.Append("1");
-                    else
-                        builder.Append("0");
 
                     index += pixelSize * sampleWidth;
                 }
 
                 builder.AppendLine();
-                index += padding + ((sampleWidth - 1) * data.Width * pixelSize);
+
+                index += (additionalPlayfieldW * pixelSize) + padding // Skip padding.
+                    + (sampleHeight-1) * data.Stride; // Next Sample row.
             }
 
             timer.Stop();

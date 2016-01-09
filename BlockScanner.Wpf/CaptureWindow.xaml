@@ -1,0 +1,11 @@
+﻿<Window x:Class="BlockScanner.Wpf.CaptureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        WindowState="Maximized"
+        Opacity=".3"
+        AllowsTransparency="True"
+        Background="Black"
+        Title="CaptureWindow" PreviewMouseDown="Window_PreviewMouseDown" PreviewMouseMove="Window_PreviewMouseMove">
+    <Canvas x:Name="canvas" />
+</Window>

@@ -1,0 +1,20 @@
+﻿<Window x:Class="BlockScanner.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <UniformGrid>
+        <Button Name="BeginSelection" 
+                Content="Select Capture Area"
+                Click="BeginSelection_Click" />
+        <UniformGrid Columns="2">
+            <TextBlock Name="Xl" Text="X"/> 
+            <TextBlock Name="X" /> 
+            <TextBlock Name="Yl" Text="Y"/> 
+            <TextBlock Name="Y" /> 
+            <TextBlock Name="Widthl" Text="Width"/> 
+            <TextBlock Name="Width" /> 
+            <TextBlock Name="Heightl" Text="Height"/> 
+            <TextBlock Name="Height" /> 
+        </UniformGrid>
+        </UniformGrid>
+</Window>

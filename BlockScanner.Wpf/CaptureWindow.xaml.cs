@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace BlockScanner.Wpf
 {
     /// <summary>
     /// Interaction logic for CaptureWindow.xaml
     /// </summary>
+    // Capture technique based on this article: http://www.abhisheksur.com/2010/04/screen-capture-using-wpf-winforms.html
     public partial class CaptureWindow : Window
     {
         private double x;
@@ -84,8 +78,8 @@ namespace BlockScanner.Wpf
 
                     this.SelectionHeight = r.Height;
                     this.SelectionWidth = r.Width;
-                    this.SelectionX = curx;
-                    this.SelectionY = cury;
+                    this.SelectionX = Canvas.GetLeft(r);
+                    this.SelectionY = Canvas.GetTop(r);
 
                     this.Close();
                 }

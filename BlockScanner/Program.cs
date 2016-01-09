@@ -11,8 +11,6 @@ namespace BlockScanner
 {
     class Program
     {
-        private readonly Stopwatch sw = new Stopwatch();
-
         static void Main(string[] args)
         {
             Stopwatch timer = new Stopwatch();
@@ -44,9 +42,9 @@ namespace BlockScanner
             return b;
         }
 
-        static void Capture()
+        static void ScanImage()
         {
-            var playField = Scanner.LoadBMP("Images/Tetris.Real.bmp");
+            var playField = new Bitmap("Images/Tetris.Real.bmp");
 
             Rectangle rect = new Rectangle(0, 0, playField.Width, playField.Height);
 

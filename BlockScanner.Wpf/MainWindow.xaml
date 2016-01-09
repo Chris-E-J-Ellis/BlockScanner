@@ -7,14 +7,15 @@
                 Content="Select Capture Area"
                 Click="BeginSelection_Click" />
         <UniformGrid Columns="2">
-            <TextBlock Name="Xl" Text="X"/> 
-            <TextBlock Name="X" /> 
-            <TextBlock Name="Yl" Text="Y"/> 
-            <TextBlock Name="Y" /> 
-            <TextBlock Name="Widthl" Text="Width"/> 
-            <TextBlock Name="Width" /> 
-            <TextBlock Name="Heightl" Text="Height"/> 
-            <TextBlock Name="Height" /> 
+            <TextBlock Name="Xl" Text="X"/>
+            <TextBlock Name="X" />
+            <TextBlock Name="Yl" Text="Y"/>
+            <TextBlock Name="Y" />
+            <TextBlock Name="Widthl" Text="Width"/>
+            <TextBlock Name="Widthv" />
+            <TextBlock Name="Heightl" Text="Height"/>
+            <TextBlock Name="Heightv" />
         </UniformGrid>
-        </UniformGrid>
+        <Button Name="DumpScanArea" Content="Dump Scan Area (./Images/cap.bmp)" Click="DumpScanArea_Click" />
+    </UniformGrid>
 </Window>

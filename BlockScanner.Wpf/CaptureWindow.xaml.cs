@@ -75,11 +75,13 @@ namespace BlockScanner.Wpf
                     this.x = this.y = 0;
                     this.isMouseDown = false;
 
-
+                    // Convert from Wpf coordinates;
+                    Point topLeft = this.PointToScreen(new Point(Canvas.GetLeft(r), Canvas.GetTop(r)));
+                    
                     this.SelectionHeight = r.Height;
                     this.SelectionWidth = r.Width;
-                    this.SelectionX = Canvas.GetLeft(r);
-                    this.SelectionY = Canvas.GetTop(r);
+                    this.SelectionX = topLeft.X;
+                    this.SelectionY = topLeft.Y;
 
                     this.Close();
                 }

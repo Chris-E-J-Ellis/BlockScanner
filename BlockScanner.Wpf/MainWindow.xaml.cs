@@ -23,16 +23,18 @@ namespace BlockScanner.Wpf
         {
             var captureZone = new CaptureWindow();
             captureZone.ShowDialog();
-            X.Text = captureZone.SelectionX.ToString();
-            Y.Text = captureZone.SelectionY.ToString();
-            Widthv.Text = captureZone.SelectionWidth.ToString();
-            Heightv.Text = captureZone.SelectionHeight.ToString();
+            XCoord.Text = captureZone.SelectionX.ToString();
+            YCoord.Text = captureZone.SelectionY.ToString();
+            ScanWidth.Text = captureZone.SelectionWidth.ToString();
+            ScanHeight.Text = captureZone.SelectionHeight.ToString();
 
             scanner.PlayfieldWidthPixels = (int)captureZone.SelectionWidth;
             scanner.PlayfieldHeightPixels = (int)captureZone.SelectionHeight;
             scanner.PlayfieldXCoord = (int)captureZone.SelectionX;
             scanner.PlayfieldYCoord = (int)captureZone.SelectionY;
 
+            // Rough, whilst I sort out what this is going to look like.
+            // Should use a cancellation token.
             Task scanTask = new Task(() => { scanner.Start(); });
 
             if (!scanner.Scanning)
@@ -42,6 +44,19 @@ namespace BlockScanner.Wpf
         private void DumpScanArea_Click(object sender, RoutedEventArgs e)
         {
             scanner.DumpScanArea("Images/cap.bmp");
+        }
+
+        private void RunTestArea_Click(object sender, RoutedEventArgs e)
+        {
+            scanner.PlayfieldWidthPixels = 400;
+            scanner.PlayfieldHeightPixels = 400; 
+            scanner.PlayfieldXCoord = 0;
+            scanner.PlayfieldYCoord = 0; 
+
+            Task scanTask = new Task(() => { scanner.Start(); });
+
+            if (!scanner.Scanning)
+                scanTask.Start();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

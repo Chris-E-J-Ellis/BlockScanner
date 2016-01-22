@@ -181,6 +181,13 @@ namespace BlockScanner
             var additionalPlayfieldW = data.Width % sampleWidth;
             var additionalPlayfieldH = data.Height % sampleHeight;
 
+            // Attempt to account for additional Height/Widths by boosting pixel positions.
+            // May change loop/samples to use floats instead.
+            float missingPixelsPerColumn = additionalPlayfieldW / (float)gridWidth;
+            float missingPixelsPerRow = additionalPlayfieldH / (float)gridHeight;
+            float widthBoost = 0;
+            float heightBoost = 0;
+
             // Start from midpoint.
             var index = (sampleWidth / 2) * pixelSize
                 + (sampleHeight / 2 * data.Stride);
@@ -190,6 +197,8 @@ namespace BlockScanner
 
             for (var y = 1; y < maxSampleHeight; y += sampleHeight)
             {
+                widthBoost = 0;
+
                 for (var x = 1; x < maxSampleWidth; x += sampleWidth)
                 {
                     rgbValues[index] = 255;
@@ -197,10 +206,27 @@ namespace BlockScanner
                     rgbValues[index + 1] = 255;
 
                     index += pixelSize * sampleWidth;
+
+                    widthBoost += missingPixelsPerColumn;
+
+                    if (widthBoost > 1)
+                    {
+                        index += pixelSize;
+                        widthBoost -= 1;
+                    }
                 }
 
-                index += (additionalPlayfieldW * pixelSize) + padding // Skip padding.
+                index += pixelSize + padding // Skip padding.
                     + (sampleHeight - 1) * data.Stride; // Next Sample row.
+
+                heightBoost += missingPixelsPerRow;
+
+                if (heightBoost > 1)
+                {
+                    index += data.Stride;
+
+                    heightBoost -= 1;
+                }
             }
 
             // Copy the RGB values back to the bitmap

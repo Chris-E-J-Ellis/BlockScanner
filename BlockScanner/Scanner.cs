@@ -107,8 +107,13 @@ namespace BlockScanner
             var gridHeight = 20;
             var sampleWidth = data.Width / gridWidth;
             var sampleHeight = data.Height / gridHeight;
-            var additionalPlayfieldW = data.Width % sampleWidth;
-            var additionalPlayfieldH = data.Height % sampleHeight;
+            
+            // Attempt to account for additional Height/Widths by boosting pixel positions.
+            // May change loop/samples to use floats instead.
+            float missingPixelsPerColumn = (float)(data.Width % sampleWidth) / (float)gridWidth;
+            float missingPixelsPerRow = (float)(data.Height % sampleHeight) / (float)gridHeight;
+            float widthBoost = 0;
+            float heightBoost = 0;
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
@@ -119,11 +124,13 @@ namespace BlockScanner
 
             var builder = new StringBuilder();
 
-            var maxSampleHeight = data.Height - additionalPlayfieldH;
-            var maxSampleWidth = data.Width - additionalPlayfieldW;
+            var maxSampleHeight = sampleHeight * gridHeight;
+            var maxSampleWidth = sampleWidth * gridWidth;
 
             for (var y = 1; y < maxSampleHeight; y += sampleHeight)
             {
+                widthBoost = 0;
+
                 for (var x = 1; x < maxSampleWidth; x += sampleWidth)
                 {
                     if (DetectBlock(rgbValues, index))
@@ -132,12 +139,31 @@ namespace BlockScanner
                         builder.Append("_");
 
                     index += pixelSize * sampleWidth;
+
+                    widthBoost += missingPixelsPerColumn;
+
+                    if (widthBoost > 1)
+                    {
+                        index += pixelSize;
+                        widthBoost -= 1;
+                    }
                 }
 
                 builder.AppendLine();
 
-                index += (additionalPlayfieldW * pixelSize) + padding // Skip padding.
+                // Skip any remaining fractional pixels.
+                if (Math.Round(widthBoost) == 1)
+                    index += pixelSize;
+
+                index += padding // Skip padding.
                     + (sampleHeight - 1) * data.Stride; // Next Sample row.
+
+                if (heightBoost > 1)
+                {
+                    index += data.Stride;
+
+                    heightBoost -= 1;
+                }
             }
 
             timer.Stop();
@@ -178,13 +204,11 @@ namespace BlockScanner
             var gridHeight = 20;
             var sampleWidth = data.Width / gridWidth;
             var sampleHeight = data.Height / gridHeight;
-            var additionalPlayfieldW = data.Width % sampleWidth;
-            var additionalPlayfieldH = data.Height % sampleHeight;
 
             // Attempt to account for additional Height/Widths by boosting pixel positions.
             // May change loop/samples to use floats instead.
-            float missingPixelsPerColumn = additionalPlayfieldW / (float)gridWidth;
-            float missingPixelsPerRow = additionalPlayfieldH / (float)gridHeight;
+            float missingPixelsPerColumn = (float)(data.Width % sampleWidth) / (float)gridWidth;
+            float missingPixelsPerRow = (float)(data.Height % sampleHeight) / (float)gridHeight;
             float widthBoost = 0;
             float heightBoost = 0;
 
@@ -192,8 +216,8 @@ namespace BlockScanner
             var index = (sampleWidth / 2) * pixelSize
                 + (sampleHeight / 2 * data.Stride);
 
-            var maxSampleHeight = data.Height - additionalPlayfieldH;
-            var maxSampleWidth = data.Width - additionalPlayfieldW;
+            var maxSampleHeight = sampleHeight * gridHeight;
+            var maxSampleWidth = sampleWidth * gridWidth; 
 
             for (var y = 1; y < maxSampleHeight; y += sampleHeight)
             {
@@ -216,9 +240,14 @@ namespace BlockScanner
                     }
                 }
 
-                index += pixelSize + padding // Skip padding.
+                // Skip any remaining fractional pixels.
+                if (Math.Round(widthBoost) == 1)
+                    index += pixelSize;
+
+                index += padding // Skip padding.
                     + (sampleHeight - 1) * data.Stride; // Next Sample row.
 
+                // Boost any fractional pixels.
                 heightBoost += missingPixelsPerRow;
 
                 if (heightBoost > 1)

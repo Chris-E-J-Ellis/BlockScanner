@@ -31,7 +31,6 @@ namespace BlockScanner
 
         public Scanner()
         {
-            Detector = new BasicDetector();
         }
 
         public bool Scanning { get { return this.scanning; } }
@@ -43,8 +42,6 @@ namespace BlockScanner
         public int PlayfieldWidthPixels { get; set; }
 
         public int PlayfieldHeightPixels { get; set; }
-
-        public IDetector Detector { get; set; }
 
         // Start/Launch a scan job, temporary until I sort out more of the structure.
         public void Start()
@@ -70,8 +67,11 @@ namespace BlockScanner
             var initialFrame = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
             ConfigureScanner(initialFrame);
 
+            // Simple detector.
+            var detector = new BasicDetector();
+
             // Simple Render.
-            var simpleRenderer = new BasicRenderer();
+            var simpleRenderer = new MonochromeBitmapRender();
 
             while (scanning)
             {
@@ -80,7 +80,7 @@ namespace BlockScanner
 
                 var cap = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
 
-                var frameData = AnalyseFrame(cap, Detector.GetDetector());
+                var frameData = AnalyseFrame(cap, detector.GetDetector());
 
                 simpleRenderer.Render(frameData);
 
@@ -200,13 +200,9 @@ namespace BlockScanner
             return b;
         }
 
-        private static void DumpFrameWithSamplePoints(Bitmap frame, string filename)
+        private void DumpFrameWithSamplePoints(Bitmap frame, string filename)
         {
-            var playField = frame;
-
-            Rectangle rect = new Rectangle(0, 0, playField.Width, playField.Height);
-
-            BitmapData data = playField.LockBits(rect, ImageLockMode.ReadWrite, playField.PixelFormat);
+            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
             // Get the address of the first line.
             IntPtr ptr = data.Scan0;
@@ -218,28 +214,11 @@ namespace BlockScanner
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            // Approximate block locations. 
-            var pixelSize = 3;
-            var padding = data.Stride - (data.Width * pixelSize);
-
-            var gridWidth = 10;
-            var gridHeight = 20;
-            var sampleWidth = data.Width / gridWidth;
-            var sampleHeight = data.Height / gridHeight;
-
-            // Attempt to account for additional Height/Widths by boosting pixel positions.
-            // May change loop/samples to use floats instead.
-            float missingPixelsPerColumn = (float)(data.Width % sampleWidth) / (float)gridWidth;
-            float missingPixelsPerRow = (float)(data.Height % sampleHeight) / (float)gridHeight;
             float widthBoost = 0;
             float heightBoost = 0;
 
             // Start from midpoint.
-            var index = (sampleWidth / 2) * pixelSize
-                + (sampleHeight / 2 * data.Stride);
-
-            var maxSampleHeight = sampleHeight * gridHeight;
-            var maxSampleWidth = sampleWidth * gridWidth; 
+            var index = startingScanIndex;
 
             for (var y = 1; y < maxSampleHeight; y += sampleHeight)
             {
@@ -284,9 +263,9 @@ namespace BlockScanner
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
 
             // Unlock the bits.
-            playField.UnlockBits(data);
+            frame.UnlockBits(data);
 
-            playField.Save(filename);
+            frame.Save(filename);
         }
     }
 }

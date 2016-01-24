@@ -2,8 +2,8 @@
 
 namespace BlockScanner.Detectors
 {
-    public interface IDetector
+    public interface IDetector<T>
     {
-        Func<byte[], int, bool> GetDetector();
+        Func<byte[], int, T> GetDetector();
     }
 }

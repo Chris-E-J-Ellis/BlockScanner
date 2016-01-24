@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace BlockScanner.Detectors
 {
-    public class BasicDetector : IDetector
+    public class BasicDetector : IDetector<bool>
     {
         public static Func<byte[], int, bool> BasicDetectorFunc =
             new Func<byte[], int, bool>((rgbValues, index) =>

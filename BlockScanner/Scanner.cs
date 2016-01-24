@@ -68,10 +68,10 @@ namespace BlockScanner
             ConfigureScanner(initialFrame);
 
             // Simple detector.
-            var detector = new BasicDetector();
+            var detector = new PassThroughDetector();
 
             // Simple Render.
-            var simpleRenderer = new MonochromeBitmapRender();
+            var simpleRenderer = new ColourBitmapRenderer();
 
             while (scanning)
             {
@@ -113,7 +113,7 @@ namespace BlockScanner
                 + (sampleHeight / 2 * data.Stride);
         }
 
-        public bool[][] AnalyseFrame(Bitmap frame, Func<byte[], int, bool> detectBlock)
+        public T[][] AnalyseFrame<T>(Bitmap frame, Func<byte[], int, T> detectBlock)
         {
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
@@ -136,12 +136,12 @@ namespace BlockScanner
             // Start from midpoint.
             var index = startingScanIndex;
 
-            var grid = new bool[gridHeight][];
+            var grid = new T[gridHeight][];
 
             for (var y = 0; y < gridHeight; y++)
             {
                 widthBoost = 0;
-                grid[y] = new bool[gridWidth];
+                grid[y] = new T[gridWidth];
 
                 for (var x = 0; x < gridWidth; x++)
                 {

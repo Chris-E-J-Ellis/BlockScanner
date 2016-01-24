@@ -22,7 +22,14 @@ namespace BlockScanner.Rendering
 
                 output.Save("Images/output.bmp");
 
-                var doubleSize = new Bitmap(output, new Size(output.Width * 2, output.Height * 2));
+                var doubleSize = new Bitmap(output.Width * 2, output.Height * 2);
+
+                using (Graphics g = Graphics.FromImage(doubleSize))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    g.DrawImage(output, 0, 0, width * 2, height * 2);
+                }
+
                 doubleSize.Save("Images/outputDouble.bmp");
 
                 // Temporary choke method, shouldn't use this to actually render output (bitmap writing is slow).

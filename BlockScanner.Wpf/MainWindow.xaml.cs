@@ -21,6 +21,8 @@ namespace BlockScanner.Wpf
 
         private void BeginSelection_Click(object sender, RoutedEventArgs e)
         {
+            scanner.Stop();
+
             var captureZone = new CaptureWindow();
             captureZone.ShowDialog();
             XCoord.Text = captureZone.SelectionX.ToString();

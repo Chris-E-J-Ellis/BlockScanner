@@ -14,20 +14,11 @@ namespace BlockScanner
         // Fields related to scanning area.
         private Rectangle rectangle;
         private int pixelSize = 3;
-        private int padding;
 
         private int gridWidth = 10;
         private int gridHeight = 20;
-        private int sampleWidth;
-        private int sampleHeight;
-        private int startingScanIndex;
-        private int maxSampleHeight;
-        private int maxSampleWidth;
-
-        // Attempt to account for additional Height/Widths by boosting pixel positions.
-        // May change loop/samples to use floats instead.
-        private float missingPixelsPerColumn;
-        private float missingPixelsPerRow;
+        private float sampleWidth;
+        private float sampleHeight;
 
         public Scanner()
         {
@@ -97,20 +88,8 @@ namespace BlockScanner
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
             // Approximate block locations.
-            padding = data.Stride - (data.Width * pixelSize);
-            sampleWidth = data.Width / gridWidth;
-            sampleHeight = data.Height / gridHeight;
-
-            // Attempt to account for additional Height/Widths by boosting pixel positions.
-            // May change loop/samples to use floats instead.
-            missingPixelsPerColumn = (float)(data.Width % sampleWidth) / (float)gridWidth;
-            missingPixelsPerRow = (float)(data.Height % sampleHeight) / (float)gridHeight;
-
-            maxSampleHeight = sampleHeight * gridHeight;
-            maxSampleWidth = sampleWidth * gridWidth;
-
-            startingScanIndex = (sampleWidth / 2) * pixelSize
-                + (sampleHeight / 2 * data.Stride);
+            sampleWidth = (float)data.Width / gridWidth;
+            sampleHeight = (float)data.Height / gridHeight;
         }
 
         public T[][] AnalyseFrame<T>(Bitmap frame, Func<byte[], int, T> detectBlock)
@@ -130,49 +109,27 @@ namespace BlockScanner
             // Unlock the bits.
             frame.UnlockBits(data);
 
-            float widthBoost = 0;
-            float heightBoost = 0;
-
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            // Start from midpoint.
-            var index = startingScanIndex;
+            Func<int, int, int> GetIndex = (x, y) =>
+            {
+                var localIndex = 0;
+                localIndex += (int)(sampleWidth * (x + 1 / 2f)) * pixelSize;
+                localIndex += (int)(sampleHeight * (y + 1 / 2f)) * data.Stride;
+
+                return localIndex;
+            };
 
             var grid = new T[gridHeight][];
 
             for (var y = 0; y < gridHeight; y++)
             {
-                widthBoost = 0;
                 grid[y] = new T[gridWidth];
 
                 for (var x = 0; x < gridWidth; x++)
                 {
-                    grid[y][x] = detectBlock(rgbValues, index);
-
-                    index += pixelSize * sampleWidth;
-
-                    widthBoost += missingPixelsPerColumn;
-
-                    if (widthBoost > 1)
-                    {
-                        index += pixelSize;
-                        widthBoost -= 1;
-                    }
-                }
-
-                // Skip any remaining fractional pixels.
-                if (Math.Round(widthBoost) == 1)
-                    index += pixelSize;
-
-                index += padding // Skip padding.
-                    + (sampleHeight - 1) * data.Stride; // Next Sample row.
-
-                if (heightBoost > 1)
-                {
-                    index += data.Stride;
-
-                    heightBoost -= 1;
+                    grid[y][x] = detectBlock(rgbValues, GetIndex(x, y));
                 }
             }
 
@@ -188,6 +145,8 @@ namespace BlockScanner
             var scanZone = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
 
             DumpFrameWithSamplePoints(scanZone, path);
+
+            scanZone.Save(path);
         }
 
         private static Bitmap CaptureImage(int x, int y, int width, int height)
@@ -214,47 +173,24 @@ namespace BlockScanner
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            float widthBoost = 0;
-            float heightBoost = 0;
-
             // Start from midpoint.
-            var index = startingScanIndex;
             var detector = new BasicDetector();
 
-            for (var y = 1; y < maxSampleHeight; y += sampleHeight)
+            // Make the code a bit more readable, see if it impacts performance.
+            Func<int, int, int> GetIndex = (x, y) =>
             {
-                widthBoost = 0;
+                var localIndex = 0;
+                localIndex += (int)(sampleWidth * (x + 1/2f)) * pixelSize;
+                localIndex += (int)(sampleHeight * (y + 1/2f)) * data.Stride;
 
-                for (var x = 1; x < maxSampleWidth; x += sampleWidth)
+                return localIndex;
+            };
+
+            for (var y = 0; y < gridHeight; y ++)
+            {
+                for (var x = 0; x < gridWidth; x ++)
                 {
-                    detector.HighlightSamplePoints(rgbValues, index);
-
-                    index += pixelSize * sampleWidth;
-
-                    widthBoost += missingPixelsPerColumn;
-
-                    if (widthBoost > 1)
-                    {
-                        index += pixelSize;
-                        widthBoost -= 1;
-                    }
-                }
-
-                // Skip any remaining fractional pixels.
-                if (Math.Round(widthBoost) == 1)
-                    index += pixelSize;
-
-                index += padding // Skip padding.
-                    + (sampleHeight - 1) * data.Stride; // Next Sample row.
-
-                // Boost any fractional pixels.
-                heightBoost += missingPixelsPerRow;
-
-                if (heightBoost > 1)
-                {
-                    index += data.Stride;
-
-                    heightBoost -= 1;
+                    detector.HighlightSamplePoints(rgbValues, GetIndex(x, y));
                 }
             }
 
@@ -263,8 +199,6 @@ namespace BlockScanner
 
             // Unlock the bits.
             frame.UnlockBits(data);
-
-            frame.Save(filename);
         }
     }
 }

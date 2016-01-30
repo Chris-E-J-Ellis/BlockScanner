@@ -68,10 +68,10 @@ namespace BlockScanner
             ConfigureScanner(initialFrame);
 
             // Simple detector.
-            var detector = new PassThroughDetector();
+            var detector = new BasicDetector();
 
             // Simple Render.
-            var simpleRenderer = new ColourBitmapRenderer();
+            var simpleRenderer = new BasicRenderer();
 
             while (scanning)
             {
@@ -127,6 +127,9 @@ namespace BlockScanner
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
+            // Unlock the bits.
+            frame.UnlockBits(data);
+
             float widthBoost = 0;
             float heightBoost = 0;
 
@@ -177,9 +180,6 @@ namespace BlockScanner
 
             Console.WriteLine(timer.ElapsedTicks);
 
-            // Unlock the bits.
-            frame.UnlockBits(data);
-
             return grid;
         }
 
@@ -219,6 +219,7 @@ namespace BlockScanner
 
             // Start from midpoint.
             var index = startingScanIndex;
+            var detector = new BasicDetector();
 
             for (var y = 1; y < maxSampleHeight; y += sampleHeight)
             {
@@ -226,9 +227,7 @@ namespace BlockScanner
 
                 for (var x = 1; x < maxSampleWidth; x += sampleWidth)
                 {
-                    rgbValues[index] = 255;
-                    rgbValues[index + 2] = 255;
-                    rgbValues[index + 1] = 255;
+                    detector.HighlightSamplePoints(rgbValues, index);
 
                     index += pixelSize * sampleWidth;
 

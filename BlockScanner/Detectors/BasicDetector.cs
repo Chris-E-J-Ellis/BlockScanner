@@ -28,8 +28,15 @@ namespace BlockScanner.Detectors
             });
 
         public Func<byte[], int, bool> GetDetector()
-        { 
+        {
             return BasicDetectorFunc;
+        }
+
+        public void HighlightSamplePoints(byte[] rgbValues, int index)
+        {
+                rgbValues[index + 2] = 255;
+                rgbValues[index + 1] = 255;
+                rgbValues[index] = 255;
         }
     }
 }

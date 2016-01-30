@@ -23,5 +23,9 @@ namespace BlockScanner.Detectors
         {
             return BasicDetectorFunc;
         }
+
+        public void HighlightSamplePoints(byte[] rgbData, int index)
+        {
+        }
     }
 }

@@ -38,13 +38,13 @@ namespace BlockScanner
         public int PlayfieldHeightPixels { get; set; }
 
         // Start/Launch a scan job, temporary until I sort out more of the structure.
-        public void Start()
+        public void Start<T>(IDetector<T> detector, IRenderer<T> renderer)
         {
             if (scanning)
                 return;
 
             scanning = true;
-            Scan();
+            Scan(detector, renderer);
         }
 
         public void Stop()
@@ -54,18 +54,12 @@ namespace BlockScanner
         /// Launches a grid scan using the current settings. Will currently block the active thread while the scan is running. 
         /// Temporary whilst I decide upon more structure details.
         /// </summary>
-        public void Scan()
+        public void Scan<T>(IDetector<T> detector, IRenderer<T> renderer)
         {
             Stopwatch timer = new Stopwatch();
 
             var initialFrame = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
             ConfigureScanner(initialFrame);
-
-            // Simple detector.
-            var detector = new BasicDetector();
-
-            // Simple Render.
-            var simpleRenderer = new BasicRenderer();
 
             var detectorFunc = detector.GetDetector(coordinatesToIndexFunc);
 
@@ -78,7 +72,7 @@ namespace BlockScanner
 
                 var frameData = AnalyseFrame(cap, detectorFunc);
 
-                simpleRenderer.Render(frameData);
+                renderer.Render(frameData);
 
                 timer.Stop();
 
@@ -96,8 +90,8 @@ namespace BlockScanner
             sampleWidth = (float)data.Width / gridWidth;
             sampleHeight = (float)data.Height / gridHeight;
 
-            sampleXOffset = (int)(sampleHeight / 2);
-            sampleYOffset = (int)(sampleWidth / 2);
+            sampleXOffset = (int)(sampleWidth / 2);
+            sampleYOffset = (int)(sampleHeight / 2);
 
             coordinatesToIndexFunc = (x, y) =>
             {

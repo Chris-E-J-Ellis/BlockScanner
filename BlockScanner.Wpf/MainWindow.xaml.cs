@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using BlockScanner.Detectors;
+using BlockScanner.Rendering;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -35,9 +37,12 @@ namespace BlockScanner.Wpf
             scanner.PlayfieldXCoord = (int)captureZone.SelectionX;
             scanner.PlayfieldYCoord = (int)captureZone.SelectionY;
 
+            var detector = new BasicDetector();
+            var renderer = new BasicRenderer();
+
             // Rough, whilst I sort out what this is going to look like.
             // Should use a cancellation token.
-            Task scanTask = new Task(() => { scanner.Start(); });
+            Task scanTask = new Task(() => { scanner.Start(detector, renderer); });
 
             if (!scanner.Scanning)
                 scanTask.Start();
@@ -53,9 +58,12 @@ namespace BlockScanner.Wpf
             scanner.PlayfieldWidthPixels = 400;
             scanner.PlayfieldHeightPixels = 400; 
             scanner.PlayfieldXCoord = 0;
-            scanner.PlayfieldYCoord = 0; 
+            scanner.PlayfieldYCoord = 0;
 
-            Task scanTask = new Task(() => { scanner.Start(); });
+            var detector = new BasicDetector();
+            var renderer = new BasicRenderer();
+
+            Task scanTask = new Task(() => { scanner.Start(detector, renderer); });
 
             if (!scanner.Scanning)
                 scanTask.Start();

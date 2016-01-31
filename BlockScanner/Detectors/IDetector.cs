@@ -4,8 +4,8 @@ namespace BlockScanner.Detectors
 {
     public interface IDetector<T>
     {
-        Func<byte[], int, T> GetDetector();
+        Func<byte[], int, int, T> GetDetector(Func<int, int, int> coordinatesToIndex);
 
-        void HighlightSamplePoints(byte[] rgbData, int index);
+        void HighlightSamplePoints(byte[] rgbData, int x, int y);
     }
 }

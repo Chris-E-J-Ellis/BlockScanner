@@ -5,9 +5,17 @@ namespace BlockScanner.Detectors
 {
     public class BasicDetector : IDetector<bool>
     {
-        public static Func<byte[], int, bool> BasicDetectorFunc =
-            new Func<byte[], int, bool>((rgbValues, index) =>
+        public Func<int, int, int> coordinatesToIndexFunc;
+
+        public Func<byte[], int, int, bool> GetDetector(Func<int, int, int> coordinatesToIndex)
+        {
+            coordinatesToIndexFunc = coordinatesToIndex;
+
+            Func<byte[], int, int, bool> basicDetectorFunc =
+                (rgbValues, x, y) =>
             {
+                var index = coordinatesToIndexFunc(x, y);
+
                 Color pixelColor = Color.FromArgb(
                     //pixelSize == 3 ? 255 : rgbValues[index + 3], // A component if present
                     255, // Assume our alpha is always 255 (we aren't capturing alpha in our bitmaps).
@@ -25,18 +33,18 @@ namespace BlockScanner.Detectors
                     return true;
 
                 return false;
-            });
+            };
 
-        public Func<byte[], int, bool> GetDetector()
-        {
-            return BasicDetectorFunc;
+            return basicDetectorFunc;
         }
 
-        public void HighlightSamplePoints(byte[] rgbValues, int index)
+        public void HighlightSamplePoints(byte[] rgbValues, int x, int y)
         {
-                rgbValues[index + 2] = 255;
-                rgbValues[index + 1] = 255;
-                rgbValues[index] = 255;
+            var index = coordinatesToIndexFunc(x, y);
+
+            rgbValues[index + 2] = 255;
+            rgbValues[index + 1] = 255;
+            rgbValues[index] = 255;
         }
     }
 }

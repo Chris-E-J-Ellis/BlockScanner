@@ -19,6 +19,9 @@ namespace BlockScanner
         private int gridHeight = 20;
         private float sampleWidth;
         private float sampleHeight;
+        private int sampleXOffset = 0;
+        private int sampleYOffset = 0;
+        private Func<int, int, int> coordinatesToIndexFunc;
 
         public Scanner()
         {
@@ -64,6 +67,8 @@ namespace BlockScanner
             // Simple Render.
             var simpleRenderer = new BasicRenderer();
 
+            var detectorFunc = detector.GetDetector(coordinatesToIndexFunc);
+
             while (scanning)
             {
                 timer.Reset();
@@ -71,7 +76,7 @@ namespace BlockScanner
 
                 var cap = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
 
-                var frameData = AnalyseFrame(cap, detector.GetDetector());
+                var frameData = AnalyseFrame(cap, detectorFunc);
 
                 simpleRenderer.Render(frameData);
 
@@ -90,9 +95,17 @@ namespace BlockScanner
             // Approximate block locations.
             sampleWidth = (float)data.Width / gridWidth;
             sampleHeight = (float)data.Height / gridHeight;
+
+            sampleXOffset = (int)(sampleHeight / 2);
+            sampleYOffset = (int)(sampleWidth / 2);
+
+            coordinatesToIndexFunc = (x, y) =>
+            {
+                return x * pixelSize + y * data.Stride;
+            };
         }
 
-        public T[][] AnalyseFrame<T>(Bitmap frame, Func<byte[], int, T> detectBlock)
+        public T[][] AnalyseFrame<T>(Bitmap frame, Func<byte[], int, int, T> detectBlock)
         {
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
@@ -112,13 +125,10 @@ namespace BlockScanner
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
+            // Should only index, not skip sample widths.
             Func<int, int, int> GetIndex = (x, y) =>
             {
-                var localIndex = 0;
-                localIndex += (int)(sampleWidth * (x + 1 / 2f)) * pixelSize;
-                localIndex += (int)(sampleHeight * (y + 1 / 2f)) * data.Stride;
-
-                return localIndex;
+                return x * pixelSize + y * data.Stride;
             };
 
             var grid = new T[gridHeight][];
@@ -129,7 +139,7 @@ namespace BlockScanner
 
                 for (var x = 0; x < gridWidth; x++)
                 {
-                    grid[y][x] = detectBlock(rgbValues, GetIndex(x, y));
+                    grid[y][x] = detectBlock(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }
             }
 
@@ -170,27 +180,17 @@ namespace BlockScanner
             int bytes = Math.Abs(data.Stride) * data.Height;
             byte[] rgbValues = new byte[bytes];
 
+            var detector = new BasicDetector();
+            detector.GetDetector(this.coordinatesToIndexFunc);
+
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            // Start from midpoint.
-            var detector = new BasicDetector();
-
-            // Make the code a bit more readable, see if it impacts performance.
-            Func<int, int, int> GetIndex = (x, y) =>
-            {
-                var localIndex = 0;
-                localIndex += (int)(sampleWidth * (x + 1/2f)) * pixelSize;
-                localIndex += (int)(sampleHeight * (y + 1/2f)) * data.Stride;
-
-                return localIndex;
-            };
 
             for (var y = 0; y < gridHeight; y ++)
             {
                 for (var x = 0; x < gridWidth; x ++)
                 {
-                    detector.HighlightSamplePoints(rgbValues, GetIndex(x, y));
+                    detector.HighlightSamplePoints(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }
             }
 

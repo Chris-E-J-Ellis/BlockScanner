@@ -174,7 +174,7 @@ namespace BlockScanner
             int bytes = Math.Abs(data.Stride) * data.Height;
             byte[] rgbValues = new byte[bytes];
 
-            var detector = new BasicDetector();
+            var detector = new MultiPointDetector();
             detector.GetDetector(this.coordinatesToIndexFunc);
 
             // Copy the RGB values into the array.

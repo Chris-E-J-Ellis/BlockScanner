@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Detectors\BasicDetector.cs" />
     <Compile Include="Detectors\IDetector.cs" />
+    <Compile Include="Detectors\MultiPointDetector.cs" />
     <Compile Include="Detectors\PassThroughDetector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

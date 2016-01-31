@@ -37,7 +37,7 @@ namespace BlockScanner.Wpf
             scanner.PlayfieldXCoord = (int)captureZone.SelectionX;
             scanner.PlayfieldYCoord = (int)captureZone.SelectionY;
 
-            var detector = new BasicDetector();
+            var detector = new MultiPointDetector();
             var renderer = new BasicRenderer();
 
             // Rough, whilst I sort out what this is going to look like.
@@ -60,7 +60,7 @@ namespace BlockScanner.Wpf
             scanner.PlayfieldXCoord = 0;
             scanner.PlayfieldYCoord = 0;
 
-            var detector = new BasicDetector();
+            var detector = new MultiPointDetector();
             var renderer = new BasicRenderer();
 
             Task scanTask = new Task(() => { scanner.Start(detector, renderer); });

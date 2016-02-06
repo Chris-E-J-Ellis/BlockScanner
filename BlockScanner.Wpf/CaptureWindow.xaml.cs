@@ -26,6 +26,11 @@ namespace BlockScanner.Wpf
         public CaptureWindow()
         {
             InitializeComponent();
+
+            // Allow window to maximise on any monitor.
+            // http://stackoverflow.com/questions/3121900/how-can-i-make-a-wpf-window-maximized-on-the-screen-with-the-mouse-cursor
+
+            this.SourceInitialized += (s, a) => this.WindowState = WindowState.Maximized;
         }
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)

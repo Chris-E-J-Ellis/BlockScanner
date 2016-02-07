@@ -29,13 +29,7 @@ namespace BlockScanner
 
         public bool Scanning { get { return this.scanning; } }
 
-        public int PlayfieldXCoord { get; set; }
-
-        public int PlayfieldYCoord { get; set; }
-
-        public int PlayfieldWidthPixels { get; set; }
-
-        public int PlayfieldHeightPixels { get; set; }
+        public Rectangle PlayFieldArea { get; set; }
 
         // Start/Launch a scan job, temporary until I sort out more of the structure.
         public void Start<T>(IDetector<T> detector, IRenderer<T> renderer)
@@ -58,7 +52,7 @@ namespace BlockScanner
         {
             Stopwatch timer = new Stopwatch();
 
-            var initialFrame = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
+            var initialFrame = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
             ConfigureScanner(initialFrame);
 
             var detectorFunc = detector.GetDetector(coordinatesToIndexFunc);
@@ -68,7 +62,7 @@ namespace BlockScanner
                 timer.Reset();
                 timer.Start();
 
-                var cap = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
+                var cap = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
 
                 var frameData = AnalyseFrame(cap, detectorFunc);
 
@@ -119,12 +113,6 @@ namespace BlockScanner
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            // Should only index, not skip sample widths.
-            Func<int, int, int> GetIndex = (x, y) =>
-            {
-                return x * pixelSize + y * data.Stride;
-            };
-
             var grid = new T[gridHeight][];
 
             for (var y = 0; y < gridHeight; y++)
@@ -146,7 +134,7 @@ namespace BlockScanner
 
         public void DumpScanArea(string path)
         {
-            var scanZone = CaptureImage(PlayfieldXCoord, PlayfieldYCoord, PlayfieldWidthPixels, PlayfieldHeightPixels);
+            var scanZone = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
 
             DumpFrameWithSamplePoints(scanZone, path);
 
@@ -174,7 +162,7 @@ namespace BlockScanner
             int bytes = Math.Abs(data.Stride) * data.Height;
             byte[] rgbValues = new byte[bytes];
 
-            var detector = new MultiPointDetector();
+            var detector = new BasicDetector();
             detector.GetDetector(this.coordinatesToIndexFunc);
 
             // Copy the RGB values into the array.

@@ -17,13 +17,14 @@ namespace BlockScanner.Wpf
         private double width;
         private double height;
         private bool isMouseDown = false;
+        private CaptureWindowViewModel viewModel;
 
         public double SelectionX { get; private set; }
         public double SelectionY { get; private set; }
         public double SelectionWidth { get; private set;}
         public double SelectionHeight { get; private set;}
 
-        public CaptureWindow()
+        public CaptureWindow(CaptureWindowViewModel viewModel)
         {
             InitializeComponent();
 

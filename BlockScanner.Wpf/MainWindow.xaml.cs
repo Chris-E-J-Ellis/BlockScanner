@@ -1,5 +1,6 @@
 ﻿using BlockScanner.Detectors;
 using BlockScanner.Rendering;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,9 @@ namespace BlockScanner.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel mainViewModel = new MainWindowViewModel();
+        private CaptureWindowViewModel captureViewModel = new CaptureWindowViewModel();
+
         private Scanner scanner = new Scanner();
 
         public MainWindow()
@@ -25,19 +29,18 @@ namespace BlockScanner.Wpf
         {
             scanner.Stop();
 
-            var captureZone = new CaptureWindow();
+            var captureZone = new CaptureWindow(captureViewModel);
             captureZone.ShowDialog();
+
             XCoord.Text = captureZone.SelectionX.ToString();
             YCoord.Text = captureZone.SelectionY.ToString();
             ScanWidth.Text = captureZone.SelectionWidth.ToString();
             ScanHeight.Text = captureZone.SelectionHeight.ToString();
 
-            scanner.PlayfieldWidthPixels = (int)captureZone.SelectionWidth;
-            scanner.PlayfieldHeightPixels = (int)captureZone.SelectionHeight;
-            scanner.PlayfieldXCoord = (int)captureZone.SelectionX;
-            scanner.PlayfieldYCoord = (int)captureZone.SelectionY;
+            scanner.PlayFieldArea = 
+                new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight);
 
-            var detector = new MultiPointDetector();
+            var detector = new BasicDetector();
             var renderer = new BasicRenderer();
 
             // Rough, whilst I sort out what this is going to look like.
@@ -55,12 +58,9 @@ namespace BlockScanner.Wpf
 
         private void RunTestArea_Click(object sender, RoutedEventArgs e)
         {
-            scanner.PlayfieldWidthPixels = 400;
-            scanner.PlayfieldHeightPixels = 400; 
-            scanner.PlayfieldXCoord = 0;
-            scanner.PlayfieldYCoord = 0;
+            scanner.PlayFieldArea = new Rectangle(0, 0, 400, 400);
 
-            var detector = new MultiPointDetector();
+            var detector = new BasicDetector();
             var renderer = new BasicRenderer();
 
             Task scanTask = new Task(() => { scanner.Start(detector, renderer); });

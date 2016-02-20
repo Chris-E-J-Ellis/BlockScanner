@@ -3,14 +3,14 @@ using System.Drawing;
 
 namespace BlockScanner.Detectors
 {
-    public class PassThroughDetector : IDetector<Color>
+    public class PassThroughDetector : BaseDetector<Color>
     {
-        public Func<byte[], int, int, Color> GetDetector(Func<int, int, int> coordinatesToIndex)
+        public override Func<byte[], int, int, Color> GetDetector()
         {
             Func<byte[], int, int, Color> passThroughDetectorFunc =
                 (rgbValues, x, y) =>
                 {
-                    var index = coordinatesToIndex(x, y);
+                    var index = this.CoordinatesToIndex(x, y);
 
                     Color pixelColor = Color.FromArgb(
                         //pixelSize == 3 ? 255 : rgbValues[index + 3], // A component if present
@@ -26,8 +26,9 @@ namespace BlockScanner.Detectors
             return passThroughDetectorFunc;
         }
 
-        public void HighlightSamplePoints(byte[] rgbData, int x, int y)
+        public override void HighlightSamplePoints(byte[] rgbData, int x, int y)
         {
+            return;
         }
     }
 }

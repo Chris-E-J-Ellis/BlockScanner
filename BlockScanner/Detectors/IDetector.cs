@@ -1,11 +1,18 @@
-﻿using System;
-
-namespace BlockScanner.Detectors
+﻿namespace BlockScanner.Detectors
 {
-    public interface IDetector<T>
+    using System;
+
+    public interface IDetector
     {
-        Func<byte[], int, int, T> GetDetector(Func<int, int, int> coordinatesToIndex);
+        void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndex);
 
         void HighlightSamplePoints(byte[] rgbData, int x, int y);
+    }
+
+    public interface IDetector<T> : IDetector
+    {
+        Func<byte[], int, int, T> GetDetector();
+
+        Type DetectedPointOutputType { get; } 
     }
 }

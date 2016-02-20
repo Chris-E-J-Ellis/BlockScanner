@@ -4,14 +4,12 @@ using System.Drawing;
 
 namespace BlockScanner.Detectors
 {
-    public class MultiPointDetector : IDetector<bool>
+    public class MultiPointDetector : BaseDetector<bool>
     {
         public Func<int, int, int> coordinatesToIndexFunc;
 
-        public Func<byte[], int, int, bool> GetDetector(Func<int, int, int> coordinatesToIndex)
+        public override Func<byte[], int, int, bool> GetDetector()
         {
-            coordinatesToIndexFunc = coordinatesToIndex;
-
             return Detect;
         }
 
@@ -54,7 +52,7 @@ namespace BlockScanner.Detectors
             return output;
         }
 
-        public void HighlightSamplePoints(byte[] rgbValues, int x, int y)
+        public override void HighlightSamplePoints(byte[] rgbValues, int x, int y)
         {
             var samplePoints = new HashSet<Point>();
 

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Detectors\BaseDetector.cs" />
     <Compile Include="Detectors\BasicDetector.cs" />
     <Compile Include="Detectors\IDetector.cs" />
     <Compile Include="Detectors\MultiPointDetector.cs" />

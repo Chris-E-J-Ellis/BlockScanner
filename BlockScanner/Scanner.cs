@@ -55,7 +55,9 @@ namespace BlockScanner
             var initialFrame = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
             ConfigureScanner(initialFrame);
 
-            var detectorFunc = detector.GetDetector(coordinatesToIndexFunc);
+            detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
+
+            var detectorFunc = detector.GetDetector();
 
             while (scanning)
             {
@@ -85,7 +87,7 @@ namespace BlockScanner
             sampleHeight = (float)data.Height / gridHeight;
 
             sampleXOffset = (int)(sampleWidth / 2);
-            sampleYOffset = (int)(sampleHeight / 2);
+            sampleYOffset = (int)(sampleHeight / 3);
 
             coordinatesToIndexFunc = (x, y) =>
             {
@@ -163,7 +165,10 @@ namespace BlockScanner
             byte[] rgbValues = new byte[bytes];
 
             var detector = new BasicDetector();
-            detector.GetDetector(this.coordinatesToIndexFunc);
+
+            detector.SetCoordinatesToIndex(this.coordinatesToIndexFunc);
+
+            detector.GetDetector();
 
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);

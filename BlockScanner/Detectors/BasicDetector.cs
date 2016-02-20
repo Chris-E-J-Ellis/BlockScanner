@@ -3,18 +3,14 @@ using System.Drawing;
 
 namespace BlockScanner.Detectors
 {
-    public class BasicDetector : IDetector<bool>
+    public class BasicDetector : BaseDetector<bool>
     {
-        public Func<int, int, int> coordinatesToIndexFunc;
-
-        public Func<byte[], int, int, bool> GetDetector(Func<int, int, int> coordinatesToIndex)
+        public override Func<byte[], int, int, bool> GetDetector()
         {
-            coordinatesToIndexFunc = coordinatesToIndex;
-
             Func<byte[], int, int, bool> basicDetectorFunc =
                 (rgbValues, x, y) =>
             {
-                var index = coordinatesToIndexFunc(x, y);
+                var index = CoordinatesToIndex(x, y);
 
                 Color pixelColor = Color.FromArgb(
                     //pixelSize == 3 ? 255 : rgbValues[index + 3], // A component if present
@@ -26,7 +22,7 @@ namespace BlockScanner.Detectors
 
                 // Simple stab at colour detection.
                 if (pixelColor.R > 110
-                    || pixelColor.B > 100
+                    || pixelColor.B > 110
                     || pixelColor.G > 100
                     || (pixelColor.R + pixelColor.G > 100) && pixelColor.B < 20 // Take a punt at the yellows/oranges.
                     )
@@ -36,11 +32,11 @@ namespace BlockScanner.Detectors
             };
 
             return basicDetectorFunc;
-        }
+        }        
 
-        public void HighlightSamplePoints(byte[] rgbValues, int x, int y)
+        public override void HighlightSamplePoints(byte[] rgbValues, int x, int y)
         {
-            var index = coordinatesToIndexFunc(x, y);
+            var index = CoordinatesToIndex(x, y);
 
             rgbValues[index + 2] = 255;
             rgbValues[index + 1] = 255;

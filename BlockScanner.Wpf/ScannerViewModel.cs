@@ -2,11 +2,11 @@
 {
     public class ScannerViewModel
     {
-        private Scanner scanner;
+        private IScanner scanner;
 
         public ScannerViewModel() {}
 
-        public void Initialise(Scanner scanner)
+        public void Initialise(IScanner scanner)
         {
             this.scanner = scanner;
         }

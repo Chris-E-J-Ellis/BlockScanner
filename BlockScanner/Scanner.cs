@@ -1,15 +1,18 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using BlockScanner.Detectors;
-using BlockScanner.Rendering;
-
-namespace BlockScanner
+﻿namespace BlockScanner
 {
-    public class Scanner
+    using System;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using BlockScanner.Detectors;
+    using BlockScanner.Rendering;
+
+    public class Scanner<T> : IScanner<T>
     {
         private bool scanning = false;
+
+        private IDetector<T> detector;
+        private IRenderer<T> renderer;
 
         // Fields related to scanning area.
         private Rectangle rectangle;
@@ -23,8 +26,10 @@ namespace BlockScanner
         private int sampleYOffset = 0;
         private Func<int, int, int> coordinatesToIndexFunc;
 
-        public Scanner()
+        public Scanner(IDetector<T> detector, IRenderer<T> renderer)
         {
+            this.detector = detector;
+            this.renderer = renderer;
         }
 
         public bool Scanning { get { return this.scanning; } }
@@ -32,13 +37,13 @@ namespace BlockScanner
         public Rectangle PlayFieldArea { get; set; }
 
         // Start/Launch a scan job, temporary until I sort out more of the structure.
-        public void Start<T>(IDetector<T> detector, IRenderer<T> renderer)
+        public void Start()
         {
             if (scanning)
                 return;
 
             scanning = true;
-            Scan(detector, renderer);
+            Scan();
         }
 
         public void Stop()
@@ -48,16 +53,14 @@ namespace BlockScanner
         /// Launches a grid scan using the current settings. Will currently block the active thread while the scan is running. 
         /// Temporary whilst I decide upon more structure details.
         /// </summary>
-        public void Scan<T>(IDetector<T> detector, IRenderer<T> renderer)
+        public void Scan()
         {
-            Stopwatch timer = new Stopwatch();
+            var timer = new Stopwatch();
 
             var initialFrame = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
             ConfigureScanner(initialFrame);
 
             detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
-
-            var detectorFunc = detector.GetDetector();
 
             while (scanning)
             {
@@ -66,7 +69,7 @@ namespace BlockScanner
 
                 var cap = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
 
-                var frameData = AnalyseFrame(cap, detectorFunc);
+                var frameData = AnalyseFrame(cap);
 
                 renderer.Render(frameData);
 
@@ -95,7 +98,7 @@ namespace BlockScanner
             };
         }
 
-        public T[][] AnalyseFrame<T>(Bitmap frame, Func<byte[], int, int, T> detectBlock)
+        public T[][] AnalyseFrame(Bitmap frame)
         {
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
@@ -123,7 +126,7 @@ namespace BlockScanner
 
                 for (var x = 0; x < gridWidth; x++)
                 {
-                    grid[y][x] = detectBlock(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
+                    grid[y][x] = detector.Detect(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }
             }
 
@@ -138,22 +141,22 @@ namespace BlockScanner
         {
             var scanZone = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
 
-            DumpFrameWithSamplePoints(scanZone, path);
+            DumpFrameWithSamplePoints(scanZone);
 
             scanZone.Save(path);
         }
 
         private static Bitmap CaptureImage(int x, int y, int width, int height)
         {
-            Bitmap b = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            using (Graphics g = Graphics.FromImage(b))
+            var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.CopyFromScreen(x, y, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
             }
-            return b;
+            return bitmap;
         }
 
-        private void DumpFrameWithSamplePoints(Bitmap frame, string filename)
+        private void DumpFrameWithSamplePoints(Bitmap frame)
         {
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
@@ -167,8 +170,6 @@ namespace BlockScanner
             var detector = new BasicDetector();
 
             detector.SetCoordinatesToIndex(this.coordinatesToIndexFunc);
-
-            detector.GetDetector();
 
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);

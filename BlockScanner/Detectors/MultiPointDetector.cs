@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-
-namespace BlockScanner.Detectors
+﻿namespace BlockScanner.Detectors
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+
     public class MultiPointDetector : BaseDetector<bool>
     {
-        public Func<int, int, int> coordinatesToIndexFunc;
-
-        public override Func<byte[], int, int, bool> GetDetector()
-        {
-            return Detect;
-        }
-
-        public bool Detect(byte[] rgbValues, int x, int y)
+        public override bool Detect(byte[] rgbValues, int x, int y)
         {
             var samplePoints = new HashSet<Point>();
 
@@ -25,7 +17,7 @@ namespace BlockScanner.Detectors
 
             foreach (var point in samplePoints)
             {
-                var index = coordinatesToIndexFunc(point.X, point.Y);
+                var index = CoordinatesToIndex(point.X, point.Y);
 
                 Color pixelColor = Color.FromArgb(
                     255, // Assume our alpha is always 255 (we aren't capturing alpha in our bitmaps).
@@ -62,7 +54,7 @@ namespace BlockScanner.Detectors
 
             foreach (var point in samplePoints)
             {
-                var index = coordinatesToIndexFunc(point.X, point.Y);
+                var index = CoordinatesToIndex(point.X, point.Y);
 
                 rgbValues[index + 2] = 255;
                 rgbValues[index + 1] = 255;

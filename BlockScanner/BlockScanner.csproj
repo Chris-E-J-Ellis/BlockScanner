@@ -54,6 +54,8 @@
     <Compile Include="Rendering\IRenderer.cs" />
     <Compile Include="Rendering\MonochromeBitmapRender.cs" />
     <Compile Include="Scanner.cs" />
+    <Compile Include="IScanner.cs" />
+    <Compile Include="ScannerFactory.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

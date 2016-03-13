@@ -7,12 +7,12 @@
         void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndex);
 
         void HighlightSamplePoints(byte[] rgbData, int x, int y);
+
+        Type DetectedPointOutputType { get; } 
     }
 
     public interface IDetector<T> : IDetector
     {
-        Func<byte[], int, int, T> GetDetector();
-
-        Type DetectedPointOutputType { get; } 
+        T Detect(byte[] bitmapData, int x, int y);
     }
 }

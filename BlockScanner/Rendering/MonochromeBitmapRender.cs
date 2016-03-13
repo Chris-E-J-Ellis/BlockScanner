@@ -13,11 +13,11 @@ namespace BlockScanner.Rendering
                 int height = frameData.Length;
                 int width = frameData.Max(x => x.Length);
 
-                Bitmap output = new Bitmap(width, height);
+                var output = new Bitmap(width, height);
 
                 for (int i = 0; i < height; i++)
                     for (int j = 0; j < width; j++)
-                        output.SetPixel(j, i, frameData[i][j] == true ? Color.White : Color.Black);
+                        output.SetPixel(j, i, frameData[i][j] ? Color.White : Color.Black);
 
 
                 output.Save("Images/output.bmp");

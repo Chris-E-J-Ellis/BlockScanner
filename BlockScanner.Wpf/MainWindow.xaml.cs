@@ -15,7 +15,7 @@ namespace BlockScanner.Wpf
         private MainWindowViewModel mainViewModel = new MainWindowViewModel();
         private CaptureWindowViewModel captureViewModel = new CaptureWindowViewModel();
 
-        private Scanner scanner = new Scanner();
+        private Scanner<bool> scanner;
 
         public MainWindow()
         {
@@ -23,6 +23,12 @@ namespace BlockScanner.Wpf
 
             // Spawn Console for temp output monitoring.
             AllocConsole();
+
+            this.DataContext = mainViewModel;
+
+            mainViewModel.Initialise();
+
+            scanner = new Scanner<bool>(new BasicDetector(), new BasicRenderer());
         }
 
         private void BeginSelection_Click(object sender, RoutedEventArgs e)
@@ -40,12 +46,9 @@ namespace BlockScanner.Wpf
             scanner.PlayFieldArea = 
                 new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight);
 
-            var detector = new BasicDetector();
-            var renderer = new BasicRenderer();
-
             // Rough, whilst I sort out what this is going to look like.
             // Should use a cancellation token.
-            Task scanTask = new Task(() => { scanner.Start(detector, renderer); });
+            Task scanTask = new Task(() => { scanner.Start(); });
 
             if (!scanner.Scanning)
                 scanTask.Start();
@@ -60,10 +63,7 @@ namespace BlockScanner.Wpf
         {
             scanner.PlayFieldArea = new Rectangle(0, 0, 400, 400);
 
-            var detector = new BasicDetector();
-            var renderer = new BasicRenderer();
-
-            Task scanTask = new Task(() => { scanner.Start(detector, renderer); });
+            Task scanTask = new Task(() => { scanner.Start(); });
 
             if (!scanner.Scanning)
                 scanTask.Start();
@@ -72,5 +72,13 @@ namespace BlockScanner.Wpf
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+
+        private void CreateScanner_Click(object sender, RoutedEventArgs e)
+        {
+            var detector = mainViewModel.SelectedDetector;
+            var renderer = mainViewModel.SelectedRenderer;
+
+            var scanner = ScannerFactory.Create(detector, renderer);
+        }
     }
 }

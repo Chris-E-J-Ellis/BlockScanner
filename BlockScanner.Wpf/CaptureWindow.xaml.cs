@@ -17,7 +17,7 @@ namespace BlockScanner.Wpf
         private double width;
         private double height;
         private bool isMouseDown = false;
-        private CaptureWindowViewModel viewModel;
+        private CaptureWindowViewModel viewModel = new CaptureWindowViewModel();
 
         public double SelectionX { get; private set; }
         public double SelectionY { get; private set; }

@@ -8,8 +8,6 @@
 
     public class MainWindowViewModel
     {
-        private ScannerViewModel scannerVM;
-
         public MainWindowViewModel()
         {
             Detectors = new List<IDetector>();
@@ -24,6 +22,8 @@
 
         public void Initialise()
         {
+            ScannerVM = new ScannerViewModel();
+
             LoadDetectors();
             LoadRenderers();
         }
@@ -60,6 +60,6 @@
             }
         }
 
-        public ScannerViewModel ScannerVM { get { return this.scannerVM; } }
+        public ScannerViewModel ScannerVM { get; private set; } 
     }
 }

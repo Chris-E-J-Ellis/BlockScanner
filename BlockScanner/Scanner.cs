@@ -32,9 +32,17 @@
             this.renderer = renderer;
         }
 
+        public void Initialise(Rectangle playfield)
+        {
+            PlayfieldArea = playfield;
+
+            var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+            ConfigureScanner(sampleFrame);
+        }
+
         public bool Scanning { get { return this.scanning; } }
 
-        public Rectangle PlayFieldArea { get; set; }
+        public Rectangle PlayfieldArea { get; private set; }
 
         // Start/Launch a scan job, temporary until I sort out more of the structure.
         public void Start()
@@ -57,9 +65,6 @@
         {
             var timer = new Stopwatch();
 
-            var initialFrame = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
-            ConfigureScanner(initialFrame);
-
             detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
 
             while (scanning)
@@ -67,7 +72,7 @@
                 timer.Reset();
                 timer.Start();
 
-                var cap = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
+                var cap = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
                 var frameData = AnalyseFrame(cap);
 
@@ -75,11 +80,11 @@
 
                 timer.Stop();
 
-                Console.WriteLine(timer.ElapsedMilliseconds);
+                Console.WriteLine($"Capture->Render Cycle: {timer.ElapsedMilliseconds}ms");
             }
         }
 
-        public void ConfigureScanner(Bitmap frame)
+        private void ConfigureScanner(Bitmap frame)
         {
             rectangle = new Rectangle(0, 0, frame.Width, frame.Height);
 
@@ -100,20 +105,7 @@
 
         public T[][] AnalyseFrame(Bitmap frame)
         {
-            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
-
-            // Get the address of the first line.
-            IntPtr ptr = data.Scan0;
-
-            // Declare an array to hold the bytes of the bitmap.
-            int bytes = Math.Abs(data.Stride) * data.Height;
-            byte[] rgbValues = new byte[bytes];
-
-            // Copy the RGB values into the array.
-            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            // Unlock the bits.
-            frame.UnlockBits(data);
+            byte[] rgbValues = GetFrameData(frame);
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
@@ -132,27 +124,50 @@
 
             timer.Stop();
 
-            Console.WriteLine(timer.ElapsedTicks);
+            Console.WriteLine($"Frame Analysis: {timer.ElapsedTicks} ticks");
 
             return grid;
         }
 
         public void DumpScanArea(string path)
         {
-            var scanZone = CaptureImage(PlayFieldArea.X, PlayFieldArea.Y, PlayFieldArea.Width, PlayFieldArea.Height);
+            var scanZone = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
             DumpFrameWithSamplePoints(scanZone);
 
             scanZone.Save(path);
         }
+        
+        private byte[] GetFrameData(Bitmap frame)
+        {
+            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
+            // Get the address of the first line.
+            IntPtr ptr = data.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+            int bytes = Math.Abs(data.Stride) * data.Height;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copy the RGB values into the array.
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            // Unlock the bits.
+            frame.UnlockBits(data);
+
+            return rgbValues;
+        }
+
+        // At some point, all the Bitmap capturing stuff can be unpicked/replaced with a generic data source.
         private static Bitmap CaptureImage(int x, int y, int width, int height)
         {
             var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.CopyFromScreen(x, y, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
             }
+
             return bitmap;
         }
 
@@ -166,10 +181,6 @@
             // Declare an array to hold the bytes of the bitmap.
             int bytes = Math.Abs(data.Stride) * data.Height;
             byte[] rgbValues = new byte[bytes];
-
-            var detector = new BasicDetector();
-
-            detector.SetCoordinatesToIndex(this.coordinatesToIndexFunc);
 
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);

@@ -15,7 +15,7 @@ namespace BlockScanner.Wpf
         private MainWindowViewModel mainViewModel = new MainWindowViewModel();
         private CaptureWindowViewModel captureViewModel = new CaptureWindowViewModel();
 
-        private Scanner<bool> scanner;
+        private IScanner scanner;
 
         public MainWindow()
         {
@@ -28,7 +28,7 @@ namespace BlockScanner.Wpf
 
             mainViewModel.Initialise();
 
-            scanner = new Scanner<bool>(new BasicDetector(), new BasicRenderer());
+            scanner = ScannerFactory.CreateBasic(); 
         }
 
         private void BeginSelection_Click(object sender, RoutedEventArgs e)
@@ -43,8 +43,8 @@ namespace BlockScanner.Wpf
             ScanWidth.Text = captureZone.SelectionWidth.ToString();
             ScanHeight.Text = captureZone.SelectionHeight.ToString();
 
-            scanner.PlayFieldArea = 
-                new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight);
+            scanner.Initialise(
+                new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight));
 
             // Rough, whilst I sort out what this is going to look like.
             // Should use a cancellation token.
@@ -61,17 +61,13 @@ namespace BlockScanner.Wpf
 
         private void RunTestArea_Click(object sender, RoutedEventArgs e)
         {
-            scanner.PlayFieldArea = new Rectangle(0, 0, 400, 400);
+            scanner.Initialise(new Rectangle(0, 0, 400, 400));
 
             Task scanTask = new Task(() => { scanner.Start(); });
 
             if (!scanner.Scanning)
                 scanTask.Start();
         }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
 
         private void CreateScanner_Click(object sender, RoutedEventArgs e)
         {
@@ -80,5 +76,9 @@ namespace BlockScanner.Wpf
 
             var scanner = ScannerFactory.Create(detector, renderer);
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
     }
 }

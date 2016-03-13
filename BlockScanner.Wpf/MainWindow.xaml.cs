@@ -2,6 +2,7 @@
 using BlockScanner.Rendering;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,6 +17,7 @@ namespace BlockScanner.Wpf
         private CaptureWindowViewModel captureViewModel = new CaptureWindowViewModel();
 
         private IScanner scanner;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public MainWindow()
         {
@@ -28,13 +30,11 @@ namespace BlockScanner.Wpf
 
             mainViewModel.Initialise();
 
-            scanner = ScannerFactory.CreateBasic(); 
+            scanner = ScannerFactory.CreateBasic();
         }
 
         private void BeginSelection_Click(object sender, RoutedEventArgs e)
         {
-            scanner.Stop();
-
             var captureZone = new CaptureWindow(captureViewModel);
             captureZone.ShowDialog();
 
@@ -43,15 +43,20 @@ namespace BlockScanner.Wpf
             ScanWidth.Text = captureZone.SelectionWidth.ToString();
             ScanHeight.Text = captureZone.SelectionHeight.ToString();
 
-            scanner.Initialise(
-                new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight));
-
-            // Rough, whilst I sort out what this is going to look like.
             // Should use a cancellation token.
-            Task scanTask = new Task(() => { scanner.Start(); });
+            cancellationTokenSource.Cancel();
 
-            if (!scanner.Scanning)
-                scanTask.Start();
+            cancellationTokenSource = new CancellationTokenSource();
+
+            Task scanTask = new Task(() =>
+            {
+                scanner.Initialise(
+                    new Rectangle((int)captureZone.SelectionX, (int)captureZone.SelectionY, (int)captureZone.SelectionWidth, (int)captureZone.SelectionHeight));
+
+                scanner.Scan(cancellationTokenSource.Token);
+            }, cancellationTokenSource.Token);
+
+            scanTask.Start();
         }
 
         private void DumpScanArea_Click(object sender, RoutedEventArgs e)
@@ -61,12 +66,17 @@ namespace BlockScanner.Wpf
 
         private void RunTestArea_Click(object sender, RoutedEventArgs e)
         {
-            scanner.Initialise(new Rectangle(0, 0, 400, 400));
+            cancellationTokenSource.Cancel();
 
-            Task scanTask = new Task(() => { scanner.Start(); });
+            cancellationTokenSource = new CancellationTokenSource();
 
-            if (!scanner.Scanning)
-                scanTask.Start();
+            Task scanTask = new Task(() => 
+            {
+                scanner.Initialise(new Rectangle(0, 0, 400, 400));
+                scanner.Scan(cancellationTokenSource.Token);
+            }, cancellationTokenSource.Token);
+
+            scanTask.Start();
         }
 
         private void CreateScanner_Click(object sender, RoutedEventArgs e)
@@ -74,7 +84,7 @@ namespace BlockScanner.Wpf
             var detector = mainViewModel.SelectedDetector;
             var renderer = mainViewModel.SelectedRenderer;
 
-            var scanner = ScannerFactory.Create(detector, renderer);
+            this.scanner = ScannerFactory.Create(detector, renderer);
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

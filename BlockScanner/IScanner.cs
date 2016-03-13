@@ -1,17 +1,15 @@
 using System.Drawing;
+using System.Threading;
 
 namespace BlockScanner
 {
     public interface IScanner
     {
         Rectangle PlayfieldArea { get; }
-        bool Scanning { get; }
 
         void DumpScanArea(string path);
         void Initialise(Rectangle playfield);
-        void Start();
-        void Stop();
-        void Scan();
+        void Scan(CancellationToken token);
     }
 
     public interface IScanner<T> : IScanner

@@ -6,11 +6,9 @@
     using System.Drawing.Imaging;
     using BlockScanner.Detectors;
     using BlockScanner.Rendering;
-
+    using System.Threading;
     public class Scanner<T> : IScanner<T>
     {
-        private bool scanning = false;
-
         private IDetector<T> detector;
         private IRenderer<T> renderer;
 
@@ -32,42 +30,27 @@
             this.renderer = renderer;
         }
 
+        public Rectangle PlayfieldArea { get; private set; }
+
         public void Initialise(Rectangle playfield)
         {
             PlayfieldArea = playfield;
 
             var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
             ConfigureScanner(sampleFrame);
+
+            detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
         }
-
-        public bool Scanning { get { return this.scanning; } }
-
-        public Rectangle PlayfieldArea { get; private set; }
-
-        // Start/Launch a scan job, temporary until I sort out more of the structure.
-        public void Start()
-        {
-            if (scanning)
-                return;
-
-            scanning = true;
-            Scan();
-        }
-
-        public void Stop()
-        { scanning = false; }
 
         /// <summary>
         /// Launches a grid scan using the current settings. Will currently block the active thread while the scan is running. 
         /// Temporary whilst I decide upon more structure details.
         /// </summary>
-        public void Scan()
+        public void Scan(CancellationToken token)
         {
             var timer = new Stopwatch();
 
-            detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
-
-            while (scanning)
+            while (!token.IsCancellationRequested)
             {
                 timer.Reset();
                 timer.Start();

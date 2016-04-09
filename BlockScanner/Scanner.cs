@@ -7,7 +7,7 @@
     using BlockScanner.Detectors;
     using BlockScanner.Rendering;
     using System.Threading;
-
+    using Configuration;
     public class Scanner<T> : IScanner<T>
     {
         private IDetector<T> detector;
@@ -39,6 +39,8 @@
 
             var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
             ConfigureScanner(sampleFrame);
+
+            detector.Initialise(ConfigurationManager.Instance);
 
             detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
         }

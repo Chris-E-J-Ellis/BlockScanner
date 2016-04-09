@@ -45,9 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="Detectors\BaseDetector.cs" />
+    <Compile Include="Detectors\BasicDetectorConfig.cs" />
     <Compile Include="Detectors\BasicDetector.cs" />
+    <Compile Include="Detectors\ConfigurableBasicDetector.cs" />
+    <Compile Include="Detectors\ConfigurableBasicDetectorConfig.cs" />
     <Compile Include="Detectors\IDetector.cs" />
+    <Compile Include="Detectors\IDetectorConfig.cs" />
     <Compile Include="Detectors\MultiPointDetector.cs" />
     <Compile Include="Detectors\PassThroughDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

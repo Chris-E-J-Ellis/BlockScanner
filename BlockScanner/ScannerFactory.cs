@@ -1,9 +1,9 @@
-﻿using BlockScanner.Detectors;
-using BlockScanner.Rendering;
-using System;
-
-namespace BlockScanner
+﻿namespace BlockScanner
 {
+    using BlockScanner.Detectors;
+    using BlockScanner.Rendering;
+    using System;
+
     public static class ScannerFactory
     {
         public static IScanner CreateBasic()
@@ -13,6 +13,12 @@ namespace BlockScanner
 
         public static IScanner Create(IDetector detector, IRenderer renderer)
         {
+            if (detector.DetectedPointOutputType != renderer.RendererInputType)
+            {
+                throw new ArgumentException(string.Format("Renderer input type {0} does not match detector output type {1}",
+                    renderer.RendererInputType, detector.DetectedPointOutputType), "renderer");
+            }
+
             Type scannerType = typeof(Scanner<>);
 
             // Create a scanner using the type defined by the detector.

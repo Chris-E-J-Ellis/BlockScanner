@@ -1,11 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-
-namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering
 {
-    public class ColourBitmapRenderer : IRenderer<Color>
+    using System;
+    using System.Drawing;
+    using System.Linq;
+    using System.Threading;
+
+    public class ColourBitmapRenderer : BaseRenderer<Color>
     {
         public static readonly Action<Color[][]> RenderFunc =
             frameData =>
@@ -25,7 +25,7 @@ namespace BlockScanner.Rendering
                 Thread.Sleep(500);
             };
 
-        public void Render(Color[][] data)
+        public override void Render(Color[][] data)
         {
             RenderFunc(data);
         }

@@ -7,6 +7,7 @@
     using BlockScanner.Detectors;
     using BlockScanner.Rendering;
     using System.Threading;
+
     public class Scanner<T> : IScanner<T>
     {
         private IDetector<T> detector;
@@ -78,7 +79,7 @@
             sampleHeight = (float)data.Height / gridHeight;
 
             sampleXOffset = (int)(sampleWidth / 2);
-            sampleYOffset = (int)(sampleHeight / 3);
+            sampleYOffset = (int)(sampleHeight / 2);
 
             coordinatesToIndexFunc = (x, y) =>
             {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-
-namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering
 {
-    public class BasicRenderer : IRenderer<bool>
+    using System;
+    using System.Linq;
+
+    public class BasicRenderer : BaseRenderer<bool>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>
@@ -15,7 +15,7 @@ namespace BlockScanner.Rendering
                     Console.WriteLine(output);
                 };
 
-        public void Render(bool[][] data)
+        public override void Render(bool[][] data)
         {
             RenderFunc(data);
         }

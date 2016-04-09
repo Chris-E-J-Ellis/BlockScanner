@@ -1,11 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-
-namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering
 {
-    public class MonochromeBitmapRender : IRenderer<bool>
+    using System;
+    using System.Drawing;
+    using System.Linq;
+    using System.Threading;
+
+    public class MonochromeBitmapRender : BaseRenderer<bool>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>
@@ -36,7 +36,7 @@ namespace BlockScanner.Rendering
                 Thread.Sleep(10000);
             };
 
-        public void Render(bool[][] data)
+        public override void Render(bool[][] data)
         {
             RenderFunc(data);
         }

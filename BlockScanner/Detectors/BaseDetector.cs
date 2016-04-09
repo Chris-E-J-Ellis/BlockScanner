@@ -6,13 +6,7 @@
     {
         protected Func<int, int, int> CoordinatesToIndex { get; private set; }
 
-        public Type DetectedPointOutputType
-        {
-            get
-            {
-                return typeof(T);
-            }
-        }
+        public Type DetectedPointOutputType => typeof(T);
 
         public virtual void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndexFunc)
         {

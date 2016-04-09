@@ -1,8 +1,8 @@
-using System.Drawing;
-using System.Threading;
-
 namespace BlockScanner
 {
+    using System.Drawing;
+    using System.Threading;
+
     public interface IScanner
     {
         Rectangle PlayfieldArea { get; }

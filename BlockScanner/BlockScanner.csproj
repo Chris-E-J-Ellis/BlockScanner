@@ -50,6 +50,7 @@
     <Compile Include="Detectors\BaseDetector.cs" />
     <Compile Include="Detectors\BasicDetectorConfig.cs" />
     <Compile Include="Detectors\BasicDetector.cs" />
+    <Compile Include="Detectors\ColourDetector.cs" />
     <Compile Include="Detectors\ConfigurableBasicDetector.cs" />
     <Compile Include="Detectors\ConfigurableBasicDetectorConfig.cs" />
     <Compile Include="Detectors\IDetector.cs" />

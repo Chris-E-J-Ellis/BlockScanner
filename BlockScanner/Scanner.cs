@@ -80,8 +80,8 @@
             sampleWidth = (float)data.Width / gridWidth;
             sampleHeight = (float)data.Height / gridHeight;
 
-            sampleXOffset = (int)(sampleWidth / 2);
-            sampleYOffset = (int)(sampleHeight / 2);
+            sampleXOffset = (int)(sampleWidth / 3);
+            sampleYOffset = (int)(sampleHeight / 3);
 
             coordinatesToIndexFunc = (x, y) =>
             {

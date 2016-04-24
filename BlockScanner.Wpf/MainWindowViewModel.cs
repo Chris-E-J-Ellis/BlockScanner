@@ -5,7 +5,8 @@
     using Detectors;
     using System.Linq;
     using Rendering;
-
+    using System.IO;
+    using System.Reflection;
     public class MainWindowViewModel
     {
         public MainWindowViewModel()
@@ -26,6 +27,7 @@
 
             LoadDetectors();
             LoadRenderers();
+            LoadRenderersExternal();
         }
 
         private void LoadDetectors()
@@ -51,6 +53,30 @@
                 .Where(p => typeof(IRenderer).IsAssignableFrom(p)
                 && !p.IsInterface
                 && !p.IsAbstract);
+
+            foreach (var type in types)
+            {
+                var activatedType = Activator.CreateInstance(type);
+
+                Renderers.Add((IRenderer)activatedType);
+            }
+        }
+
+        private void LoadDetectorsExternal()
+        {
+
+        }
+
+        private void LoadRenderersExternal()
+        {
+            var files = Directory.GetFiles(Environment.CurrentDirectory, "*Renderer*.dll");
+            
+            var types = files
+                .Select(a => Assembly.LoadFile(a))
+                .SelectMany(t => t.GetTypes()
+                .Where(p => typeof(IRenderer).IsAssignableFrom(p)
+                && !p.IsInterface
+                && !p.IsAbstract));
 
             foreach (var type in types)
             {

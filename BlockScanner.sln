@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockScanner", "BlockScanner\BlockScanner.csproj", "{00A813C9-8528-4FAA-9ACF-3F73BEE6C9DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockScanner.Wpf", "BlockScanner.Wpf\BlockScanner.Wpf.csproj", "{E1B951DC-0A6A-439D-A556-857EAA618BA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockScanner.GDIRenderer", "BlockScanner.GDIRenderer\BlockScanner.GDIRenderer.csproj", "{7D4380C0-1B50-4CA3-8EED-54409B7EED1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,10 @@ Global
 		{E1B951DC-0A6A-439D-A556-857EAA618BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1B951DC-0A6A-439D-A556-857EAA618BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1B951DC-0A6A-439D-A556-857EAA618BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4380C0-1B50-4CA3-8EED-54409B7EED1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4380C0-1B50-4CA3-8EED-54409B7EED1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4380C0-1B50-4CA3-8EED-54409B7EED1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4380C0-1B50-4CA3-8EED-54409B7EED1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

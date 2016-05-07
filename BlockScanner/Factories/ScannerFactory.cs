@@ -1,7 +1,7 @@
-﻿namespace BlockScanner
+﻿namespace BlockScanner.Factories
 {
-    using BlockScanner.Detectors;
-    using BlockScanner.Rendering;
+    using Detectors;
+    using Rendering;
     using System;
 
     public static class ScannerFactory

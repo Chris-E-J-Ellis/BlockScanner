@@ -41,6 +41,7 @@
             ConfigureScanner(sampleFrame);
 
             detector.Initialise(ConfigurationManager.Instance);
+            renderer.Initialise();
 
             detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
         }

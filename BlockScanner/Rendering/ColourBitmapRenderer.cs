@@ -1,33 +1,26 @@
 ﻿namespace BlockScanner.Rendering
 {
-    using System;
     using System.Drawing;
     using System.Linq;
     using System.Threading;
 
     public class ColourBitmapRenderer : BaseRenderer<Color>
     {
-        public static readonly Action<Color[][]> RenderFunc =
-            frameData =>
-            {
-                int height = frameData.Length;
-                int width = frameData.Max(x => x.Length);
-
-                Bitmap output = new Bitmap(width, height);
-
-                for (int i = 0; i < height; i++)
-                    for (int j = 0; j < width; j++)
-                        output.SetPixel(j, i, frameData[i][j]);
-
-                output.Save("Images/output.bmp");
-
-                // Temporary choke method, shouldn't use this to actually render output (bitmap writing is slow).
-                Thread.Sleep(500);
-            };
-
-        public override void Render(Color[][] data)
+        public override void Render(Color[][] frameData)
         {
-            RenderFunc(data);
+            int height = frameData.Length;
+            int width = frameData.Max(x => x.Length);
+
+            Bitmap output = new Bitmap(width, height);
+
+            for (int i = 0; i < height; i++)
+                for (int j = 0; j < width; j++)
+                    output.SetPixel(j, i, frameData[i][j]);
+
+            output.Save("Images/output.bmp");
+
+            // Temporary choke method, shouldn't use this to actually render output (bitmap writing is slow).
+            Thread.Sleep(500);
         }
     }
 }

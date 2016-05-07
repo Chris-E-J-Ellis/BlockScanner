@@ -5,6 +5,8 @@
     public interface IRenderer
     {
         Type RendererInputType { get; }
+
+        void Initialise();
     }
 
     public interface IRenderer<T> : IRenderer

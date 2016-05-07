@@ -1,12 +1,10 @@
 ﻿namespace BlockScanner.Wpf
 {
-    using System;
     using System.Collections.Generic;
     using Detectors;
-    using System.Linq;
     using Rendering;
-    using System.IO;
-    using System.Reflection;
+    using Factories;
+
     public class MainWindowViewModel
     {
         public MainWindowViewModel()
@@ -25,65 +23,25 @@
         {
             ScannerVM = new ScannerViewModel();
 
+            DetectorFactory.Instance.LoadTypes();
+            RendererFactory.Instance.LoadTypes();
+
             LoadDetectors();
             LoadRenderers();
-            LoadRenderersExternal();
         }
 
         private void LoadDetectors()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IDetector).IsAssignableFrom(p)
-                && !p.IsInterface
-                && !p.IsAbstract);
+            var detectors = DetectorFactory.Instance.LoadConcreteObjects();
 
-            foreach (var type in types)
-            {
-                var activatedType = Activator.CreateInstance(type);
-
-                Detectors.Add((IDetector)activatedType);
-            }
+            Detectors.AddRange(detectors);
         }
 
         private void LoadRenderers()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IRenderer).IsAssignableFrom(p)
-                && !p.IsInterface
-                && !p.IsAbstract);
+            var renderers = RendererFactory.Instance.LoadConcreteObjects();
 
-            foreach (var type in types)
-            {
-                var activatedType = Activator.CreateInstance(type);
-
-                Renderers.Add((IRenderer)activatedType);
-            }
-        }
-
-        private void LoadDetectorsExternal()
-        {
-
-        }
-
-        private void LoadRenderersExternal()
-        {
-            var files = Directory.GetFiles(Environment.CurrentDirectory, "*Renderer*.dll");
-            
-            var types = files
-                .Select(a => Assembly.LoadFile(a))
-                .SelectMany(t => t.GetTypes()
-                .Where(p => typeof(IRenderer).IsAssignableFrom(p)
-                && !p.IsInterface
-                && !p.IsAbstract));
-
-            foreach (var type in types)
-            {
-                var activatedType = Activator.CreateInstance(type);
-
-                Renderers.Add((IRenderer)activatedType);
-            }
+            Renderers.AddRange(renderers);
         }
 
         public ScannerViewModel ScannerVM { get; private set; } 

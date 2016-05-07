@@ -6,9 +6,8 @@
     {
         public Type RendererInputType => typeof(T);
 
-        public virtual void Render(T[][] data)
-        {
-            return;
-        }
+        public virtual void Initialise() { }
+
+        public virtual void Render(T[][] data) { }
     }
 }

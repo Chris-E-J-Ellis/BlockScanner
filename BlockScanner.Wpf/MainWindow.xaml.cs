@@ -1,10 +1,9 @@
-﻿using BlockScanner.Detectors;
-using BlockScanner.Rendering;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using BlockScanner.Factories;
 
 namespace BlockScanner.Wpf
 {

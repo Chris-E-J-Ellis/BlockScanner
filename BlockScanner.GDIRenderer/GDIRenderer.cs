@@ -1,5 +1,6 @@
 ﻿namespace BlockScanner.Rendering
 {
+    using System;
     using System.Drawing;
 
     public class GDIRenderer : BaseRenderer<Color>
@@ -8,7 +9,14 @@
 
         public GDIRenderer()
         {
+            // Create the window handle.
             renderSurface.Show();
+            renderSurface.Hide();
+        }
+
+        public override void Initialise()
+        {
+            renderSurface.BeginInvoke(new Action(() => renderSurface.Show()));
         }
 
         public override void Render(Color[][] data)
@@ -21,7 +29,7 @@
                 var height = renderSurface.ClientRectangle.Height;
 
                 var dataHeight = data.GetLength(0);
-                var dataWidth = data[0].GetLength(0); 
+                var dataWidth = data[0].GetLength(0);
 
                 var renderWidth = width / dataWidth;
                 var renderHeight = height / dataHeight;

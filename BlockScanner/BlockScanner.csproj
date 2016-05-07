@@ -57,6 +57,10 @@
     <Compile Include="Detectors\IDetectorConfig.cs" />
     <Compile Include="Detectors\MultiPointDetector.cs" />
     <Compile Include="Detectors\PassThroughDetector.cs" />
+    <Compile Include="Factories\DetectorFactory.cs" />
+    <Compile Include="Factories\PluginFactoryBase.cs" />
+    <Compile Include="Factories\PluginHelpers.cs" />
+    <Compile Include="Factories\RendererFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\BaseRenderer.cs" />
     <Compile Include="Rendering\BasicRenderer.cs" />
@@ -65,15 +69,15 @@
     <Compile Include="Rendering\MonochromeBitmapRender.cs" />
     <Compile Include="Scanner.cs" />
     <Compile Include="IScanner.cs" />
-    <Compile Include="ScannerFactory.cs" />
+    <Compile Include="Factories\ScannerFactory.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Images\Tetris.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)\BlockScanner\bin\Debug\Plugins\" mkdir "$(SolutionDir)\BlockScanner\bin\Debug\Plugins\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

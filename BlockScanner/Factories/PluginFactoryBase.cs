@@ -6,8 +6,6 @@
 
     public abstract class PluginFactoryBase<T>
     {
-        private IEnumerable<Type> types;
-        private IEnumerable<T> concreteObjects;
         private readonly string pluginFolder;
         private readonly string searchPattern;
 
@@ -16,6 +14,10 @@
             this.pluginFolder = pluginFolder;
             this.searchPattern = searchPattern;
         }
+
+        public IEnumerable<Type> Types { get; private set; } = Enumerable.Empty<Type>();
+
+        public IEnumerable<T> ConcreteProducts { get; private set; } = Enumerable.Empty<T>();
 
         public T Create(Type type)
         {
@@ -35,14 +37,14 @@
             foundTypes.AddRange(GetDomainRenderers());
             foundTypes.AddRange(GetPluginRenderers(this.pluginFolder, this.searchPattern));
 
-            types = foundTypes;
+            Types = foundTypes;
         }
 
         public IEnumerable<T> LoadConcreteObjects()
         {
-            concreteObjects = types.Select(Create);
+            ConcreteProducts = Types.Select(Create);
 
-            return concreteObjects;
+            return ConcreteProducts;
         }
 
         private static IEnumerable<Type> GetDomainRenderers()

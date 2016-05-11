@@ -4,10 +4,11 @@
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using BlockScanner.Detectors;
-    using BlockScanner.Rendering;
     using System.Threading;
+    using Detectors;
+    using Rendering;
     using Configuration;
+
     public class Scanner<T> : IScanner<T>
     {
         private IDetector<T> detector;

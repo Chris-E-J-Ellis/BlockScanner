@@ -5,7 +5,6 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
-    using ViewModels;
 
     /// <summary>
     /// Interaction logic for CaptureWindow.xaml
@@ -18,14 +17,18 @@
         private double width;
         private double height;
         private bool isMouseDown = false;
-        private CaptureWindowViewModel viewModel = new CaptureWindowViewModel();
 
         public double SelectionX { get; private set; }
         public double SelectionY { get; private set; }
         public double SelectionWidth { get; private set;}
         public double SelectionHeight { get; private set;}
 
-        public CaptureWindow(CaptureWindowViewModel viewModel)
+        public Rect SelectionArea { get; private set; }
+
+        public System.Drawing.Rectangle SelectionAreaRectangle
+            => new System.Drawing.Rectangle((int)SelectionArea.X, (int)SelectionArea.Y, (int)SelectionArea.Width, (int)SelectionArea.Height);
+
+        public CaptureWindow()
         {
             InitializeComponent();
 
@@ -89,6 +92,8 @@
                     this.SelectionWidth = r.Width;
                     this.SelectionX = topLeft.X;
                     this.SelectionY = topLeft.Y;
+
+                    this.SelectionArea = new Rect(topLeft, new Size(r.Width, r.Height));
 
                     this.Close();
                 }

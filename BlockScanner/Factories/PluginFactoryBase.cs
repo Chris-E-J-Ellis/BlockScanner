@@ -13,6 +13,9 @@
         {
             this.pluginFolder = pluginFolder;
             this.searchPattern = searchPattern;
+
+            LoadTypes();
+            LoadConcreteObjects();
         }
 
         public IEnumerable<Type> Types { get; private set; } = Enumerable.Empty<Type>();
@@ -30,14 +33,14 @@
             return (T)Activator.CreateInstance(type);
         }
 
-        public virtual void LoadTypes()
+        public void LoadTypes()
         {
             var foundTypes = new List<Type>();
 
             foundTypes.AddRange(GetDomainRenderers());
             foundTypes.AddRange(GetPluginRenderers(this.pluginFolder, this.searchPattern));
 
-            Types = foundTypes;
+            Types = foundTypes.Distinct();
         }
 
         public IEnumerable<T> LoadConcreteObjects()

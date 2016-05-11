@@ -3,20 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Height="350" Width="525">
     <UniformGrid Columns="2">
-        <Button x:Name="BeginSelection" 
-                Content="Select Capture Area" />
-        <UniformGrid Columns="2">
-            <TextBlock x:Name="XCoordLbl" Text="X"/>
-            <TextBlock x:Name="XCoord" />
-            <TextBlock x:Name="YCoordLbl" Text="Y"/>
-            <TextBlock x:Name="YCoord" />
-            <TextBlock x:Name="ScanWidthLbl" Text="Width"/>
-            <TextBlock x:Name="ScanWidth" />
-            <TextBlock x:Name="ScanHeightLbl" Text="Height"/>
-            <TextBlock x:Name="ScanHeight" />
-        </UniformGrid>
+        <Button x:Name="BeginSelection" Content="Select Capture Area" />
+        <ContentControl x:Name="Scanner" />
         <Button x:Name="DumpScanArea" Content="Dump Scan Area (./Images/cap.bmp)" />
-        <Button x:Name="RunTestArea" Content="Run Temp Test (Area x = 0, y = 0 , 400x400)" />
+        <Button x:Name="RunTestArea" Content="Run Test (Area x = 0, y = 0 , 400x400)" />
         <ComboBox ItemsSource="{Binding Path=Detectors}" SelectedItem="{Binding Path=SelectedDetector}" />
         <ComboBox ItemsSource="{Binding Path=Renderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
         <Button x:Name="CreateScanner" Content="Create Scanner" />

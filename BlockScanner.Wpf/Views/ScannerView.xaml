@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="BlockScanner.Wpf.Views.ScannerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BlockScanner.Wpf.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Background="Coral">
+        <UniformGrid Columns="2">
+            <TextBlock x:Name="XCoordLbl" Text="X" />
+            <TextBlock x:Name="XCoord" Text="{Binding Path=ScanArea.X}" />
+            <TextBlock x:Name="YCoordLbl" Text="Y"/>
+            <TextBlock x:Name="YCoord" Text="{Binding Path=ScanArea.Y}" />
+            <TextBlock x:Name="ScanWidthLbl" Text="Width"/>
+            <TextBlock x:Name="ScanWidth" Text="{Binding Path=ScanArea.Width}" />
+            <TextBlock x:Name="ScanHeightLbl" Text="Height"/>
+            <TextBlock x:Name="ScanHeight" Text="{Binding Path=ScanArea.Height}" />
+        </UniformGrid>
+    </Grid>
+</UserControl>

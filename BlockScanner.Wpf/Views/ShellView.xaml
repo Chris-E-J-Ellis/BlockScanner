@@ -8,7 +8,7 @@
         <Button x:Name="DumpScanArea" Content="Dump Scan Area (./Images/cap.bmp)" />
         <Button x:Name="RunTestArea" Content="Run Test (Area x = 0, y = 0 , 400x400)" />
         <ComboBox ItemsSource="{Binding Path=Detectors}" SelectedItem="{Binding Path=SelectedDetector}" />
-        <ComboBox ItemsSource="{Binding Path=Renderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
+        <ComboBox ItemsSource="{Binding Path=ValidRenderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
         <Button x:Name="CreateScanner" Content="Create Scanner" />
     </UniformGrid>
 </Window>

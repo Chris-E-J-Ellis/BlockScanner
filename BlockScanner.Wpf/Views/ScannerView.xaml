@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BlockScanner.Wpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Coral">
+    <Grid>
         <UniformGrid Columns="2">
             <TextBlock x:Name="XCoordLbl" Text="X" />
             <TextBlock x:Name="XCoord" Text="{Binding Path=ScanArea.X}" />

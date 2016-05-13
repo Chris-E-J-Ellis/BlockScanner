@@ -1,9 +1,8 @@
 namespace BlockScanner.Wpf.ViewModels
 {
     using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.Drawing;
+    using System.Linq;
     using Detectors;
     using Factories;
     using Rendering;
@@ -12,12 +11,11 @@ namespace BlockScanner.Wpf.ViewModels
 
     public class ShellViewModel : Caliburn.Micro.PropertyChangedBase, IShell
     {
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly List<IDetector> detectors = new List<IDetector>();
+        private readonly List<IRenderer> renderers = new List<IRenderer>();
 
-        public readonly List<IDetector> detectors = new List<IDetector>();
-        public readonly List<IRenderer> renderers = new List<IRenderer>();
-
-        public IDetector selectedDetector;
+        private IDetector selectedDetector;
+        private IRenderer selectedRenderer;
 
         public ShellViewModel()
         {
@@ -26,8 +24,9 @@ namespace BlockScanner.Wpf.ViewModels
 
         public ScannerViewModel Scanner { get; private set; }
 
-        public List<IDetector> Detectors { get; private set; } = new List<IDetector>();
-        public List<IRenderer> Renderers { get; private set; } = new List<IRenderer>();
+        public IEnumerable<IDetector> Detectors => detectors;
+        public IEnumerable<IRenderer> Renderers => renderers;
+        public IEnumerable<IRenderer> ValidRenderers => renderers.Where(r => r.RendererInputType == SelectedDetector?.DetectedPointOutputType); 
 
         public IDetector SelectedDetector
         {
@@ -35,11 +34,23 @@ namespace BlockScanner.Wpf.ViewModels
             set
             {
                 this.selectedDetector = value;
+
                 NotifyOfPropertyChange(() => SelectedDetector);
+                NotifyOfPropertyChange(() => ValidRenderers);
+                NotifyOfPropertyChange(() => CanCreateScanner);
             }
         }
 
-        public IRenderer SelectedRenderer { get; set; }
+        public IRenderer SelectedRenderer
+        {
+            get { return this.selectedRenderer; }
+            set
+            {
+                this.selectedRenderer = value;
+
+                NotifyOfPropertyChange(() => CanCreateScanner);
+            }
+        }
 
         public void Initialise()
         {
@@ -57,41 +68,21 @@ namespace BlockScanner.Wpf.ViewModels
             var captureZone = new CaptureWindow();
             captureZone.ShowDialog();
 
-            // Should use a cancellation token.
-            cancellationTokenSource.Cancel();
+            Scanner.SetScanArea(captureZone.SelectionAreaRectangle);
 
-            cancellationTokenSource = new CancellationTokenSource();
-
-            Task scanTask = new Task(() =>
-            {
-                Scanner.SetScanArea(captureZone.SelectionAreaRectangle);
-
-                Scanner.Scan(cancellationTokenSource.Token);
-            }, cancellationTokenSource.Token);
-
-            scanTask.Start();
+            Scanner.Scan();
         }
 
         public void DumpScanArea()
         {
-            // TODO: Move path to config.
-            Scanner.Scanner.DumpScanArea("Images/cap.bmp");
+            Scanner.DumpScanArea();
         }
 
         public void RunTestArea()
         {
-            cancellationTokenSource.Cancel();
+            Scanner.SetScanArea(new Rectangle(0, 0, 400, 400));
 
-            cancellationTokenSource = new CancellationTokenSource();
-
-            Task scanTask = new Task(() =>
-            {
-                Scanner.SetScanArea(new Rectangle(0, 0, 400, 400));
-
-                Scanner.Scan(cancellationTokenSource.Token);
-            }, cancellationTokenSource.Token);
-
-            scanTask.Start();
+            Scanner.Scan();
         }
 
         public void CreateScanner()
@@ -99,23 +90,32 @@ namespace BlockScanner.Wpf.ViewModels
             Scanner.Dispose();
 
             var scanner = ScannerFactory.Create(SelectedDetector, SelectedRenderer);
+
             Scanner = new ScannerViewModel(scanner);
 
             NotifyOfPropertyChange(() => Scanner);
         }
 
+        public bool CanCreateScanner
+        {
+            get
+            {
+                return SelectedDetector?.DetectedPointOutputType == SelectedRenderer?.RendererInputType;
+            }
+        }
+
         private void LoadDetectors()
         {
-            var detectors = DetectorFactory.Instance.LoadConcreteObjects();
+            var loadedDetector = DetectorFactory.Instance.LoadConcreteObjects();
 
-            Detectors.AddRange(detectors);
+            detectors.AddRange(loadedDetector);
         }
 
         private void LoadRenderers()
         {
-            var renderers = RendererFactory.Instance.LoadConcreteObjects();
+            var loadedRenderer = RendererFactory.Instance.LoadConcreteObjects();
 
-            Renderers.AddRange(renderers);
+            renderers.AddRange(loadedRenderer);
         }
     }
 }

@@ -1,15 +1,13 @@
 ﻿namespace BlockScanner.Detectors
 {
-    using Configuration;
+    using Config;
     using System;
 
     public interface IDetector
     {
-        Type DetectedPointOutputType { get; } 
+        Type DetectedPointOutputType { get; }
 
-        IDetectorConfig Configuration { get; }
-
-        void Initialise(IConfigurationManager configurationManager = null);
+        void Initialise(IConfigManager configurationManager = null);
 
         void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndex);
 

@@ -1,17 +1,21 @@
 ﻿namespace BlockScanner.Detectors
 {
-    using Configuration;
+    using Config;
+    using Config.Detectors;
     using System.Drawing;
 
-    public class ConfigurableBasicDetector : BaseDetector<bool>
+    public class ConfigurableBasicDetector : BaseDetector<bool>, IConfigurable<ConfigurableBasicDetectorConfig>
     {
-        private ConfigurableBasicDetectorConfig configuration = new ConfigurableBasicDetectorConfig();
+        public ConfigurableBasicDetectorConfig Config { get; private set; } = new ConfigurableBasicDetectorConfig();
 
-        public override IDetectorConfig Configuration => this.configuration;
-
-        public override void Initialise(IConfigurationManager configurationManager)
+        public void SetConfig(ConfigurableBasicDetectorConfig config)
         {
-            this.configuration = configurationManager.Load<ConfigurableBasicDetectorConfig>("Default")
+            this.Config = config;
+        }
+
+        public override void Initialise(IConfigManager configurationManager)
+        {
+            this.Config = configurationManager.Load<ConfigurableBasicDetectorConfig>("Default")
                 ?? new ConfigurableBasicDetectorConfig();
         }
 
@@ -27,11 +31,11 @@
                 );
 
             // Simple stab at colour detection.
-            if (pixelColor.R > configuration.RedMaxThreshold
-                || pixelColor.B > configuration.BlueMaxThreshold
-                || pixelColor.G > configuration.GreenMaxThreshold
-                || (pixelColor.R + pixelColor.G > configuration.YellowOrangeRGMinThreshold)
-                    && pixelColor.B < configuration.YellowOrangeBMaxThreshold // Take a punt at the yellows/oranges.
+            if (pixelColor.R > Config.RedMaxThreshold
+                || pixelColor.B > Config.BlueMaxThreshold
+                || pixelColor.G > Config.GreenMaxThreshold
+                || (pixelColor.R + pixelColor.G > Config.YellowOrangeRGMinThreshold)
+                    && pixelColor.B < Config.YellowOrangeBMaxThreshold // Take a punt at the yellows/oranges.
                 )
                 return true;
 

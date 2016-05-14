@@ -1,6 +1,6 @@
 ﻿namespace BlockScanner.Detectors
 {
-    using Configuration;
+    using Config;
     using System;
 
     public abstract class BaseDetector<T> : IDetector<T>
@@ -9,9 +9,9 @@
 
         public Type DetectedPointOutputType => typeof(T);
 
-        public virtual IDetectorConfig Configuration { get; private set; }
+        public IConfig Configuration { get; private set; }
 
-        public virtual void Initialise(IConfigurationManager configurationManager)
+        public virtual void Initialise(IConfigManager configurationManager)
         {
         }
 

@@ -7,12 +7,13 @@
     using System.Threading;
     using Detectors;
     using Rendering;
-    using Configuration;
+    using Config;
 
-    public class Scanner<T> : IScanner<T>
+    public class Scanner<T> : IScanner<T>, IConfigurable<ScannerConfig>
     {
         private IDetector<T> detector;
         private IRenderer<T> renderer;
+        private IConfigManager configManager;
 
         // Fields related to scanning area.
         private Rectangle rectangle;
@@ -27,21 +28,28 @@
         private Func<int, int, int> coordinatesToIndexFunc;
 
         public Scanner(IDetector<T> detector, IRenderer<T> renderer)
+            : this(detector, renderer, ConfigManager.Instance) { }
+
+        public Scanner(IDetector<T> detector, IRenderer<T> renderer, IConfigManager configManager)
         {
             this.detector = detector;
             this.renderer = renderer;
+            this.configManager = configManager;
         }
 
-        public Rectangle PlayfieldArea { get; private set; }
+        public Rectangle PlayfieldArea => Config.ScanArea;
 
-        public void Initialise(Rectangle playfield)
+        public ScannerConfig Config { get; private set; } = new ScannerConfig();
+
+        public void Initialise(Rectangle scanArea)
         {
-            PlayfieldArea = playfield;
+            Config = configManager.Load<ScannerConfig>("default");
+            Config.ScanArea = scanArea;
 
             var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
             ConfigureScanner(sampleFrame);
 
-            detector.Initialise(ConfigurationManager.Instance);
+            detector.Initialise(ConfigManager.Instance);
             renderer.Initialise();
 
             detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
@@ -82,8 +90,8 @@
             sampleWidth = (float)data.Width / gridWidth;
             sampleHeight = (float)data.Height / gridHeight;
 
-            sampleXOffset = (int)(sampleWidth / 3);
-            sampleYOffset = (int)(sampleHeight / 3);
+            sampleXOffset = (int)(sampleWidth / Config.SamplePointCentreRatio);
+            sampleYOffset = (int)(sampleHeight / Config.SamplePointCentreRatio);
 
             coordinatesToIndexFunc = (x, y) =>
             {
@@ -186,6 +194,11 @@
 
             // Unlock the bits.
             frame.UnlockBits(data);
+        }
+
+        public void SetConfig(ScannerConfig config)
+        {
+            throw new NotImplementedException();
         }
     }
 }

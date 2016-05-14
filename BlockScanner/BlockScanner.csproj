@@ -48,16 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Configuration\ConfigManager.cs" />
+    <Compile Include="Configuration\IConfigManager.cs" />
+    <Compile Include="Configuration\IConfigurable.cs" />
+    <Compile Include="Configuration\Scanner\ScannerConfig.cs" />
     <Compile Include="Detectors\BaseDetector.cs" />
-    <Compile Include="Detectors\BasicDetectorConfig.cs" />
+    <Compile Include="Configuration\BaseConfig.cs" />
     <Compile Include="Detectors\BasicDetector.cs" />
     <Compile Include="Detectors\ColourDetector.cs" />
     <Compile Include="Detectors\ConfigurableBasicDetector.cs" />
-    <Compile Include="Detectors\ConfigurableBasicDetectorConfig.cs" />
+    <Compile Include="Configuration\Detectors\ConfigurableBasicDetectorConfig.cs" />
     <Compile Include="Detectors\IDetector.cs" />
-    <Compile Include="Detectors\IDetectorConfig.cs" />
+    <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="Detectors\MultiPointDetector.cs" />
     <Compile Include="Detectors\PassThroughDetector.cs" />
     <Compile Include="Factories\DetectorFactory.cs" />

@@ -7,15 +7,31 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <UniformGrid Columns="2">
-            <TextBlock x:Name="XCoordLbl" Text="X" />
-            <TextBlock x:Name="XCoord" Text="{Binding Path=ScanArea.X}" />
-            <TextBlock x:Name="YCoordLbl" Text="Y"/>
-            <TextBlock x:Name="YCoord" Text="{Binding Path=ScanArea.Y}" />
-            <TextBlock x:Name="ScanWidthLbl" Text="Width"/>
-            <TextBlock x:Name="ScanWidth" Text="{Binding Path=ScanArea.Width}" />
-            <TextBlock x:Name="ScanHeightLbl" Text="Height"/>
-            <TextBlock x:Name="ScanHeight" Text="{Binding Path=ScanArea.Height}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Rectangle></Rectangle>
+        <UniformGrid Columns="1" Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="XCoordLbl" Text="X" MinWidth="40" />
+                <TextBlock x:Name="XCoord" Text="{Binding Path=ScanArea.X}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="YCoordLbl" Text="Y" MinWidth="40" />
+                <TextBlock x:Name="YCoord" Text="{Binding Path=ScanArea.Y}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ScanWidthLbl" Text="Width" MinWidth="40" />
+                <TextBlock x:Name="ScanWidth" Text="{Binding Path=ScanArea.Width}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ScanHeightLbl" Text="Height" MinWidth="40" />
+                <TextBlock x:Name="ScanHeight" Text="{Binding Path=ScanArea.Height}" />
+            </StackPanel>
         </UniformGrid>
+        <Border  Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+            <Image x:Name="CapturePreview" Source="{Binding Path=CapturePreview}" />
+        </Border>
     </Grid>
 </UserControl>

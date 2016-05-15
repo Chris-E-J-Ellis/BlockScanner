@@ -21,10 +21,12 @@
 
         private int gridWidth = 10;
         private int gridHeight = 20;
+
         private float sampleWidth;
         private float sampleHeight;
         private int sampleXOffset = 0;
         private int sampleYOffset = 0;
+
         private Func<int, int, int> coordinatesToIndexFunc;
 
         public Scanner(IDetector<T> detector, IRenderer<T> renderer)
@@ -45,6 +47,9 @@
         {
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
+
+            gridWidth = Config.GridWidth;
+            gridHeight = Config.GridHeight;
 
             var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
             ConfigureScanner(sampleFrame);
@@ -80,6 +85,11 @@
             }
         }
 
+        public void SetConfig(ScannerConfig config)
+        {
+            this.Config = config;
+        }
+
         private void ConfigureScanner(Bitmap frame)
         {
             rectangle = new Rectangle(0, 0, frame.Width, frame.Height);
@@ -90,8 +100,8 @@
             sampleWidth = (float)data.Width / gridWidth;
             sampleHeight = (float)data.Height / gridHeight;
 
-            sampleXOffset = (int)(sampleWidth / Config.SamplePointCentreRatio);
-            sampleYOffset = (int)(sampleHeight / Config.SamplePointCentreRatio);
+            sampleXOffset = (int)(sampleWidth / Config.SamplePointCentreWidthRatio);
+            sampleYOffset = (int)(sampleHeight / Config.SamplePointCentreHeightRatio);
 
             coordinatesToIndexFunc = (x, y) =>
             {
@@ -125,13 +135,15 @@
             return grid;
         }
 
-        public void DumpScanArea(string path)
+        public Bitmap DumpScanArea(string path)
         {
             var scanZone = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
             DumpFrameWithSamplePoints(scanZone);
 
             scanZone.Save(path);
+
+            return scanZone;
         }
         
         private byte[] GetFrameData(Bitmap frame)
@@ -194,11 +206,6 @@
 
             // Unlock the bits.
             frame.UnlockBits(data);
-        }
-
-        public void SetConfig(ScannerConfig config)
-        {
-            throw new NotImplementedException();
         }
     }
 }

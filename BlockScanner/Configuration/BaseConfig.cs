@@ -6,6 +6,6 @@
     {
         public Type ConfigType => typeof(T);
 
-        public string Name { get; set; } = $"{typeof(T)}Default";
+        public string Name { get; set; } = $"{typeof(T).Name}.Default";
     }
 }

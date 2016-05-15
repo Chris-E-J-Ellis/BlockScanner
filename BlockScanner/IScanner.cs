@@ -7,7 +7,7 @@ namespace BlockScanner
     {
         Rectangle PlayfieldArea { get; }
 
-        void DumpScanArea(string path);
+        Bitmap DumpScanArea(string path);
         void Initialise(Rectangle playfield);
         void Scan(CancellationToken token);
     }

@@ -8,7 +8,7 @@
     using Detectors;
     using Rendering;
     using Config;
-
+    using Helpers;
     public class Scanner<T> : IScanner<T>, IConfigurable<ScannerConfig>
     {
         private IDetector<T> detector;
@@ -75,13 +75,14 @@
 
                 var cap = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
-                var frameData = AnalyseFrame(cap);
+                var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
                 renderer.Render(frameData);
 
                 timer.Stop();
 
-                Console.WriteLine($"Capture->Render Cycle: {timer.ElapsedMilliseconds}ms");
+                // Not great, the console takes time to render this.
+                Console.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
             }
         }
 
@@ -113,9 +114,6 @@
         {
             byte[] rgbValues = GetFrameData(frame);
 
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-
             var grid = new T[gridHeight][];
 
             for (var y = 0; y < gridHeight; y++)
@@ -127,10 +125,6 @@
                     grid[y][x] = detector.Detect(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }
             }
-
-            timer.Stop();
-
-            Console.WriteLine($"Frame Analysis: {timer.ElapsedTicks} ticks");
 
             return grid;
         }

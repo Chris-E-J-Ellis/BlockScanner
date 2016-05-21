@@ -67,6 +67,7 @@
     <Compile Include="Factories\PluginHelpers.cs" />
     <Compile Include="Factories\RendererFactory.cs" />
     <Compile Include="Helpers\InteropHelpers.cs" />
+    <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\BaseRenderer.cs" />
     <Compile Include="Rendering\BasicRenderer.cs" />

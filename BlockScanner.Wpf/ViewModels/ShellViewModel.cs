@@ -73,6 +73,8 @@ namespace BlockScanner.Wpf.ViewModels
 
             Scanner.SetScanArea(captureZone.SelectionAreaRectangle);
 
+            Scanner.DumpScanArea();
+
             Scanner.Scan();
         }
 
@@ -84,6 +86,8 @@ namespace BlockScanner.Wpf.ViewModels
         public void RunTestArea()
         {
             Scanner.SetScanArea(new Rectangle(0, 0, 400, 400));
+
+            Scanner.DumpScanArea();
 
             Scanner.Scan();
         }

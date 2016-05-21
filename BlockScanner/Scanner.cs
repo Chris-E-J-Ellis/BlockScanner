@@ -39,6 +39,10 @@
             this.configManager = configManager;
         }
 
+        public IDetector Detector => detector;
+
+        public IRenderer Renderer => renderer;
+
         public Rectangle PlayfieldArea => Config.ScanArea;
 
         public ScannerConfig Config { get; private set; } = new ScannerConfig();
@@ -104,10 +108,7 @@
             sampleXOffset = (int)(sampleWidth / Config.SamplePointCentreWidthRatio);
             sampleYOffset = (int)(sampleHeight / Config.SamplePointCentreHeightRatio);
 
-            coordinatesToIndexFunc = (x, y) =>
-            {
-                return x * pixelSize + y * data.Stride;
-            };
+            coordinatesToIndexFunc = (x, y) => x * pixelSize + y * data.Stride;
         }
 
         public T[][] AnalyseFrame(Bitmap frame)
@@ -139,7 +140,7 @@
 
             return scanZone;
         }
-        
+
         private byte[] GetFrameData(Bitmap frame)
         {
             BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
@@ -187,9 +188,9 @@
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (var y = 0; y < gridHeight; y ++)
+            for (var y = 0; y < gridHeight; y++)
             {
-                for (var x = 0; x < gridWidth; x ++)
+                for (var x = 0; x < gridWidth; x++)
                 {
                     detector.HighlightSamplePoints(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }

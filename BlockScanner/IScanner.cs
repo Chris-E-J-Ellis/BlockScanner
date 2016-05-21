@@ -1,11 +1,15 @@
 namespace BlockScanner
 {
+    using Detectors;
+    using Rendering;
     using System.Drawing;
     using System.Threading;
 
     public interface IScanner
     {
         Rectangle PlayfieldArea { get; }
+        IDetector Detector { get; }
+        IRenderer Renderer { get; }
 
         Bitmap DumpScanArea(string path);
         void Initialise(Rectangle playfield);

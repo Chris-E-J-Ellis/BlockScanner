@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     public abstract class PluginFactoryBase<T>
@@ -61,7 +62,9 @@
 
         private static IEnumerable<Type> GetPluginRenderers(string pluginFolder, string searchPattern)
         {
-            var assemblies = PluginHelpers.GetPluginFolderAssemblies(Environment.CurrentDirectory, searchPattern);
+            var pluginFolderPath = Path.Combine(Environment.CurrentDirectory, pluginFolder);
+
+            var assemblies = PluginHelpers.GetPluginFolderAssemblies(pluginFolderPath, searchPattern);
 
             var types = assemblies.GetTypes<T>();
 

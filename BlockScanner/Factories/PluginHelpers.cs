@@ -22,7 +22,7 @@
             if (!Directory.Exists(pluginFolder))
                 return Enumerable.Empty<Assembly>();
 
-            var files = Directory.GetFiles(pluginFolder, searchPattern);
+            var files = Directory.GetFiles(pluginFolder, searchPattern).ToList();
 
             var assemblies = files
                 .Select(a => Assembly.LoadFile(a));

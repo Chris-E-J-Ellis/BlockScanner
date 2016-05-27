@@ -76,12 +76,16 @@ namespace BlockScanner.Wpf.ViewModels
             Scanner.DumpScanArea();
 
             Scanner.Scan();
+
+            NotifyOfPropertyChange(() => CanDumpScanArea);
         }
 
         public void DumpScanArea()
         {
             Scanner.DumpScanArea();
         }
+
+        public bool CanDumpScanArea => Scanner.ScanArea.Width >= 0 && Scanner.ScanArea.Height > 0;
 
         public void RunTestArea()
         {
@@ -103,14 +107,8 @@ namespace BlockScanner.Wpf.ViewModels
             NotifyOfPropertyChange(() => Scanner);
         }
 
-        public bool CanCreateScanner
-        {
-            get
-            {
-                return SelectedDetector != null 
-                    && SelectedDetector.DetectedPointOutputType == SelectedRenderer?.RendererInputType;
-            }
-        }
+        public bool CanCreateScanner => SelectedDetector != null 
+            && SelectedDetector.DetectedPointOutputType == SelectedRenderer?.RendererInputType;
 
         public void ToggleConsole()
         {

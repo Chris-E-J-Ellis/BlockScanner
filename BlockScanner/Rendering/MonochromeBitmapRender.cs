@@ -33,7 +33,7 @@
                 doubleSize.Save("Images/outputDouble.bmp");
 
                 // Temporary choke method, shouldn't use this to actually render output (bitmap writing is slow).
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
             };
 
         public override void Render(bool[][] data)

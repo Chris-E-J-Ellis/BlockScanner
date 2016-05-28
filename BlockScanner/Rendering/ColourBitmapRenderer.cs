@@ -20,7 +20,7 @@
             output.Save("Images/output.bmp");
 
             // Temporary choke method, shouldn't use this to actually render output (bitmap writing is slow).
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
         }
     }
 }

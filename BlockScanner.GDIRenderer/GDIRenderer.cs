@@ -3,20 +3,24 @@
     using System;
     using System.Drawing;
 
-    public class GDIRenderer : BaseRenderer<Color>
+    public class GDIRenderer : BaseRenderer<Color>, IDisposable
     {
-        private readonly RenderSurfaceForm renderSurface = new RenderSurfaceForm();
+        private RenderSurfaceForm renderSurface = new RenderSurfaceForm();
 
         public GDIRenderer()
         {
-            // Create the window handle.
-            renderSurface.Show();
-            renderSurface.Hide();
+
         }
 
         public override void Initialise()
         {
-            renderSurface.BeginInvoke(new Action(() => renderSurface.Show()));
+            if (renderSurface == null || renderSurface.IsDisposed)
+            {
+                renderSurface = new RenderSurfaceForm();
+            }
+
+            // Create the window handle.
+            renderSurface.Show();
         }
 
         public override void Render(Color[][] data)
@@ -42,6 +46,11 @@
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            this.renderSurface.Dispose();
         }
     }
 }

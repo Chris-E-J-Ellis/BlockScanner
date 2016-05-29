@@ -14,6 +14,7 @@
             <Button x:Name="BeginSelection" Content="Select Capture Area" />
             <Button x:Name="DumpScanArea" Content="Dump Scan (./Images/cap.bmp)" />
             <Button x:Name="ToggleConsole" Content="Toggle Console" />
+            <Button x:Name="SingleScan" Content="SingleScan" />
             <Button x:Name="RunTestArea" Content="Test (Area x = 0, y = 0 , 400x400)" />
         </UniformGrid>
         <ContentControl x:Name="Scanner" Grid.Row="1"/>

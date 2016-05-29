@@ -98,6 +98,34 @@
             }
         }
 
+        // Probably temporary, collapse with above function.
+        public void ScanOnce()
+        {
+            var timer = new Stopwatch();
+
+            try
+            {
+                timer.Reset();
+                timer.Start();
+
+                var cap = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+
+                var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
+
+                renderer.Render(frameData);
+
+                timer.Stop();
+
+                // Not great, the console takes time to render this.
+                Console.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
+            }
+            catch (Exception ex)
+            {
+                // Super basic, just fail and stop scanning.
+                Console.WriteLine($"Encountered an exception, scan halted: '{ex};");
+            }
+        }
+
         public void SetConfig(ScannerConfig config)
         {
             this.Config = config;

@@ -43,6 +43,14 @@
             scanTask.Start();
         }
 
+        public void SingleScan()
+        {
+            // Cancel any existing scanning task.
+            cancellationTokenSource.Cancel();
+
+            Scanner.ScanOnce();
+        }
+
         public void DumpScanArea()
         {
             var previewLocation = Path.Combine(Environment.CurrentDirectory, "Images", "cap.bmp");

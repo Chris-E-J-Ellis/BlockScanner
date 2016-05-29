@@ -14,6 +14,7 @@ namespace BlockScanner
         Bitmap DumpScanArea(string path);
         void Initialise(Rectangle playfield);
         void Scan(CancellationToken token);
+        void ScanOnce();
     }
 
     public interface IScanner<T> : IScanner

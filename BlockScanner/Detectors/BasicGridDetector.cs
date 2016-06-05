@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    public class BasicDetector : BaseDetector<bool>
+    public class BasicGridDetector : BaseGridDetector<bool>
     {
         public override bool Detect(byte[] bitmapData, int x, int y)
         {

@@ -3,7 +3,7 @@
     using System;
     using System.Runtime.InteropServices;
 
-    public static class InteropHelpers
+    public static class InteropHelper
     {
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

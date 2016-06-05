@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    public class PassThroughDetector : BaseDetector<Color>
+    public class PassThroughGridDetector : BaseGridDetector<Color>
     {
         public override Color Detect(byte[] bitmapData, int x, int y)
         {
@@ -16,7 +16,7 @@
                 bitmapData[index]      // B component
                 );
 
-            return pixelColor; ;
+            return pixelColor;
         }
     }
 }

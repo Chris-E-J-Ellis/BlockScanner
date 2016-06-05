@@ -9,25 +9,12 @@
     using Rendering;
     using Config;
     using Helpers;
+
     public class Scanner<T> : IScanner<T>, IConfigurable<ScannerConfig>
     {
         private IDetector<T> detector;
         private IRenderer<T> renderer;
         private IConfigManager configManager;
-
-        // Fields related to scanning area.
-        private Rectangle rectangle;
-        private int pixelSize = 3;
-
-        private int gridWidth = 10;
-        private int gridHeight = 20;
-
-        private float sampleWidth;
-        private float sampleHeight;
-        private int sampleXOffset = 0;
-        private int sampleYOffset = 0;
-
-        private Func<int, int, int> coordinatesToIndexFunc;
 
         public Scanner(IDetector<T> detector, IRenderer<T> renderer)
             : this(detector, renderer, ConfigManager.Instance) { }
@@ -52,16 +39,11 @@
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
 
-            gridWidth = Config.GridWidth;
-            gridHeight = Config.GridHeight;
-
             var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
-            ConfigureScanner(sampleFrame);
 
             detector.Initialise(ConfigManager.Instance);
+            detector.Initialise(sampleFrame);
             renderer.Initialise();
-
-            detector.SetCoordinatesToIndex(coordinatesToIndexFunc);
         }
 
         /// <summary>
@@ -131,39 +113,9 @@
             this.Config = config;
         }
 
-        private void ConfigureScanner(Bitmap frame)
-        {
-            rectangle = new Rectangle(0, 0, frame.Width, frame.Height);
-
-            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
-
-            // Approximate block locations.
-            sampleWidth = (float)data.Width / gridWidth;
-            sampleHeight = (float)data.Height / gridHeight;
-
-            sampleXOffset = (int)(sampleWidth / Config.SamplePointCentreWidthRatio);
-            sampleYOffset = (int)(sampleHeight / Config.SamplePointCentreHeightRatio);
-
-            coordinatesToIndexFunc = (x, y) => x * pixelSize + y * data.Stride;
-        }
-
         public T[][] AnalyseFrame(Bitmap frame)
         {
-            byte[] rgbValues = GetFrameData(frame);
-
-            var grid = new T[gridHeight][];
-
-            for (var y = 0; y < gridHeight; y++)
-            {
-                grid[y] = new T[gridWidth];
-
-                for (var x = 0; x < gridWidth; x++)
-                {
-                    grid[y][x] = detector.Detect(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
-                }
-            }
-
-            return grid;
+            return detector.Detect(frame);
         }
 
         public Bitmap DumpScanArea(string path)
@@ -175,26 +127,6 @@
             scanZone.Save(path);
 
             return scanZone;
-        }
-
-        private byte[] GetFrameData(Bitmap frame)
-        {
-            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
-
-            // Get the address of the first line.
-            IntPtr ptr = data.Scan0;
-
-            // Declare an array to hold the bytes of the bitmap.
-            int bytes = Math.Abs(data.Stride) * data.Height;
-            byte[] rgbValues = new byte[bytes];
-
-            // Copy the RGB values into the array.
-            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            // Unlock the bits.
-            frame.UnlockBits(data);
-
-            return rgbValues;
         }
 
         // At some point, all the Bitmap capturing stuff can be unpicked/replaced with a generic data source.
@@ -212,31 +144,31 @@
 
         private void DumpFrameWithSamplePoints(Bitmap frame)
         {
-            BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
+            //BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
 
-            // Get the address of the first line.
-            IntPtr ptr = data.Scan0;
+            //// Get the address of the first line.
+            //IntPtr ptr = data.Scan0;
 
-            // Declare an array to hold the bytes of the bitmap.
-            int bytes = Math.Abs(data.Stride) * data.Height;
-            byte[] rgbValues = new byte[bytes];
+            //// Declare an array to hold the bytes of the bitmap.
+            //int bytes = Math.Abs(data.Stride) * data.Height;
+            //byte[] rgbValues = new byte[bytes];
 
-            // Copy the RGB values into the array.
-            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+            //// Copy the RGB values into the array.
+            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (var y = 0; y < gridHeight; y++)
-            {
-                for (var x = 0; x < gridWidth; x++)
-                {
-                    detector.HighlightSamplePoints(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
-                }
-            }
+            //for (var y = 0; y < gridHeight; y++)
+            //{
+            //    for (var x = 0; x < gridWidth; x++)
+            //    {
+            //        detector.HighlightSamplePoints(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
+            //    }
+            //}
 
-            // Copy the RGB values back to the bitmap
-            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+            //// Copy the RGB values back to the bitmap
+            //System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
 
-            // Unlock the bits.
-            frame.UnlockBits(data);
+            //// Unlock the bits.
+            //frame.UnlockBits(data);
         }
     }
 }

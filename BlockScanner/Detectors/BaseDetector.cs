@@ -2,6 +2,7 @@
 {
     using Config;
     using System;
+    using System.Drawing;
 
     public abstract class BaseDetector<T> : IDetector<T>
     {
@@ -15,6 +16,10 @@
         {
         }
 
+        public virtual void Initialise(Bitmap sampleFrame)
+        {
+        }
+
         public virtual void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndexFunc)
         {
             this.CoordinatesToIndex = coordinatesToIndexFunc;
@@ -23,6 +28,11 @@
         public virtual T Detect(byte[] bitmapData, int x, int y)
         {
             return default(T);
+        }
+
+        public virtual T[][] Detect(Bitmap bitmap)
+        {
+            return default(T[][]);
         }
 
         public virtual void HighlightSamplePoints(byte[] rgbData, int x, int y)

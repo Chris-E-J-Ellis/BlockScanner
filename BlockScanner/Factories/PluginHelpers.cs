@@ -39,8 +39,8 @@
                 .SelectMany(t => t.GetTypes()
                 .Where(p => typeof(T).IsAssignableFrom(p)
                 && !p.IsInterface
-                && !p.IsAbstract));
-
+                && !p.IsAbstract
+                && !p.ContainsGenericParameters)); 
             return types;
         }
     }

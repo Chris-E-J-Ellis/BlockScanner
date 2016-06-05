@@ -4,7 +4,7 @@
     using Config.Detectors;
     using System.Drawing;
 
-    public class ConfigurableBasicDetector : BaseDetector<bool>, IConfigurable<ConfigurableBasicDetectorConfig>
+    public class ConfigurableBasicGridDetector : BaseGridDetector<bool>, IConfigurable<ConfigurableBasicDetectorConfig>
     {
         public ConfigurableBasicDetectorConfig Config { get; private set; } = new ConfigurableBasicDetectorConfig();
 

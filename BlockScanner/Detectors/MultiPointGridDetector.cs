@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Drawing;
 
-    public class MultiPointDetector : BaseDetector<bool>
+    public class MultiPointGridDetector : BaseGridDetector<bool>
     {
         public override bool Detect(byte[] rgbValues, int x, int y)
         {

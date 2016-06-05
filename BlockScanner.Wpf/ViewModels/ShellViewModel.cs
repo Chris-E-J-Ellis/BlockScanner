@@ -17,7 +17,7 @@ namespace BlockScanner.Wpf.ViewModels
         private IDetector selectedDetector;
         private IRenderer selectedRenderer;
 
-        private int consoleVisible = InteropHelpers.SW_SHOW;
+        private int consoleVisible = InteropHelper.SW_SHOW;
 
         public ShellViewModel()
         {
@@ -61,8 +61,8 @@ namespace BlockScanner.Wpf.ViewModels
 
         public void Initialise()
         {
-            InteropHelpers.AllocConsole();
-            consoleVisible = InteropHelpers.SW_SHOW;
+            InteropHelper.AllocConsole();
+            consoleVisible = InteropHelper.SW_SHOW;
 
             LoadDetectors();
             LoadRenderers();
@@ -117,13 +117,13 @@ namespace BlockScanner.Wpf.ViewModels
 
         public void ToggleConsole()
         {
-            var handle = InteropHelpers.GetConsoleWindow();
+            var handle = InteropHelper.GetConsoleWindow();
 
-            consoleVisible = consoleVisible == InteropHelpers.SW_HIDE
-                ? InteropHelpers.SW_SHOW
-                : InteropHelpers.SW_HIDE;
+            consoleVisible = consoleVisible == InteropHelper.SW_HIDE
+                ? InteropHelper.SW_SHOW
+                : InteropHelper.SW_HIDE;
 
-            InteropHelpers.ShowWindow(handle, consoleVisible);
+            InteropHelper.ShowWindow(handle, consoleVisible);
         }
 
         private void LoadDetectors()

@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    public class ColourDetector : BaseDetector<Color>
+    public class ColourGridDetector : BaseGridDetector<Color>
     {
         public override Color Detect(byte[] bitmapData, int x, int y)
         {

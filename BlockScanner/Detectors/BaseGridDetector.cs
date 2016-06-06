@@ -1,12 +1,11 @@
 ﻿namespace BlockScanner.Detectors
 {
-    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
     using Config;
     using Helpers;
 
-    public class BaseGridDetector<T> : BaseDetector<T>
+    public class BaseGridDetector<T> : BaseDetector<T[][]>
     {
         private Rectangle frameRectangle;
 
@@ -37,11 +36,16 @@
 
                 for (var x = 0; x < gridWidth; x++)
                 {
-                    grid[y][x] = Detect(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
+                    grid[y][x] = AnalyseSample(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
                 }
             }
 
             return grid;
+        }
+
+        public virtual T AnalyseSample(byte[] bitmapData, int x, int y)
+        {
+            return default (T);
         }
 
         public override void Initialise(IConfigManager configurationManager)

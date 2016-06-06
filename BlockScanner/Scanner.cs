@@ -113,7 +113,7 @@
             this.Config = config;
         }
 
-        public T[][] AnalyseFrame(Bitmap frame)
+        public T AnalyseFrame(Bitmap frame)
         {
             return detector.Detect(frame);
         }

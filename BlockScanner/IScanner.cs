@@ -19,6 +19,6 @@ namespace BlockScanner
 
     public interface IScanner<T> : IScanner
     {
-        T[][] AnalyseFrame(Bitmap frame);
+        T AnalyseFrame(Bitmap frame);
     }
 }

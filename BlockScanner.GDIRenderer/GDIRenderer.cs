@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
     using System.Drawing.Drawing2D;
-    public class GDIRenderer : BaseRenderer<Color>, IDisposable
+    public class GDIRenderer : BaseRenderer<Color[][]>, IDisposable
     {
         private RenderSurfaceForm renderSurface = new RenderSurfaceForm();
 

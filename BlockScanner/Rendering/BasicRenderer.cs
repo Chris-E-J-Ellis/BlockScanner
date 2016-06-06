@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
 
-    public class BasicRenderer : BaseRenderer<bool>
+    public class BasicRenderer : BaseRenderer<bool[][]>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>

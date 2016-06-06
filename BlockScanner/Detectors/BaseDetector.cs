@@ -25,14 +25,9 @@
             this.CoordinatesToIndex = coordinatesToIndexFunc;
         }
 
-        public virtual T Detect(byte[] bitmapData, int x, int y)
+        public virtual T Detect(Bitmap bitmap)
         {
             return default(T);
-        }
-
-        public virtual T[][] Detect(Bitmap bitmap)
-        {
-            return default(T[][]);
         }
 
         public virtual void HighlightSamplePoints(byte[] rgbData, int x, int y)

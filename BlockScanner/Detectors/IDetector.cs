@@ -19,8 +19,6 @@
 
     public interface IDetector<T> : IDetector
     {
-        T Detect(byte[] bitmapData, int x, int y);
-
-        T[][] Detect(Bitmap frame);
+        T Detect(Bitmap frame);
     }
 }

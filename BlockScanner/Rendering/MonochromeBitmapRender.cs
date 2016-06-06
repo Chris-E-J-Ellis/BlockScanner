@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Threading;
 
-    public class MonochromeBitmapRender : BaseRenderer<bool>
+    public class MonochromeBitmapRender : BaseRenderer<bool[][]>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>

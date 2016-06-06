@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Threading;
 
-    public class ColourBitmapRenderer : BaseRenderer<Color>
+    public class ColourBitmapRenderer : BaseRenderer<Color[][]>
     {
         public override void Render(Color[][] frameData)
         {

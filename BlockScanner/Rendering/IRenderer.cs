@@ -11,6 +11,6 @@
 
     public interface IRenderer<T> : IRenderer
     {
-        void Render(T[][] data);
+        void Render(T data);
     }
 }

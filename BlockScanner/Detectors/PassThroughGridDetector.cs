@@ -4,7 +4,7 @@
 
     public class PassThroughGridDetector : BaseGridDetector<Color>
     {
-        public override Color Detect(byte[] bitmapData, int x, int y)
+        public override Color AnalyseSample(byte[] bitmapData, int x, int y)
         {
             var index = this.CoordinatesToIndex(x, y);
 

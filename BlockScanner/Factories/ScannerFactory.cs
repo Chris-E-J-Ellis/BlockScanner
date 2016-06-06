@@ -8,7 +8,7 @@
     {
         public static IScanner CreateBasic()
         {
-            return new Scanner<bool>(new BasicGridDetector(), new BasicRenderer());
+            return new Scanner<bool[][]>(new BasicGridDetector(), new BasicRenderer());
         }
 
         public static IScanner Create(IDetector detector, IRenderer renderer)

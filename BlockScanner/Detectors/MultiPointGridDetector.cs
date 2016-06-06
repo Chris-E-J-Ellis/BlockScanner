@@ -5,7 +5,7 @@
 
     public class MultiPointGridDetector : BaseGridDetector<bool>
     {
-        public override bool Detect(byte[] rgbValues, int x, int y)
+        public override bool AnalyseSample(byte[] rgbValues, int x, int y)
         {
             var samplePoints = new HashSet<Point>();
 

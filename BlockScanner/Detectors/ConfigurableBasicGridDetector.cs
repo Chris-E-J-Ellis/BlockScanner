@@ -19,7 +19,7 @@
                 ?? new ConfigurableBasicDetectorConfig();
         }
 
-        public override bool Detect(byte[] bitmapData, int x, int y)
+        public override bool AnalyseSample(byte[] bitmapData, int x, int y)
         {
             var index = CoordinatesToIndex(x, y);
 

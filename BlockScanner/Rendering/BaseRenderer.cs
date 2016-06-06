@@ -8,7 +8,7 @@
 
         public virtual void Initialise() { }
 
-        public virtual void Render(T[][] data) { }
+        public virtual void Render(T data) { }
 
         public override string ToString()
         {

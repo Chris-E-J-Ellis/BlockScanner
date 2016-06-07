@@ -26,14 +26,5 @@
 
             return false;
         }
-
-        public override void HighlightSamplePoints(byte[] rgbValues, int x, int y)
-        {
-            var index = CoordinatesToIndex(x, y);
-
-            rgbValues[index + 2] = 255;
-            rgbValues[index + 1] = 255;
-            rgbValues[index] = 255;
-        }
     }
 }

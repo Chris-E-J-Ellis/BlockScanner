@@ -4,7 +4,7 @@
     using System.Drawing.Imaging;
     using Config;
     using Helpers;
-
+    using System;
     public class BaseGridDetector<T> : BaseDetector<T[][]>
     {
         private Rectangle frameRectangle;
@@ -70,6 +70,45 @@
             sampleYOffset = (int)(sampleHeight / samplePointCentreHeightRatio);
 
             SetCoordinatesToIndex((x, y) => x * pixelSize + y * data.Stride);
+        }
+
+        public override void HighlightSamplePoints(Bitmap frame)
+        {
+            // Todo: this image manipulation logic + duplicate iteration code probably doesn't need to be here.
+            BitmapData data = frame.LockBits(frameRectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
+
+            // Get the address of the first line.
+            IntPtr ptr = data.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+            int bytes = Math.Abs(data.Stride) * data.Height;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copy the RGB values into the array.
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            for (var y = 0; y < gridHeight; y++)
+            {
+                for (var x = 0; x < gridWidth; x++)
+                {
+                    HighlightSamplePoint(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
+                }
+            }
+
+            // Copy the RGB values back to the bitmap
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+            // Unlock the bits.
+            frame.UnlockBits(data);
+        }
+
+        public virtual void HighlightSamplePoint(byte[] rgbData, int x, int y)
+        {
+            var index = CoordinatesToIndex(x, y);
+
+            rgbData[index + 2] = 255;
+            rgbData[index + 1] = 255;
+            rgbData[index] = 255;
         }
     }
 }

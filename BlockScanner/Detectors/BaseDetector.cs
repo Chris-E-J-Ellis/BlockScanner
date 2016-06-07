@@ -30,9 +30,8 @@
             return default(T);
         }
 
-        public virtual void HighlightSamplePoints(byte[] rgbData, int x, int y)
+        public virtual void HighlightSamplePoints(Bitmap frame)
         {
-            return;
         }
 
         public override string ToString()

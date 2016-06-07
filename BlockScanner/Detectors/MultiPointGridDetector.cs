@@ -44,7 +44,7 @@
             return output;
         }
 
-        public override void HighlightSamplePoints(byte[] rgbValues, int x, int y)
+        public override void HighlightSamplePoint(byte[] rgbValues, int x, int y)
         {
             var samplePoints = new HashSet<Point>();
 

@@ -14,7 +14,7 @@
 
         void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndex);
 
-        void HighlightSamplePoints(byte[] rgbData, int x, int y);
+        void HighlightSamplePoints(Bitmap frame);
     }
 
     public interface IDetector<T> : IDetector

@@ -122,7 +122,7 @@
         {
             var scanZone = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
-            DumpFrameWithSamplePoints(scanZone);
+            detector.HighlightSamplePoints(scanZone);
 
             scanZone.Save(path);
 
@@ -140,35 +140,6 @@
             }
 
             return bitmap;
-        }
-
-        private void DumpFrameWithSamplePoints(Bitmap frame)
-        {
-            //BitmapData data = frame.LockBits(rectangle, ImageLockMode.ReadWrite, frame.PixelFormat);
-
-            //// Get the address of the first line.
-            //IntPtr ptr = data.Scan0;
-
-            //// Declare an array to hold the bytes of the bitmap.
-            //int bytes = Math.Abs(data.Stride) * data.Height;
-            //byte[] rgbValues = new byte[bytes];
-
-            //// Copy the RGB values into the array.
-            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            //for (var y = 0; y < gridHeight; y++)
-            //{
-            //    for (var x = 0; x < gridWidth; x++)
-            //    {
-            //        detector.HighlightSamplePoints(rgbValues, (int)(sampleWidth * x) + sampleXOffset, (int)(sampleHeight * y) + sampleYOffset);
-            //    }
-            //}
-
-            //// Copy the RGB values back to the bitmap
-            //System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
-
-            //// Unlock the bits.
-            //frame.UnlockBits(data);
         }
     }
 }

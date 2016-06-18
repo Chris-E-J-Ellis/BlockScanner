@@ -68,6 +68,10 @@ namespace BlockScanner.Wpf.ViewModels
             LoadRenderers();
 
             Scanner = new ScannerViewModel(ScannerFactory.CreateBasic());
+
+            var renderer = new BasicRenderer();
+            renderer.Initialise();
+            Scanner.AttachRenderer(renderer);
         }
 
         public void BeginSelection()
@@ -108,7 +112,11 @@ namespace BlockScanner.Wpf.ViewModels
         {
             Scanner.Dispose();
 
-            var scanner = ScannerFactory.Create(SelectedDetector, SelectedRenderer);
+            var scanner = ScannerFactory.Create(SelectedDetector);
+
+            SelectedRenderer.Initialise();
+
+            scanner.AttachRenderer(selectedRenderer);
 
             Scanner = new ScannerViewModel(scanner);
 

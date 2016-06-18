@@ -8,7 +8,7 @@
     using System.Drawing.Imaging;
     using System.Windows.Media.Imaging;
     using Caliburn.Micro;
-
+    using Rendering;
     public class ScannerViewModel : PropertyChangedBase, IDisposable
     {
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -23,6 +23,16 @@
         public Rectangle ScanArea => Scanner.PlayfieldArea;
 
         public BitmapImage CapturePreview { get; private set; }
+
+        public void AttachRenderer(IRenderer renderer)
+        {
+            Scanner.AttachRenderer(renderer);
+        }
+
+        public void DetachRenderer(IRenderer renderer)
+        {
+            Scanner.DetachRenderer(renderer);
+        }
 
         public void SetScanArea(Rectangle sourceRectangle)
         {

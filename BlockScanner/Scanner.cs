@@ -10,29 +10,37 @@
     using Config;
     using Helpers;
 
-    public class Scanner<T> : IScanner<T>, IConfigurable<ScannerConfig>
+    public class Scanner<T> : IScanner<T>, IConfigurable<ScannerConfig>, IDisposable
     {
-        private IDetector<T> detector;
-        private IRenderer<T> renderer;
-        private IConfigManager configManager;
+        private readonly IDetector<T> detector;
+        private readonly IConfigManager configManager;
 
-        public Scanner(IDetector<T> detector, IRenderer<T> renderer)
-            : this(detector, renderer, ConfigManager.Instance) { }
+        public Scanner(IDetector<T> detector)
+            : this(detector, ConfigManager.Instance) { }
 
-        public Scanner(IDetector<T> detector, IRenderer<T> renderer, IConfigManager configManager)
+        public Scanner(IDetector<T> detector, IConfigManager configManager)
         {
             this.detector = detector;
-            this.renderer = renderer;
             this.configManager = configManager;
         }
 
-        public IDetector Detector => detector;
+        public event EventHandler<T> FrameScanned;
 
-        public IRenderer Renderer => renderer;
+        public IDetector Detector => detector;
 
         public Rectangle PlayfieldArea => Config.ScanArea;
 
         public ScannerConfig Config { get; private set; } = new ScannerConfig();
+
+        public void AttachRenderer(IRenderer renderer)
+        {
+            FrameScanned += (o, e) => (renderer as IRenderer<T>).Render(e);
+        }
+
+        public void DetachRenderer(IRenderer renderer)
+        {
+            FrameScanned -= (o, e) => (renderer as IRenderer<T>).Render(e);
+        }
 
         public void Initialise(Rectangle scanArea)
         {
@@ -43,7 +51,6 @@
 
             detector.Initialise(ConfigManager.Instance);
             detector.Initialise(sampleFrame);
-            renderer.Initialise();
         }
 
         /// <summary>
@@ -65,7 +72,7 @@
 
                     var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
-                    renderer.Render(frameData);
+                    OnRender(frameData);
 
                     timer.Stop();
 
@@ -94,7 +101,7 @@
 
                 var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
-                renderer.Render(frameData);
+                OnRender(frameData);
 
                 timer.Stop();
 
@@ -127,6 +134,18 @@
             scanZone.Save(path);
 
             return scanZone;
+        }
+
+        public void Dispose()
+        {
+            // Not entirely convinced this is legitimate, but signals that we're done with updating at least.
+            FrameScanned = null;
+        }
+
+        private void OnRender(T frameData)
+        {
+            // Potentially ASync this up.
+            FrameScanned?.Invoke(this, frameData);
         }
 
         // At some point, all the Bitmap capturing stuff can be unpicked/replaced with a generic data source.

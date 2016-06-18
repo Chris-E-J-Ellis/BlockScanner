@@ -8,30 +8,24 @@
     {
         public static IScanner CreateBasic()
         {
-            return new Scanner<bool[][]>(new BasicGridDetector(), new BasicRenderer());
+            return new Scanner<bool[][]>(new BasicGridDetector());
         }
 
-        public static IScanner Create(IDetector detector, IRenderer renderer)
+        public static IScanner Create(IDetector detector)
         {
-            if (detector.DetectedPointOutputType != renderer.RendererInputType)
-            {
-                throw new ArgumentException(string.Format("Renderer input type {0} does not match detector output type {1}",
-                    renderer.RendererInputType, detector.DetectedPointOutputType), "renderer");
-            }
-
             Type scannerType = typeof(Scanner<>);
 
             // Create a scanner using the type defined by the detector.
             var constructedType = scannerType.MakeGenericType(detector.DetectedPointOutputType);
 
-            var scanner = Activator.CreateInstance(constructedType, new object[] { detector, renderer });
+            var scanner = Activator.CreateInstance(constructedType, new object[] { detector });
 
             return scanner as IScanner;
         }
 
         public static IScanner<T> Create<T>(IDetector<T> detector, IRenderer<T> renderer)
         {
-            return new Scanner<T>(detector, renderer);
+            return new Scanner<T>(detector);
         }
     }
 }

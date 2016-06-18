@@ -11,8 +11,6 @@ namespace BlockScanner
         Rectangle PlayfieldArea { get; }
         IDetector Detector { get; }
 
-        void AttachRenderer(IRenderer renderer);
-        void DetachRenderer(IRenderer renderer);
         Bitmap DumpScanArea(string path);
         void Initialise(Rectangle playfield);
         void Scan(CancellationToken token);

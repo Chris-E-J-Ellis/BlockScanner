@@ -7,6 +7,9 @@
         Type RendererInputType { get; }
 
         void Initialise();
+
+        void AttachScanner(IScanner scanner);
+        void DetachScanner(IScanner scanner);
     }
 
     public interface IRenderer<T> : IRenderer

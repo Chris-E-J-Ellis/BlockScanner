@@ -2,15 +2,10 @@
 {
     using System;
     using System.Drawing;
-    using System.Drawing.Drawing2D;
+
     public class GDIRenderer : BaseRenderer<Color[][]>, IDisposable
     {
         private RenderSurfaceForm renderSurface = new RenderSurfaceForm();
-
-        public GDIRenderer()
-        {
-
-        }
 
         public override void Initialise()
         {
@@ -48,9 +43,11 @@
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.renderSurface.Dispose();
+
+            base.Dispose();
         }
     }
 }

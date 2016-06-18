@@ -6,7 +6,6 @@
     using System.Drawing.Imaging;
     using System.Threading;
     using Detectors;
-    using Rendering;
     using Config;
     using Helpers;
 
@@ -31,16 +30,6 @@
         public Rectangle PlayfieldArea => Config.ScanArea;
 
         public ScannerConfig Config { get; private set; } = new ScannerConfig();
-
-        public void AttachRenderer(IRenderer renderer)
-        {
-            FrameScanned += (o, e) => (renderer as IRenderer<T>).Render(e);
-        }
-
-        public void DetachRenderer(IRenderer renderer)
-        {
-            FrameScanned -= (o, e) => (renderer as IRenderer<T>).Render(e);
-        }
 
         public void Initialise(Rectangle scanArea)
         {

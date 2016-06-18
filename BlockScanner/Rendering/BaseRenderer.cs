@@ -2,9 +2,39 @@
 {
     using System;
 
-    public abstract class BaseRenderer<T> : IRenderer<T>
+    public abstract class BaseRenderer<T> : IRenderer<T> , IDisposable
     {
+        private IScanner<T> scanner;
+
         public Type RendererInputType => typeof(T);
+
+        public void AttachScanner(IScanner scanner)
+        {
+            var downcastScanner = (scanner as IScanner<T>);
+            if (downcastScanner != null)
+            {
+                this.scanner = downcastScanner;
+                this.scanner.FrameScanned += (o, e) => Render(e);
+            }
+        }
+
+        public void DetachScanner(IScanner scanner)
+        {
+            var downcastScanner = (scanner as IScanner<T>);
+            if (downcastScanner != null)
+            {
+                this.scanner = downcastScanner;
+                this.scanner.FrameScanned -= (o, e) => Render(e);
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            if (scanner == null)
+                return;
+
+            scanner.FrameScanned -= (o, e) => Render(e);
+        }
 
         public virtual void Initialise() { }
 

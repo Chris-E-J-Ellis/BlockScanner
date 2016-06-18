@@ -6,6 +6,19 @@
 
     public static class BitmapHelper
     {
+        // At some point, all the Bitmap capturing stuff can be unpicked/replaced with a generic data source.
+        public static Bitmap CaptureImage(int x, int y, int width, int height)
+        {
+            var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(x, y, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
+            }
+
+            return bitmap;
+        }
+
         public static BitmapData ExtractBitmapData(Bitmap bitmap, Rectangle lockRect)
         {
             BitmapData data = bitmap.LockBits(lockRect, ImageLockMode.ReadWrite, bitmap.PixelFormat);

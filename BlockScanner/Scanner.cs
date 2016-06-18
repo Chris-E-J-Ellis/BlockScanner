@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Drawing.Imaging;
     using System.Threading;
     using Detectors;
     using Config;
@@ -36,7 +35,7 @@
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
 
-            var sampleFrame = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+            var sampleFrame = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
             detector.Initialise(ConfigManager.Instance);
             detector.Initialise(sampleFrame);
@@ -57,7 +56,7 @@
                     timer.Reset();
                     timer.Start();
 
-                    var cap = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+                    var cap = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
                     var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
@@ -86,7 +85,7 @@
                 timer.Reset();
                 timer.Start();
 
-                var cap = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+                var cap = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
                 var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
@@ -116,7 +115,7 @@
 
         public Bitmap DumpScanArea(string path)
         {
-            var scanZone = CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+            var scanZone = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
 
             detector.HighlightSamplePoints(scanZone);
 
@@ -135,19 +134,6 @@
         {
             // Potentially ASync this up.
             FrameScanned?.Invoke(this, frameData);
-        }
-
-        // At some point, all the Bitmap capturing stuff can be unpicked/replaced with a generic data source.
-        private static Bitmap CaptureImage(int x, int y, int width, int height)
-        {
-            var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-
-            using (Graphics g = Graphics.FromImage(bitmap))
-            {
-                g.CopyFromScreen(x, y, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
-            }
-
-            return bitmap;
         }
     }
 }

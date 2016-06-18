@@ -75,7 +75,9 @@
     <Compile Include="Rendering\BasicRenderer.cs" />
     <Compile Include="Rendering\ColourBitmapRenderer.cs" />
     <Compile Include="Rendering\IRenderer.cs" />
+    <Compile Include="Rendering\IScannerSlot.cs" />
     <Compile Include="Rendering\MonochromeBitmapRender.cs" />
+    <Compile Include="Rendering\ScannerSlot.cs" />
     <Compile Include="Scanner.cs" />
     <Compile Include="IScanner.cs" />
     <Compile Include="Factories\ScannerFactory.cs" />

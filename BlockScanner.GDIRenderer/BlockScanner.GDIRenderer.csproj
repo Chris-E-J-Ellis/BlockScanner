@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultiSourceGDIRenderer.cs" />
     <Compile Include="RenderSurfaceForm.cs">
       <SubType>Form</SubType>
     </Compile>

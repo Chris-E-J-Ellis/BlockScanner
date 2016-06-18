@@ -136,16 +136,16 @@ namespace BlockScanner.Wpf.ViewModels
 
         private void LoadDetectors()
         {
-            var loadedDetector = DetectorFactory.Instance.LoadConcreteObjects();
+            var loadedDetectors = DetectorFactory.Instance.LoadConcreteObjects();
 
-            detectors.AddRange(loadedDetector);
+            detectors.AddRange(loadedDetectors);
         }
 
         private void LoadRenderers()
         {
-            var loadedRenderer = RendererFactory.Instance.LoadConcreteObjects();
+            var loadedRenderers = RendererFactory.Instance.LoadConcreteObjects();
 
-            renderers.AddRange(loadedRenderer);
+            renderers.AddRange(loadedRenderers);
         }
     }
 }

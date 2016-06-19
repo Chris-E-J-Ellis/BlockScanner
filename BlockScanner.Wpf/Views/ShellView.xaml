@@ -6,6 +6,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <UniformGrid Columns="3" Grid.Row="0">
             <ComboBox ItemsSource="{Binding Path=Renderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
@@ -18,5 +19,6 @@
             <Button x:Name="RunTestArea" Content="Test (Area x = 0, y = 0 , 400x400)" />
         </UniformGrid>
         <ContentControl x:Name="Scanner" Grid.Row="1"/>
+        <ContentControl x:Name="RendererVm" Grid.Row="2"/>
     </Grid>
 </Window>

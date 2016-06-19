@@ -8,8 +8,9 @@ namespace BlockScanner.Wpf.ViewModels
     using Rendering;
     using Helpers;
     using Views;
+    using Caliburn.Micro;
 
-    public class ShellViewModel : Caliburn.Micro.PropertyChangedBase, IShell
+    public class ShellViewModel : PropertyChangedBase, IShell
     {
         private readonly List<IDetector> detectors = new List<IDetector>();
         private readonly List<IRenderer> renderers = new List<IRenderer>();
@@ -25,6 +26,7 @@ namespace BlockScanner.Wpf.ViewModels
         }
 
         public ScannerViewModel Scanner { get; private set; }
+        public PropertyChangedBase RendererVm { get; private set; }
 
         public IEnumerable<IDetector> Detectors => detectors;
         public IEnumerable<IDetector> ValidDetectors
@@ -37,7 +39,7 @@ namespace BlockScanner.Wpf.ViewModels
                     return Detectors.Where(d => multiSource.ScannerSlots.Any(s => s.ScanType == d.DetectedPointOutputType));
                 }
 
-                return Detectors.Where(d => d.DetectedPointOutputType == SelectedRenderer.RendererInputType);
+                return Detectors.Where(d => d.DetectedPointOutputType == (SelectedRenderer as ISingleSourceRenderer)?.RendererInputType);
             }
         }
 
@@ -67,7 +69,7 @@ namespace BlockScanner.Wpf.ViewModels
         }
 
         public bool CanCreateScanner => SelectedDetector != null 
-            && SelectedDetector.DetectedPointOutputType == SelectedRenderer?.RendererInputType;
+            && SelectedDetector.DetectedPointOutputType == (SelectedRenderer as ISingleSourceRenderer)?.RendererInputType;
 
         public bool CanDumpScanArea => Scanner.ScanArea.Width >= 0 && Scanner.ScanArea.Height > 0;
 
@@ -82,11 +84,13 @@ namespace BlockScanner.Wpf.ViewModels
             Scanner = new ScannerViewModel(ScannerFactory.CreateBasic());
 
             // Quick test.
-            var renderer = Renderers.First(r => r.GetType() == typeof(BasicRenderer));
+            var renderer = Renderers.OfType<ISingleSourceRenderer>().First(r => r.GetType() == typeof(BasicRenderer));
             renderer.Initialise();
             renderer.AttachScanner(Scanner.Scanner);
 
             SelectedRenderer = renderer;
+
+            RendererVm = new RendererViewModel(renderer);
         }
 
         public void BeginSelection()
@@ -131,7 +135,7 @@ namespace BlockScanner.Wpf.ViewModels
 
             SelectedRenderer.Initialise();
 
-            SelectedRenderer.AttachScanner(scanner);
+            (SelectedRenderer as ISingleSourceRenderer)?.AttachScanner(scanner);
 
             Scanner = new ScannerViewModel(scanner);
 

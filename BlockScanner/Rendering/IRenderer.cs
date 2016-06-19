@@ -5,19 +5,24 @@
 
     public interface IRenderer
     {
+        void Initialise();
+    }
+
+    public interface ISingleSourceRenderer : IRenderer
+    {
         Type RendererInputType { get; }
 
-        void Initialise();
-
         void AttachScanner(IScanner scanner);
+
         void DetachScanner(IScanner scanner);
     }
 
-    public interface IRenderer<T> : IRenderer
+    public interface ISingleSourceRenderer<T> : ISingleSourceRenderer
     {
         void Render(T data);
     }
 
+    // Might be a case for making everything a Multisource.
     public interface IMultiSourceRenderer : IRenderer
     {
         IEnumerable<IScannerSlot> ScannerSlots { get; }

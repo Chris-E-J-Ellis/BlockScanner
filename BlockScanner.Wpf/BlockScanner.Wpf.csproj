@@ -52,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.0.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -75,8 +76,16 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="ViewModels\MultiSourceRendererViewModel.cs" />
+    <Compile Include="ViewModels\RendererViewModel.cs" />
     <Compile Include="ViewModels\ScannerViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\MultiSourceRendererView.xaml.cs">
+      <DependentUpon>MultiSourceRendererView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RendererView.xaml.cs">
+      <DependentUpon>RendererView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ScannerView.xaml.cs">
       <DependentUpon>ScannerView.xaml</DependentUpon>
     </Compile>
@@ -91,6 +100,14 @@
     <Compile Include="Views\CaptureWindow.xaml.cs">
       <DependentUpon>CaptureWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\MultiSourceRendererView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RendererView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ScannerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

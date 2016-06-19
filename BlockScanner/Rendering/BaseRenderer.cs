@@ -2,7 +2,7 @@
 {
     using System;
 
-    public abstract class BaseRenderer<T> : IRenderer<T> , IDisposable
+    public abstract class BaseRenderer<T> : ISingleSourceRenderer<T> , IDisposable
     {
         private IScanner<T> scanner;
 

@@ -23,7 +23,7 @@
             return scanner as IScanner;
         }
 
-        public static IScanner<T> Create<T>(IDetector<T> detector, IRenderer<T> renderer)
+        public static IScanner<T> Create<T>(IDetector<T> detector, ISingleSourceRenderer<T> renderer)
         {
             return new Scanner<T>(detector);
         }

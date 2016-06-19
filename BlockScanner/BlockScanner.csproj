@@ -61,6 +61,7 @@
     <Compile Include="Configuration\Detectors\ConfigurableBasicDetectorConfig.cs" />
     <Compile Include="Detectors\IDetector.cs" />
     <Compile Include="Configuration\IConfig.cs" />
+    <Compile Include="Detectors\LineCountDetector.cs" />
     <Compile Include="Detectors\MultiPointGridDetector.cs" />
     <Compile Include="Detectors\PassThroughGridDetector.cs" />
     <Compile Include="Factories\DetectorFactory.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\BaseRenderer.cs" />
+    <Compile Include="Rendering\BasicMultiSourceRenderer.cs" />
     <Compile Include="Rendering\BasicRenderer.cs" />
     <Compile Include="Rendering\ColourBitmapRenderer.cs" />
     <Compile Include="Rendering\IRenderer.cs" />

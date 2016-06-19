@@ -18,7 +18,7 @@
 
         public bool IsEmpty => Scanner == null;
 
-        public Type ScanType => Scanner?.Detector.DetectedPointOutputType;
+        public Type ScanType => typeof(T); 
 
         public void Assign(IScanner<T> scanner)
         {

@@ -8,9 +8,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <UniformGrid Columns="3" Grid.Row="0">
-            <Button x:Name="CreateScanner" Content="Create Scanner" />
-            <ComboBox ItemsSource="{Binding Path=Detectors}" SelectedItem="{Binding Path=SelectedDetector}" />
-            <ComboBox ItemsSource="{Binding Path=ValidRenderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
+            <ComboBox ItemsSource="{Binding Path=Renderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
+            <Button x:Name="CreateScanner" Content="Create Single Source Scanner" />
+            <ComboBox ItemsSource="{Binding Path=ValidDetectors}" SelectedItem="{Binding Path=SelectedDetector}" />
             <Button x:Name="BeginSelection" Content="Select Capture Area" />
             <Button x:Name="DumpScanArea" Content="Dump Scan (./Images/cap.bmp)" />
             <Button x:Name="ToggleConsole" Content="Toggle Console" />

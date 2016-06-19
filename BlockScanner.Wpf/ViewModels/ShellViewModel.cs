@@ -27,8 +27,21 @@ namespace BlockScanner.Wpf.ViewModels
         public ScannerViewModel Scanner { get; private set; }
 
         public IEnumerable<IDetector> Detectors => detectors;
+        public IEnumerable<IDetector> ValidDetectors
+        {
+            get
+            {
+                var multiSource = (SelectedRenderer as IMultiSourceRenderer);
+                if (multiSource != null)
+                {
+                    return Detectors.Where(d => multiSource.ScannerSlots.Any(s => s.ScanType == d.DetectedPointOutputType));
+                }
+
+                return Detectors.Where(d => d.DetectedPointOutputType == SelectedRenderer.RendererInputType);
+            }
+        }
+
         public IEnumerable<IRenderer> Renderers => renderers;
-        public IEnumerable<IRenderer> ValidRenderers => renderers.Where(r => r.RendererInputType == SelectedDetector?.DetectedPointOutputType);
 
         public IDetector SelectedDetector
         {
@@ -37,8 +50,6 @@ namespace BlockScanner.Wpf.ViewModels
             {
                 this.selectedDetector = value;
 
-                NotifyOfPropertyChange(() => SelectedDetector);
-                NotifyOfPropertyChange(() => ValidRenderers);
                 NotifyOfPropertyChange(() => CanCreateScanner);
             }
         }
@@ -50,6 +61,7 @@ namespace BlockScanner.Wpf.ViewModels
             {
                 this.selectedRenderer = value;
 
+                NotifyOfPropertyChange(() => ValidDetectors);
                 NotifyOfPropertyChange(() => CanCreateScanner);
             }
         }
@@ -69,9 +81,12 @@ namespace BlockScanner.Wpf.ViewModels
 
             Scanner = new ScannerViewModel(ScannerFactory.CreateBasic());
 
-            var renderer = new BasicRenderer();
+            // Quick test.
+            var renderer = Renderers.First(r => r.GetType() == typeof(BasicRenderer));
             renderer.Initialise();
             renderer.AttachScanner(Scanner.Scanner);
+
+            SelectedRenderer = renderer;
         }
 
         public void BeginSelection()

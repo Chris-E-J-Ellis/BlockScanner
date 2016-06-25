@@ -16,7 +16,27 @@
             get; private set;
         }
 
-        IRenderer IRendererViewModel.Renderer => this.Renderer;
+        public ScannerViewModel Scanner
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        ISingleSourceRenderer IRendererViewModel.Renderer
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        // Attach to the first available slot?
+        public void AttachScanner(IScanner scanner)
+        {
+            //throw new NotImplementedException();
+        }
 
         public void Dispose()
         {

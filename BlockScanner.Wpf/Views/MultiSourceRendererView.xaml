@@ -7,30 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="Blue">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}Detector {0}">
-                    <Binding Path="Scanner.Detector" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <TextBlock HorizontalAlignment="Left" Grid.Row="1">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}Sample region: {0}x{1} @ ({2}, {3})">
-                    <Binding Path="ScanArea.Width" />
-                    <Binding Path="ScanArea.Height" />
-                    <Binding Path="ScanArea.X" />
-                    <Binding Path="ScanArea.Y" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <Border BorderBrush="Gray" BorderThickness="1"  Grid.Row="2">
-            <Image x:Name="CapturePreview" Source="{Binding Path=CapturePreview}" />
-        </Border>
+
     </Grid>
 </UserControl>

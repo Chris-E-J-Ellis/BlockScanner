@@ -75,6 +75,20 @@
             NotifyOfPropertyChange(() => CapturePreview);
         }
 
+        public void RunTestArea()
+        {
+            SetScanArea(new Rectangle(0, 0, 400, 400));
+
+            DumpScanArea();
+
+            Scan();
+        }
+
+        public void Stop()
+        {
+            cancellationTokenSource.Cancel();
+        }
+
         public void Dispose()
         {
             //Stop Scanning task.

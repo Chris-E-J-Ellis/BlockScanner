@@ -12,6 +12,8 @@
     {
         Type RendererInputType { get; }
 
+        IScanner Scanner { get; }
+
         void AttachScanner(IScanner scanner);
 
         void DetachScanner(IScanner scanner);

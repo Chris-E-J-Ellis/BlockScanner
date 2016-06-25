@@ -6,12 +6,23 @@
 
     public class RendererViewModel : PropertyChangedBase, IRendererViewModel, IDisposable
     {
-        public RendererViewModel(IRenderer renderer)
+        public RendererViewModel(ISingleSourceRenderer renderer)
         {
             this.Renderer = renderer;
         }
 
-        public IRenderer Renderer { get; private set; }
+        public ScannerViewModel Scanner { get; private set; }
+
+        public ISingleSourceRenderer Renderer { get; private set; }
+
+        public void AttachScanner(IScanner scanner)
+        {
+            Renderer.AttachScanner(scanner);
+
+            this.Scanner = new ScannerViewModel(scanner);
+
+            NotifyOfPropertyChange(() => Scanner);
+        }
 
         public void Dispose()
         {

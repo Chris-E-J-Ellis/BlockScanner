@@ -78,11 +78,15 @@
     <Compile Include="IShell.cs" />
     <Compile Include="ViewModels\IRendererViewModel.cs" />
     <Compile Include="ViewModels\MultiSourceRendererViewModel.cs" />
+    <Compile Include="ViewModels\RendererSetupViewModel.cs" />
     <Compile Include="ViewModels\RendererViewModel.cs" />
     <Compile Include="ViewModels\ScannerViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\MultiSourceRendererView.xaml.cs">
       <DependentUpon>MultiSourceRendererView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RendererSetupView.xaml.cs">
+      <DependentUpon>RendererSetupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RendererView.xaml.cs">
       <DependentUpon>RendererView.xaml</DependentUpon>
@@ -102,6 +106,10 @@
       <DependentUpon>CaptureWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MultiSourceRendererView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RendererSetupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

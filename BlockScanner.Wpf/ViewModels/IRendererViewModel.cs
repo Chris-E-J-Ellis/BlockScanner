@@ -4,6 +4,9 @@
 
     public interface IRendererViewModel
     {
-        IRenderer Renderer { get; }
+        ISingleSourceRenderer Renderer { get; }
+        ScannerViewModel Scanner { get; }
+
+        void AttachScanner(IScanner scanner);
     }
 }

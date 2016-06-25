@@ -8,6 +8,8 @@
 
         public Type RendererInputType => typeof(T);
 
+        public IScanner Scanner => scanner;
+
         public void AttachScanner(IScanner scanner)
         {
             var downcastScanner = (scanner as IScanner<T>);

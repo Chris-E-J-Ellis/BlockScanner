@@ -4,21 +4,13 @@
         Height="400" Width="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <UniformGrid Columns="3" Grid.Row="0">
-            <ComboBox ItemsSource="{Binding Path=Renderers}" SelectedItem="{Binding Path=SelectedRenderer}" />
-            <Button x:Name="CreateScanner" Content="Create Single Source Scanner" />
-            <ComboBox ItemsSource="{Binding Path=ValidDetectors}" SelectedItem="{Binding Path=SelectedDetector}" />
-            <Button x:Name="BeginSelection" Content="Select Capture Area" />
-            <Button x:Name="DumpScanArea" Content="Dump Scan (./Images/cap.bmp)" />
+            <ComboBox ItemsSource="{Binding Path=RendererSetups}" SelectedItem="{Binding Path=SelectedRendererSetup}" />
             <Button x:Name="ToggleConsole" Content="Toggle Console" />
-            <Button x:Name="SingleScan" Content="SingleScan" />
-            <Button x:Name="RunTestArea" Content="Test (Area x = 0, y = 0 , 400x400)" />
         </UniformGrid>
-        <ContentControl x:Name="Scanner" Grid.Row="1"/>
-        <ContentControl x:Name="SelectedRenderer" Grid.Row="2"/>
+        <ContentControl x:Name="SelectedRendererSetup" Grid.Row="1"/>
     </Grid>
 </Window>

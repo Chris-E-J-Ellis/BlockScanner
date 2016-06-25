@@ -14,8 +14,8 @@
         </Grid.RowDefinitions>
         <TextBlock HorizontalAlignment="Left" Grid.Row="0">
             <TextBlock.Text>
-                <MultiBinding StringFormat="{}Detector {0}">
-                    <Binding Path="Scanner.Detector" />
+                <MultiBinding StringFormat="{}Renderer {0}">
+                    <Binding Path="Renderer.Renderer" />
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>

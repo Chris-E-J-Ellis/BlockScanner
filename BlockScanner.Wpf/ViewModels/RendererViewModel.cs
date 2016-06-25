@@ -4,7 +4,7 @@
     using Caliburn.Micro;
     using Rendering;
 
-    public class RendererViewModel : PropertyChangedBase, IDisposable
+    public class RendererViewModel : PropertyChangedBase, IRendererViewModel, IDisposable
     {
         public RendererViewModel(IRenderer renderer)
         {
@@ -15,6 +15,11 @@
 
         public void Dispose()
         {
+        }
+
+        public override string ToString()
+        {
+            return Renderer.GetType().Name;
         }
     }
 }

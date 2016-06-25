@@ -4,7 +4,7 @@
     using Caliburn.Micro;
     using Rendering;
 
-    public class MultiSourceRendererViewModel : PropertyChangedBase, IDisposable
+    public class MultiSourceRendererViewModel : PropertyChangedBase, IRendererViewModel, IDisposable 
     {
         public MultiSourceRendererViewModel(IMultiSourceRenderer renderer)
         {
@@ -16,8 +16,15 @@
             get; private set;
         }
 
+        IRenderer IRendererViewModel.Renderer => this.Renderer;
+
         public void Dispose()
         {
+        }
+
+        public override string ToString()
+        {
+            return Renderer.GetType().Name;
         }
     }
 }

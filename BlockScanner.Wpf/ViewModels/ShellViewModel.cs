@@ -13,10 +13,10 @@ namespace BlockScanner.Wpf.ViewModels
     public class ShellViewModel : PropertyChangedBase, IShell
     {
         private readonly List<IDetector> detectors = new List<IDetector>();
-        private readonly List<IRenderer> renderers = new List<IRenderer>();
+        private readonly List<IRendererViewModel> renderers = new List<IRendererViewModel>();
 
         private IDetector selectedDetector;
-        private IRenderer selectedRenderer;
+        private IRendererViewModel selectedRenderer;
 
         private int consoleVisible = InteropHelper.SW_SHOW;
 
@@ -26,24 +26,23 @@ namespace BlockScanner.Wpf.ViewModels
         }
 
         public ScannerViewModel Scanner { get; private set; }
-        public PropertyChangedBase RendererVm { get; private set; }
 
         public IEnumerable<IDetector> Detectors => detectors;
         public IEnumerable<IDetector> ValidDetectors
         {
             get
             {
-                var multiSource = (SelectedRenderer as IMultiSourceRenderer);
+                var multiSource = (SelectedRenderer?.Renderer as IMultiSourceRenderer);
                 if (multiSource != null)
                 {
                     return Detectors.Where(d => multiSource.ScannerSlots.Any(s => s.ScanType == d.DetectedPointOutputType));
                 }
 
-                return Detectors.Where(d => d.DetectedPointOutputType == (SelectedRenderer as ISingleSourceRenderer)?.RendererInputType);
+                return Detectors.Where(d => d.DetectedPointOutputType == (SelectedRenderer?.Renderer as ISingleSourceRenderer)?.RendererInputType);
             }
         }
 
-        public IEnumerable<IRenderer> Renderers => renderers;
+        public IEnumerable<IRendererViewModel> Renderers => renderers; 
 
         public IDetector SelectedDetector
         {
@@ -56,20 +55,21 @@ namespace BlockScanner.Wpf.ViewModels
             }
         }
 
-        public IRenderer SelectedRenderer
+        public IRendererViewModel SelectedRenderer
         {
             get { return this.selectedRenderer; }
             set
             {
-                this.selectedRenderer = value;
+                this.selectedRenderer = value; 
 
                 NotifyOfPropertyChange(() => ValidDetectors);
                 NotifyOfPropertyChange(() => CanCreateScanner);
+                NotifyOfPropertyChange(() => SelectedRenderer);
             }
         }
 
         public bool CanCreateScanner => SelectedDetector != null 
-            && SelectedDetector.DetectedPointOutputType == (SelectedRenderer as ISingleSourceRenderer)?.RendererInputType;
+            && SelectedDetector.DetectedPointOutputType == (SelectedRenderer.Renderer as ISingleSourceRenderer)?.RendererInputType;
 
         public bool CanDumpScanArea => Scanner.ScanArea.Width >= 0 && Scanner.ScanArea.Height > 0;
 
@@ -84,13 +84,11 @@ namespace BlockScanner.Wpf.ViewModels
             Scanner = new ScannerViewModel(ScannerFactory.CreateBasic());
 
             // Quick test.
-            var renderer = Renderers.OfType<ISingleSourceRenderer>().First(r => r.GetType() == typeof(BasicRenderer));
-            renderer.Initialise();
-            renderer.AttachScanner(Scanner.Scanner);
+            var renderer = Renderers.OfType<IRendererViewModel>().First(r => r.Renderer.GetType() == typeof(BasicRenderer));
+            renderer.Renderer.Initialise();
+            (renderer.Renderer as ISingleSourceRenderer).AttachScanner(Scanner.Scanner);
 
             SelectedRenderer = renderer;
-
-            RendererVm = new RendererViewModel(renderer);
         }
 
         public void BeginSelection()
@@ -133,9 +131,9 @@ namespace BlockScanner.Wpf.ViewModels
 
             var scanner = ScannerFactory.Create(SelectedDetector);
 
-            SelectedRenderer.Initialise();
+            SelectedRenderer.Renderer.Initialise();
 
-            (SelectedRenderer as ISingleSourceRenderer)?.AttachScanner(scanner);
+            (SelectedRenderer.Renderer as ISingleSourceRenderer)?.AttachScanner(scanner);
 
             Scanner = new ScannerViewModel(scanner);
 
@@ -164,7 +162,13 @@ namespace BlockScanner.Wpf.ViewModels
         {
             var loadedRenderers = RendererFactory.Instance.LoadConcreteObjects();
 
-            renderers.AddRange(loadedRenderers);
+            // Separate to vm factory?
+            var singleSlotRenderers = loadedRenderers.OfType<ISingleSourceRenderer>();
+
+            var multiSlotRenderers = loadedRenderers.OfType<IMultiSourceRenderer>();
+
+            renderers.AddRange(singleSlotRenderers.Select(r => new RendererViewModel(r)));
+            renderers.AddRange(multiSlotRenderers.Select(r => new MultiSourceRendererViewModel(r)));
         }
     }
 }

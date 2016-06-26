@@ -3,11 +3,11 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for RendererView.xaml
+    /// Interaction logic for SingleSourceRendererView.xaml
     /// </summary>
-    public partial class RendererView : UserControl
+    public partial class SingleSourceRendererView : UserControl
     {
-        public RendererView()
+        public SingleSourceRendererView()
         {
             InitializeComponent();
         }

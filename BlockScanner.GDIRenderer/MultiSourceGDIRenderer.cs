@@ -11,6 +11,8 @@
 
         private readonly IList<IScannerSlot> slots = new List<IScannerSlot>();
 
+        private int lineCount;
+
         public MultiSourceGDIRenderer()
         {
             // Initialise Slots
@@ -53,6 +55,7 @@
             base.Dispose();
         }
 
+        // Testing, using this as the primary render call.
         private void UpdatePlayfield(Color[][] playfieldInfo)
         {
             // Not entirely sure it's sensible to do this every frame, let's see what happens.
@@ -75,11 +78,14 @@
                         graphics.FillRectangle(new SolidBrush(playfieldInfo[y][x]), new Rectangle(x * renderWidth, y * renderHeight, renderWidth, renderHeight));
                     }
                 }
+
+                graphics.DrawString(lineCount.ToString(), new Font("Arial", 10), new SolidBrush(Color.White), width / 2, height / 2);
             }
         }
 
         private void UpdateLineCount(int count)
         {
+            lineCount = count;
         }
     }
 }

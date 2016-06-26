@@ -7,6 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="Blue">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" Grid.Row="0" Text="{Binding Path=Renderer, StringFormat={}{0}}" />
+        <UniformGrid Columns="3" Grid.Row="1">
+            <ComboBox ItemsSource="{Binding Path=ScannerSlots}" SelectedItem="{Binding Path=SelectedScannerSlot}" />
+            <Button x:Name="AttachScanner" Content="Attach Scanner" />
+            <ComboBox ItemsSource="{Binding Path=ValidDetectors}" SelectedItem="{Binding Path=SelectedDetector}" />
+            <Button x:Name="DetachScanner" Content="Detach Scanner" />
+        </UniformGrid>
+        <Border BorderBrush="Gray" BorderThickness="1"  Grid.Row="2">
+            <ContentControl x:Name="Scanner" />
+        </Border>
     </Grid>
 </UserControl>

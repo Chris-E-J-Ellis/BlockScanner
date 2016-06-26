@@ -10,9 +10,9 @@ namespace BlockScanner.Wpf.ViewModels
     public class ShellViewModel : PropertyChangedBase, IShell
     {
         private readonly List<IDetector> detectors = new List<IDetector>();
-        private readonly List<RendererSetupViewModel> rendererSetups = new List<RendererSetupViewModel>();
+        private readonly List<IRendererViewModel> rendererSetups = new List<IRendererViewModel>();
 
-        private RendererSetupViewModel selectedRendererSetup;
+        private IRendererViewModel selectedRendererSetup;
 
         private int consoleVisible = InteropHelper.SW_SHOW;
 
@@ -21,7 +21,7 @@ namespace BlockScanner.Wpf.ViewModels
             Initialise();
         }
 
-        public RendererSetupViewModel SelectedRendererSetup
+        public IRendererViewModel SelectedRendererSetup
         {
             get { return this.selectedRendererSetup; }
             set
@@ -33,7 +33,7 @@ namespace BlockScanner.Wpf.ViewModels
             }
         }
 
-        public IEnumerable<RendererSetupViewModel> RendererSetups => rendererSetups; 
+        public IEnumerable<IRendererViewModel> RendererSetups => rendererSetups; 
 
         public void Initialise()
         {
@@ -68,7 +68,8 @@ namespace BlockScanner.Wpf.ViewModels
         {
             var loadedRenderers = RendererFactory.Instance.LoadConcreteObjects();
 
-            rendererSetups.AddRange(loadedRenderers.OfType<ISingleSourceRenderer>().Select(r => new RendererSetupViewModel(r, detectors)));
+            rendererSetups.AddRange(loadedRenderers.OfType<ISingleSourceRenderer>().Select(r => new SingleSourceRendererViewModel(r, detectors)));
+            rendererSetups.AddRange(loadedRenderers.OfType<IMultiSourceRenderer>().Select(r => new MultiSourceRendererViewModel(r, detectors)));
         }
     }
 }

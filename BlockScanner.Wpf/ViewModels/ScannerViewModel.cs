@@ -20,7 +20,7 @@
 
         public IScanner Scanner { get; }
 
-        public Rectangle ScanArea => Scanner.PlayfieldArea;
+        public Rectangle ScanArea => Scanner == null ? new Rectangle() : Scanner.PlayfieldArea;
 
         public BitmapImage CapturePreview { get; private set; }
 

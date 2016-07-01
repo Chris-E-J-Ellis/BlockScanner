@@ -76,7 +76,7 @@
         }
 
         //Temporary whilst restructuring.
-        public void KillScan()
+        public void HaltScanners()
         {
             Scanner?.Stop();
         }

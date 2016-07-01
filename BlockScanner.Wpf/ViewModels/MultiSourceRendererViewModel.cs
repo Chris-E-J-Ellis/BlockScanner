@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Drawing;
     using Caliburn.Micro;
     using Detectors;
     using Rendering;
@@ -11,7 +12,7 @@
 
     public class MultiSourceRendererViewModel : PropertyChangedBase, IRendererViewModel, IDisposable 
     {
-        private readonly IEnumerable<IDetector> detectors = new List<IDetector>();
+        private readonly List<IDetector> detectors = new List<IDetector>();
         private readonly IMultiSourceRenderer renderer;
         private readonly List<ScannerViewModel> ScannerViewModelCache = new List<ScannerViewModel>();
 
@@ -20,22 +21,17 @@
 
         public MultiSourceRendererViewModel(IMultiSourceRenderer renderer, IEnumerable<IDetector> detectors)
         {
-            this.detectors = detectors;
+            this.detectors.AddRange(detectors);
             this.renderer = renderer;
 
             Initialise();
         }
 
-        public ScannerViewModel Scanner
-        {
-            get { return ScannerViewModelCache.SingleOrDefault(s => s.Scanner == SelectedScannerSlot.Scanner); }
-        }
-
         public IMultiSourceRenderer Renderer => this.renderer;
 
-        public IEnumerable<IDetector> Detectors => detectors;
+        public IEnumerable<IDetector> ValidDetectors => detectors.Where(d => d.DetectedPointOutputType == SelectedScannerSlot.ScanType);
 
-        public IEnumerable<IDetector> ValidDetectors => Detectors.Where(d => d.DetectedPointOutputType == SelectedScannerSlot.ScanType);
+        public ScannerViewModel SelectedScanner => ScannerViewModelCache.SingleOrDefault(s => s.Scanner == SelectedScannerSlot.Scanner);
 
         public IDetector SelectedDetector
         {
@@ -57,46 +53,37 @@
             {
                 this.selectedScannerSlot = value;
 
-                this.SelectedDetector = this.selectedScannerSlot?.Scanner?.Detector != null
-                    ? this.selectedScannerSlot.Scanner.Detector
-                    : ValidDetectors.FirstOrDefault();
+                // Ensure a valid detector is selected (if one exists).
+                this.SelectedDetector = ValidDetectors.FirstOrDefault();
 
                 NotifyOfPropertyChange(() => SelectedScannerSlot);
                 NotifyOfPropertyChange(() => ValidDetectors);
             }
         }
 
+
         public void Initialise()
         {
             SelectedScannerSlot = ScannerSlots.First();
-            SelectedDetector = ValidDetectors.FirstOrDefault();
         }
 
         public void AttachScanner()
         {
-            Scanner?.Stop();
-
+            // Stop any existing scanner.
+            SelectedScanner?.Stop();
             DetachScanner();
-
-            var scanner = ScannerFactory.Create(SelectedDetector);
-
-            ScannerViewModelCache.Add(new ScannerViewModel(scanner));
 
             Renderer.Initialise();
 
-            SelectedScannerSlot.Assign(scanner);
+            // Assign a new Scanner.
+            var scannerVm = CreateScannerViewModel(selectedDetector);
+            SelectedScannerSlot.Assign(scannerVm.Scanner);
 
-            // TODO: Remove view dependency.
-            var captureZone = new CaptureWindow();
-            captureZone.ShowDialog();
+            scannerVm.SetScanArea(GetSelectionArea());
+            scannerVm.DumpScanArea();
+            scannerVm.Scan();
 
-            Scanner.SetScanArea(captureZone.SelectionAreaRectangle);
-
-            Scanner.DumpScanArea();
-
-            Scanner.Scan();
-
-            NotifyOfPropertyChange(() => Scanner);
+            NotifyOfPropertyChange(() => SelectedScanner);
         }
 
         public void DetachScanner()
@@ -111,14 +98,34 @@
             return Renderer.GetType().Name;
         }
 
-        //Temporary whilst restructuring.
-        public void KillScan()
+        public void HaltScanners()
         {
             ScannerViewModelCache.ForEach(svm => svm.Stop());
         }
 
         public void Dispose()
         {
+            ScannerViewModelCache.ForEach(svm => svm.Dispose());
+        }
+
+        private ScannerViewModel CreateScannerViewModel(IDetector detector)
+        {
+            var scanner = ScannerFactory.Create(detector);
+
+            var scannerVm = new ScannerViewModel(scanner);
+
+            ScannerViewModelCache.Add(scannerVm);
+
+            return scannerVm;
+        }
+
+        private Rectangle GetSelectionArea()
+        {
+            var captureZone = new CaptureWindow();
+
+            captureZone.ShowDialog();
+
+            return captureZone.SelectionAreaRectangle;
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IRendererViewModel
     {
-        void KillScan();
+        void HaltScanners();
     }
 }

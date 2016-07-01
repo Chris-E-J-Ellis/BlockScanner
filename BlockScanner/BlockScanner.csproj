@@ -62,7 +62,6 @@
     <Compile Include="Detectors\IDetector.cs" />
     <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="Detectors\LineCountDetector.cs" />
-    <Compile Include="Detectors\MultiPointGridDetector.cs" />
     <Compile Include="Detectors\PassThroughGridDetector.cs" />
     <Compile Include="Factories\DetectorFactory.cs" />
     <Compile Include="Factories\PluginFactoryBase.cs" />

@@ -26,7 +26,7 @@ namespace BlockScanner.Wpf.ViewModels
             get { return this.selectedRendererSetup; }
             set
             {
-                this.selectedRendererSetup?.KillScan();
+                this.selectedRendererSetup?.HaltScanners();
                 this.selectedRendererSetup = value;
 
                 NotifyOfPropertyChange(() => SelectedRendererSetup);

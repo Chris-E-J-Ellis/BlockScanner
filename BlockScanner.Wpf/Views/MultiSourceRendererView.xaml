@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BlockScanner.Wpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Blue">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="60"/>
@@ -20,7 +20,7 @@
             <Button x:Name="DetachScanner" Content="Detach Scanner" />
         </UniformGrid>
         <Border BorderBrush="Gray" BorderThickness="1"  Grid.Row="2">
-            <ContentControl x:Name="Scanner" />
+            <ContentControl x:Name="SelectedScanner" />
         </Border>
     </Grid>
 </UserControl>

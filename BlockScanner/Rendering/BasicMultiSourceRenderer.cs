@@ -46,11 +46,11 @@
             base.Dispose();
         }
 
-        private void UpdatePlayfield(bool[][] playfieldInfo)
+        private void UpdatePlayfield(object sender, bool[][] playfieldInfo)
         {
         }
 
-        private void UpdateLineCount(int count)
+        private void UpdateLineCount(object sender, int count)
         {
         }
     }

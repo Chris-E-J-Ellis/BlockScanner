@@ -69,8 +69,7 @@
 
         public void AttachScanner()
         {
-            // Stop any existing scanner.
-            SelectedScanner?.Stop();
+            // Remove the existing scanner.
             DetachScanner();
 
             Renderer.Initialise();
@@ -88,9 +87,12 @@
 
         public void DetachScanner()
         {
+            // Currently, we stop scanning.
+            SelectedScanner?.Stop();
+
             SelectedScannerSlot.Clear();
 
-            ScannerViewModelCache.Remove(ScannerViewModelCache.SingleOrDefault(s => s == SelectedScannerSlot.Scanner));
+            ScannerViewModelCache.Remove(ScannerViewModelCache.SingleOrDefault(s => s == SelectedScanner));
         }
 
         public override string ToString()

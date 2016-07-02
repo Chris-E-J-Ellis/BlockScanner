@@ -4,13 +4,13 @@
 
     public sealed class ScannerSlot<T> : IScannerSlot
     {
-        private Action<T> scanAction;
+        private EventHandler<T> scanAction;
         private IScanner<T> scanner;
 
-        public ScannerSlot(string name, Action<T> renderAction)
+        public ScannerSlot(string name, EventHandler<T> scanHandler)
         {
             Name = name;
-            scanAction = renderAction;
+            scanAction = scanHandler;
         }
 
         public string Name { get; private set; }
@@ -29,7 +29,7 @@
                 Clear();
 
                 this.scanner = downcastScanner;
-                this.scanner.FrameScanned += (o, e) => scanAction(e);
+                this.scanner.FrameScanned += scanAction;
             }
         }
 
@@ -38,7 +38,7 @@
             if (Scanner == null)
                 return;
 
-            this.scanner.FrameScanned -= (o, e) => scanAction(e);
+            this.scanner.FrameScanned -= scanAction;
         }
 
         public override string ToString()
@@ -48,7 +48,7 @@
 
         public void Dispose()
         {
-            this.scanner.FrameScanned -= (o, e) => scanAction(e);
+            this.scanner.FrameScanned -= scanAction;
         }
     }
 }

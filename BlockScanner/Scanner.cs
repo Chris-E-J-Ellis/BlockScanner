@@ -12,14 +12,16 @@
     {
         private readonly IDetector<T> detector;
         private readonly IConfigManager configManager;
+        private readonly IBitmapProvider bitmapProvider;
 
         public Scanner(IDetector<T> detector)
-            : this(detector, ConfigManager.Instance) { }
+            : this(detector, ConfigManager.Instance, new SimpleBitmapProvider()) { }
 
-        public Scanner(IDetector<T> detector, IConfigManager configManager)
+        public Scanner(IDetector<T> detector, IConfigManager configManager, IBitmapProvider bitmapProvider)
         {
             this.detector = detector;
             this.configManager = configManager;
+            this.bitmapProvider = bitmapProvider;
         }
 
         public event EventHandler<T> FrameScanned;
@@ -35,7 +37,7 @@
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
 
-            var sampleFrame = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+            var sampleFrame = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
             detector.Initialise(ConfigManager.Instance);
             detector.Initialise(sampleFrame);
@@ -56,7 +58,7 @@
                     timer.Reset();
                     timer.Start();
 
-                    var cap = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+                    var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
                     var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
@@ -85,7 +87,7 @@
                 timer.Reset();
                 timer.Start();
 
-                var cap = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+                var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
                 var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
 
@@ -115,7 +117,7 @@
 
         public Bitmap DumpScanArea(string path)
         {
-            var scanZone = BitmapHelper.CaptureImage(PlayfieldArea.X, PlayfieldArea.Y, PlayfieldArea.Width, PlayfieldArea.Height);
+            var scanZone = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
             detector.HighlightSamplePoints(scanZone);
 

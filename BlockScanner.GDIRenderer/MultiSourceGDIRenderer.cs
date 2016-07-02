@@ -56,7 +56,7 @@
         }
 
         // Testing, using this as the primary render call.
-        private void UpdatePlayfield(Color[][] playfieldInfo)
+        private void UpdatePlayfield(object sender, Color[][] playfieldInfo)
         {
             // Not entirely sure it's sensible to do this every frame, let's see what happens.
             // Waste of cycles, but hey, we're testing stuff =D
@@ -83,7 +83,7 @@
             }
         }
 
-        private void UpdateLineCount(int count)
+        private void UpdateLineCount(object sender, int count)
         {
             lineCount = count;
         }

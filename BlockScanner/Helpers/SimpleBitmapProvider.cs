@@ -13,7 +13,7 @@
         {
         }
 
-        public void UnRegisterRegionOfInterest(Rectangle rect)
+        public void UnregisterRegionOfInterest(Rectangle rect)
         {
         }
     }

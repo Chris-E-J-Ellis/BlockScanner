@@ -15,7 +15,7 @@
         private readonly IBitmapProvider bitmapProvider;
 
         public Scanner(IDetector<T> detector)
-            : this(detector, ConfigManager.Instance, new SimpleBitmapProvider()) { }
+            : this(detector, ConfigManager.Instance, DynamicRegionBitmapProvider.Instance) { }
 
         public Scanner(IDetector<T> detector, IConfigManager configManager, IBitmapProvider bitmapProvider)
         {
@@ -34,9 +34,11 @@
 
         public void Initialise(Rectangle scanArea)
         {
+
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
 
+            bitmapProvider.RegisterRegionOfInterest(scanArea);
             var sampleFrame = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
             detector.Initialise(ConfigManager.Instance);
@@ -60,14 +62,14 @@
 
                     var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
-                    var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
+                    var frameData = AnalyseFrame(cap);
 
                     OnRender(frameData);
 
                     timer.Stop();
 
                     // Not great, the console takes time to render this.
-                    Console.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
+                    //Console.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
                 }
             }
             catch (Exception ex)
@@ -75,6 +77,8 @@
                 // Super basic, just fail and stop scanning.
                 Console.WriteLine($"Encountered an exception, scan halted: '{ex};");
             }
+
+            bitmapProvider.UnregisterRegionOfInterest(Config.ScanArea);
         }
 
         // Probably temporary, collapse with above function.
@@ -130,6 +134,8 @@
         {
             // Not entirely convinced this is legitimate, but signals that we're done with updating at least.
             FrameScanned = null;
+
+            bitmapProvider.UnregisterRegionOfInterest(Config.ScanArea);
         }
 
         private void OnRender(T frameData)

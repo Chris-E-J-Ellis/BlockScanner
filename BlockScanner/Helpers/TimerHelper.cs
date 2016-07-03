@@ -27,6 +27,7 @@
         {
             // Should probably farm this off to another output.
             Console.WriteLine($"{description} took {stopWatch.Elapsed.TotalMilliseconds} ms");
+            Trace.WriteLine($"{description} took {stopWatch.Elapsed.TotalMilliseconds} ms");
         }
 
         public static T Profile<T>(Func<T> function, string description = "")

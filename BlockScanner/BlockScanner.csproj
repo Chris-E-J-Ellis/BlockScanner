@@ -68,6 +68,7 @@
     <Compile Include="Factories\PluginHelpers.cs" />
     <Compile Include="Factories\RendererFactory.cs" />
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\DynamicRegionBitmapProvider.cs" />
     <Compile Include="Helpers\IBitmapProvider.cs" />
     <Compile Include="Helpers\InteropHelper.cs" />
     <Compile Include="Helpers\SimpleBitmapProvider.cs" />

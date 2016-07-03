@@ -7,6 +7,6 @@
         Bitmap CaptureScreenRegion(Rectangle rect);
 
         void RegisterRegionOfInterest(Rectangle rect);
-        void UnRegisterRegionOfInterest(Rectangle rect);
+        void UnregisterRegionOfInterest(Rectangle rect);
     }
 }

@@ -1,7 +1,6 @@
 namespace BlockScanner
 {
     using Detectors;
-    using Rendering;
     using System;
     using System.Drawing;
     using System.Threading;

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading;
 
+    // Just a rough example.
     public class ColourBitmapRenderer : BaseRenderer<Color[][]>
     {
         public override void Render(Color[][] frameData)

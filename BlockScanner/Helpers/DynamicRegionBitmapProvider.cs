@@ -31,14 +31,15 @@
 
         public Bitmap CaptureScreenRegion(Rectangle rect)
         {
-            Bitmap region;
 
             lock (captureLockObject)
             {
+                Bitmap region;
                 if (capturedRegions.TryRemove(rect, out region))
                 {
                     return region;
                 }
+
                 return CaptureAndPopulateRegions(rect);
             }
         }
@@ -58,9 +59,10 @@
             lock (captureLockObject)
             {
                 captureRegions.Remove(rect);
+
                 RecalculateCaptureArea();
 
-                // Remove any lingering regions.
+                // Remove any lingering region captures.
                 Bitmap bitmap;
                 capturedRegions.TryRemove(rect, out bitmap);
             }
@@ -69,8 +71,8 @@
         public Bitmap GenerateHighlightedMainCaptureRegion()
         {
             Bitmap highlightedImage = MainCapturedRegion.Clone(
-                new Rectangle(0, 0, MainCapturedRegion.Width, MainCapturedRegion.Height)
-                , PixelFormat.Format24bppRgb);
+                new Rectangle(0, 0, MainCapturedRegion.Width, MainCapturedRegion.Height),
+                PixelFormat.Format24bppRgb);
 
             using (Graphics g = Graphics.FromImage(highlightedImage))
             {

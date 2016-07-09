@@ -5,6 +5,7 @@
     public sealed class ScannerSlot<T> : IScannerSlot
     {
         private EventHandler<T> scanAction;
+
         private IScanner<T> scanner;
 
         public ScannerSlot(string name, EventHandler<T> scanHandler)
@@ -41,14 +42,11 @@
             this.scanner.FrameScanned -= scanAction;
         }
 
-        public override string ToString()
-        {
-            return this.Name;
-        }
-
         public void Dispose()
         {
             this.scanner.FrameScanned -= scanAction;
         }
+
+        public override string ToString() => this.Name;
     }
 }

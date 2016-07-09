@@ -41,6 +41,7 @@
 
         public override void Render(Color[][] data)
         {
+            // If used as a single source renderer, logic goes here.
         }
 
         public override void Dispose()

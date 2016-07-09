@@ -47,16 +47,13 @@
             if (scanner == null)
                 return;
 
-            scanner.FrameScanned -= (o, e) => Render(e);
+            scanner.FrameScanned -= scanAction;
         }
 
         public virtual void Initialise() { }
 
         public virtual void Render(T data) { }
 
-        public override string ToString()
-        {
-            return GetType().Name;
-        }
+        public override string ToString() => GetType().Name;
     }
 }

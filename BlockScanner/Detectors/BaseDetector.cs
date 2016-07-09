@@ -25,18 +25,12 @@
             this.CoordinatesToIndex = coordinatesToIndexFunc;
         }
 
-        public virtual T Detect(Bitmap bitmap)
-        {
-            return default(T);
-        }
+        public virtual T Detect(Bitmap bitmap) =>            default(T);        
 
         public virtual void HighlightSamplePoints(Bitmap frame)
         {
         }
 
-        public override string ToString()
-        {
-            return GetType().Name;
-        }
+        public override string ToString() => GetType().Name;
     }
 }

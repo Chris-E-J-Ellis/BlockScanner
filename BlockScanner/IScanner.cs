@@ -14,6 +14,7 @@ namespace BlockScanner
         void Initialise(Rectangle playfield);
         void Scan(CancellationToken token);
         void ScanOnce();
+        void ShutDown();
     }
 
     public interface IScanner<T> : IScanner

@@ -5,7 +5,9 @@
     using System;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Threading.Tasks;    // Nothing particularly great in here, just sanity checking.
+    using System.Threading.Tasks;    
+    
+    // Nothing particularly great in here, just sanity checking.
     [TestClass]
     public class DynamicRegionBitmapProviderTests
     {
@@ -109,7 +111,7 @@
             provider.RegisterRegionOfInterest(rectThree);
             provider.RegisterRegionOfInterest(rectFour);
 
-            int iterations =200;
+            int iterations = 200;
             var captureOne = new Task<string>(() => TimerLoop(() => provider.CaptureScreenRegion(rectOne), iterations, "One"));
             var captureTwo = new Task<string>(() => TimerLoop(() => provider.CaptureScreenRegion(rectTwo), iterations, "Two"));
             var captureThree = new Task<string>(() => TimerLoop(() => provider.CaptureScreenRegion(rectThree), iterations, "Three"));

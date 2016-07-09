@@ -34,7 +34,6 @@
 
         public void Initialise(Rectangle scanArea)
         {
-
             Config = configManager.Load<ScannerConfig>("default");
             Config.ScanArea = scanArea;
 
@@ -60,16 +59,12 @@
                     timer.Reset();
                     timer.Start();
 
-                    var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
-
-                    var frameData = AnalyseFrame(cap);
-
-                    OnRender(frameData);
+                    Scan();
 
                     timer.Stop();
 
                     // Not great, the console takes time to render this.
-                    //Console.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
+                    Debug.WriteLine($"Capture->Render Cycle: {timer.Elapsed.TotalMilliseconds}ms");
                 }
             }
             catch (Exception ex)
@@ -77,8 +72,6 @@
                 // Super basic, just fail and stop scanning.
                 Console.WriteLine($"Encountered an exception, scan halted: '{ex};");
             }
-
-            bitmapProvider.UnregisterRegionOfInterest(Config.ScanArea);
         }
 
         // Probably temporary, collapse with above function.
@@ -91,11 +84,7 @@
                 timer.Reset();
                 timer.Start();
 
-                var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
-
-                var frameData = TimerHelper.Profile(() => AnalyseFrame(cap), "Frame Analysis");
-
-                OnRender(frameData);
+                Scan();
 
                 timer.Stop();
 
@@ -107,6 +96,15 @@
                 // Super basic, just fail and stop scanning.
                 Console.WriteLine($"Encountered an exception, scan halted: '{ex};");
             }
+        }
+
+        private void Scan()
+        {
+            var cap = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
+
+            var frameData = AnalyseFrame(cap);
+
+            OnRender(frameData);
         }
 
         public void SetConfig(ScannerConfig config)
@@ -131,6 +129,11 @@
         }
 
         public void Dispose()
+        {
+            this.ShutDown();
+        }
+
+        public void ShutDown()
         {
             // Not entirely convinced this is legitimate, but signals that we're done with updating at least.
             FrameScanned = null;

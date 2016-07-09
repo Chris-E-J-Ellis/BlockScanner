@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigManager.cs" />
+    <Compile Include="Configuration\Detectors\BasicGridDetectorConfig.cs" />
     <Compile Include="Configuration\IConfigManager.cs" />
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\Scanner\ScannerConfig.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Detectors\BasicGridDetector.cs" />
     <Compile Include="Detectors\ColourGridDetector.cs" />
     <Compile Include="Detectors\ConfigurableBasicGridDetector.cs" />
-    <Compile Include="Configuration\Detectors\ConfigurableBasicDetectorConfig.cs" />
+    <Compile Include="Configuration\Detectors\BasicDetectorConfig.cs" />
     <Compile Include="Detectors\IDetector.cs" />
     <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="Detectors\LineCountDetector.cs" />

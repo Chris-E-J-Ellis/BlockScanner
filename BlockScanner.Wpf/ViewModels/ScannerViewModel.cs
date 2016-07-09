@@ -86,13 +86,15 @@
 
         public void Stop()
         {
+            //Stop Scanning task.
             cancellationTokenSource.Cancel();
+
+            Scanner?.ShutDown();
         }
 
         public void Dispose()
         {
-            //Stop Scanning task.
-            cancellationTokenSource.Cancel();
+            Stop();
         }
     }
 }

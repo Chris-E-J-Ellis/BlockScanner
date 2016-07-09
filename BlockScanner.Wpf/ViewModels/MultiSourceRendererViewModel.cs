@@ -58,6 +58,7 @@
 
                 NotifyOfPropertyChange(() => SelectedScannerSlot);
                 NotifyOfPropertyChange(() => ValidDetectors);
+                NotifyOfPropertyChange(() => SelectedScanner);
             }
         }
 

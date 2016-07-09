@@ -31,7 +31,6 @@
 
         public Bitmap CaptureScreenRegion(Rectangle rect)
         {
-
             lock (captureLockObject)
             {
                 Bitmap region;

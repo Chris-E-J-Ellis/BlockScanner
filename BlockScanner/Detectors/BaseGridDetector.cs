@@ -5,6 +5,7 @@
     using Config;
     using Helpers;
     using System;
+
     public class BaseGridDetector<T> : BaseDetector<T[][]>
     {
         private Rectangle frameRectangle;
@@ -15,14 +16,18 @@
         private int sampleXOffset;
         private int sampleYOffset;
 
-        private int gridWidth;
-        private int gridHeight;
+        private int gridWidth = 20;
+        private int gridHeight = 10;
 
         private int samplePointCentreHeightRatio = 3;
         private int samplePointCentreWidthRatio = 2;
 
         // Again, image specific, probably shouldn't live here.
         private int pixelSize = 3;
+
+        public BaseGridDetector()
+        {
+        }
 
         public override T[][] Detect(Bitmap frame)
         {
@@ -56,9 +61,6 @@
         public override void Initialise(Bitmap sampleFrame)
         {
             frameRectangle = new Rectangle(0, 0, sampleFrame.Width, sampleFrame.Height);
-
-            gridWidth = 10;
-            gridHeight = 20;
 
             BitmapData data = BitmapHelper.ExtractBitmapData(sampleFrame, frameRectangle); 
 
@@ -102,7 +104,19 @@
             frame.UnlockBits(data);
         }
 
-        public virtual void HighlightSamplePoint(byte[] rgbData, int x, int y)
+        public void SetGridSize(int gridWidth, int gridHeight)
+        {
+            this.gridWidth = gridWidth;
+            this.gridHeight = gridHeight;
+        }
+
+        public void SetSamplePointCentre(int samplePointCentreWidthRatio, int samplePointCentreHeightRatio)
+        {
+            this.samplePointCentreWidthRatio = samplePointCentreWidthRatio;
+            this.samplePointCentreHeightRatio = samplePointCentreHeightRatio;
+        }
+
+        private void HighlightSamplePoint(byte[] rgbData, int x, int y)
         {
             var index = CoordinatesToIndex(x, y);
 

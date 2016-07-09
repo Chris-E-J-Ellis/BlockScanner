@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    public class BasicGridDetector : BaseGridDetector<bool>
+    public class BasicGridDetector : ConfigurableBasicGridDetector<bool>
     {
         public override bool AnalyseSample(byte[] bitmapData, int x, int y)
         {

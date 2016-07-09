@@ -1,6 +1,7 @@
 ﻿namespace BlockScanner.Config.Detectors
 {
-    public class ConfigurableBasicDetectorConfig : BasicConfig<ConfigurableBasicDetectorConfig>
+    // First pass, just some rough values.
+    public class BasicDetectorConfig : BasicConfig<BasicDetectorConfig>
     {
         public int RedMaxThreshold { get; set; } = 110;
 

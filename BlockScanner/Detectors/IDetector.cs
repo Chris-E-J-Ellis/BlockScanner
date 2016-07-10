@@ -2,15 +2,14 @@
 {
     using System;
     using System.Drawing;
-    using Config;
 
     public interface IDetector
     {
         Type DetectedPointOutputType { get; }
 
-        void Initialise(IConfigManager configurationManager = null);
+        void Initialise();
 
-        void Initialise(Bitmap sampleFrame);
+        void InitialiseFromFrame(Bitmap sampleFrame);
 
         void SetCoordinatesToIndex(Func<int, int, int> coordinatesToIndex);
 

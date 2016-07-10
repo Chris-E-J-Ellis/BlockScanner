@@ -42,6 +42,8 @@
 
         public IDetector SelectedDetector { get; set; }
 
+        public bool IsMultiSource => false;
+
         public void Initialise()
         {
             SelectedDetector = ValidDetectors.First();

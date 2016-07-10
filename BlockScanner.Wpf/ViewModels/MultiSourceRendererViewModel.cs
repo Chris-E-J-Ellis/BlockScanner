@@ -62,6 +62,7 @@
             }
         }
 
+        public bool IsMultiSource => true;
 
         public void Initialise()
         {

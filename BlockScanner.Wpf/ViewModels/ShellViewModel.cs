@@ -7,6 +7,7 @@ namespace BlockScanner.Wpf.ViewModels
     using Helpers;
     using Caliburn.Micro;
     using Rendering;
+
     public class ShellViewModel : PropertyChangedBase, IShell
     {
         private readonly List<IDetector> detectors = new List<IDetector>();

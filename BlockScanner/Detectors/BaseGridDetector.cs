@@ -2,7 +2,6 @@
 {
     using System.Drawing;
     using System.Drawing.Imaging;
-    using Config;
     using Helpers;
     using System;
 
@@ -53,12 +52,12 @@
             return default (T);
         }
 
-        public override void Initialise(IConfigManager configurationManager)
+        public override void Initialise()
         {
-            base.Initialise(configurationManager);
+            base.Initialise();
         }
 
-        public override void Initialise(Bitmap sampleFrame)
+        public override void InitialiseFromFrame(Bitmap sampleFrame)
         {
             frameRectangle = new Rectangle(0, 0, sampleFrame.Width, sampleFrame.Height);
 

@@ -20,9 +20,13 @@
 
         public IScanner Scanner { get; }
 
+        public string DetectorName => Scanner?.Detector?.ToString();
+
         public Rectangle ScanArea => Scanner == null ? new Rectangle() : Scanner.PlayfieldArea;
 
         public BitmapImage CapturePreview { get; private set; }
+
+        public bool IsScanning => cancellationTokenSource != null && !cancellationTokenSource.IsCancellationRequested;
 
         public void SetScanArea(Rectangle sourceRectangle)
         {
@@ -41,6 +45,8 @@
             Task scanTask = new Task(() => Scanner.Scan(cancellationTokenSource.Token), cancellationTokenSource.Token);
 
             scanTask.Start();
+
+            NotifyOfPropertyChange(() => IsScanning);
         }
 
         public void SingleScan()
@@ -49,6 +55,8 @@
             cancellationTokenSource.Cancel();
 
             Scanner.ScanOnce();
+
+            NotifyOfPropertyChange(() => IsScanning);
         }
 
         public void DumpScanArea()
@@ -90,6 +98,8 @@
             cancellationTokenSource.Cancel();
 
             Scanner?.ShutDown();
+
+            NotifyOfPropertyChange(() => IsScanning);
         }
 
         public void Dispose()

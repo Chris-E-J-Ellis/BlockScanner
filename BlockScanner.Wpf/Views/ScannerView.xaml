@@ -13,13 +13,23 @@
             <RowDefinition Height="20"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Left" Grid.Row="0">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}Detector {0}">
-                    <Binding Path="Scanner.Detector" />
-                </MultiBinding>
-            </TextBlock.Text>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding Path=DetectorName}" />
+            <TextBlock Margin="4, 0" Padding="4, 0">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="Stopped"/>
+                    <Setter Property="Background" Value="#FFEE3600" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsScanning}" Value="True">
+                            <Setter Property="Text" Value="Active"/>
+                            <Setter Property="Background" Value="#FF1ED11E" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
         </TextBlock>
+        </StackPanel>
         <UniformGrid Grid.Row="1" Rows="1">
             <Button x:Name="DumpScanArea" Content="Dump Scan (./Images/cap.bmp)" />
             <Button x:Name="SingleScan" Content="SingleScan" />

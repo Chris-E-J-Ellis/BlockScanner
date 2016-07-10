@@ -40,8 +40,8 @@
             bitmapProvider.RegisterRegionOfInterest(scanArea);
             var sampleFrame = bitmapProvider.CaptureScreenRegion(PlayfieldArea);
 
-            detector.Initialise(ConfigManager.Instance);
-            detector.Initialise(sampleFrame);
+            detector.Initialise();
+            detector.InitialiseFromFrame(sampleFrame);
         }
 
         /// <summary>

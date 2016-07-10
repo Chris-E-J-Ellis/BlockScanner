@@ -12,11 +12,11 @@
 
         public IConfig Configuration { get; private set; }
 
-        public virtual void Initialise(IConfigManager configurationManager)
+        public virtual void Initialise()
         {
         }
 
-        public virtual void Initialise(Bitmap sampleFrame)
+        public virtual void InitialiseFromFrame(Bitmap sampleFrame)
         {
         }
 

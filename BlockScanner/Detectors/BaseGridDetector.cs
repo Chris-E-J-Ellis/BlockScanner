@@ -1,9 +1,9 @@
 ﻿namespace BlockScanner.Detectors
 {
+    using System;
     using System.Drawing;
     using System.Drawing.Imaging;
     using Helpers;
-    using System;
 
     public class BaseGridDetector<T> : BaseDetector<T[][]>
     {
@@ -15,8 +15,8 @@
         private int sampleXOffset;
         private int sampleYOffset;
 
-        private int gridWidth = 20;
-        private int gridHeight = 10;
+        private int gridWidth = 10;
+        private int gridHeight = 20;
 
         private int samplePointCentreHeightRatio = 3;
         private int samplePointCentreWidthRatio = 2;
@@ -47,10 +47,7 @@
             return grid;
         }
 
-        public virtual T AnalyseSample(byte[] bitmapData, int x, int y)
-        {
-            return default (T);
-        }
+        public virtual T AnalyseSample(byte[] bitmapData, int x, int y) => default (T);
 
         public override void Initialise()
         {

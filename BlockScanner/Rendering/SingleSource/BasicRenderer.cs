@@ -1,9 +1,9 @@
-﻿namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering.SingleSource
 {
     using System;
     using System.Linq;
 
-    public class BasicRenderer : BaseRenderer<bool[][]>
+    public class BasicRenderer : BaseSingleSourceRenderer<bool[][]>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>

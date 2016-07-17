@@ -1,11 +1,11 @@
-﻿namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering.SingleSource
 {
     using System.Drawing;
     using System.Linq;
     using System.Threading;
 
     // Just a rough example.
-    public class ColourBitmapRenderer : BaseRenderer<Color[][]>
+    public class ColourBitmapRenderer : BaseSingleSourceRenderer<Color[][]>
     {
         public override void Render(Color[][] frameData)
         {

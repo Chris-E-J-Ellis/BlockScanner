@@ -1,9 +1,9 @@
-﻿namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering.SingleSource
 {
     using System;
     using System.Drawing;
 
-    public class GDIRenderer : BaseRenderer<Color[][]>, IDisposable
+    public class GDIRenderer : BaseSingleSourceRenderer<Color[][]>, IDisposable
     {
         private RenderSurfaceForm renderSurface = new RenderSurfaceForm();
 

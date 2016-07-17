@@ -123,7 +123,15 @@
 
             detector.HighlightSamplePoints(scanZone);
 
-            scanZone.Save(path);
+            try
+            {
+                scanZone.Save(path);
+            }
+            catch (System.Runtime.InteropServices.ExternalException ex)
+            {
+                // Catch Unhelpful Generic GDI errors (likely write access/bitmap format related).
+                Console.WriteLine($"An exception occured whilst saving image: {ex}");
+            }
 
             return scanZone;
         }

@@ -8,7 +8,7 @@
 
         public int SamplePointCentreWidthRatio { get; set; } = 2;
 
-        public int GridWidth { get; set; } = 20;
+        public int GridWidth { get; set; } = 10;
 
         public int GridHeight { get; set; } = 20;
 

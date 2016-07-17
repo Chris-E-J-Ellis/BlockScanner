@@ -63,6 +63,7 @@
     <Compile Include="Detectors\IDetector.cs" />
     <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="Detectors\LineCountDetector.cs" />
+    <Compile Include="Detectors\PassThroughBitmapDetector.cs" />
     <Compile Include="Detectors\PassThroughGridDetector.cs" />
     <Compile Include="Factories\DetectorFactory.cs" />
     <Compile Include="Factories\PluginFactoryBase.cs" />
@@ -76,12 +77,14 @@
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\BaseRenderer.cs" />
-    <Compile Include="Rendering\BasicMultiSourceRenderer.cs" />
-    <Compile Include="Rendering\BasicRenderer.cs" />
-    <Compile Include="Rendering\ColourBitmapRenderer.cs" />
+    <Compile Include="Rendering\MultiSource\BaseMultiSourceRenderer.cs" />
+    <Compile Include="Rendering\SingleSource\BaseSingleSourceRenderer.cs" />
+    <Compile Include="Rendering\MultiSource\BasicMultiSourceRenderer.cs" />
+    <Compile Include="Rendering\SingleSource\BasicRenderer.cs" />
+    <Compile Include="Rendering\SingleSource\ColourBitmapRenderer.cs" />
     <Compile Include="Rendering\IRenderer.cs" />
     <Compile Include="Rendering\IScannerSlot.cs" />
-    <Compile Include="Rendering\MonochromeBitmapRender.cs" />
+    <Compile Include="Rendering\SingleSource\MonochromeBitmapRender.cs" />
     <Compile Include="Rendering\ScannerSlot.cs" />
     <Compile Include="Scanner.cs" />
     <Compile Include="IScanner.cs" />

@@ -1,11 +1,11 @@
-﻿namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering.SingleSource
 {
     using System;
     using System.Drawing;
     using System.Linq;
     using System.Threading;
 
-    public class MonochromeBitmapRender : BaseRenderer<bool[][]>
+    public class MonochromeBitmapRender : BaseSingleSourceRenderer<bool[][]>
     {
         public static readonly Action<bool[][]> RenderFunc =
             frameData =>

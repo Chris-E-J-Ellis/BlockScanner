@@ -1,32 +1,23 @@
-﻿namespace BlockScanner.Rendering
+﻿namespace BlockScanner.Rendering.MultiSource
 {
-    using System;
-    using System.Collections.Generic;
     using System.Drawing;
-    using System.Linq;
 
-    public class MultiSourceGDIRenderer : BaseRenderer<Color[][]>, IMultiSourceRenderer, IDisposable
+    public class MultiSourceGDIRenderer : BaseMultiSourceRenderer<Color[][]>, IMultiSourceRenderer
     {
         private RenderSurfaceForm renderSurface = new RenderSurfaceForm();
-
-        private readonly IList<IScannerSlot> slots = new List<IScannerSlot>();
 
         private int lineCount;
 
         public MultiSourceGDIRenderer()
         {
             // Initialise Slots
-            slots.Add(new ScannerSlot<Color[][]>(nameof(PlayfieldScanner), UpdatePlayfield));
-            slots.Add(new ScannerSlot<int>(nameof(UpdateLineCount), UpdateLineCount));
+            AddSlot(new ScannerSlot<Color[][]>(nameof(PlayfieldScanner), UpdatePlayfield));
+            AddSlot(new ScannerSlot<int>(nameof(UpdateLineCount), UpdateLineCount));
         }
 
-        public IEnumerable<IScannerSlot> ScannerSlots => slots;
+        public IScanner<Color[][]> PlayfieldScanner { get; private set; }
 
-        public IEnumerable<IScannerSlot> EmptyScannerSlots => slots.Where(s => s.IsEmpty);
-
-        public IScanner<Color[][]> PlayfieldScanner { get; set; }
-
-        public IScanner<int> LineCountScanner { get; set; }
+        public IScanner<int> LineCountScanner { get; private set; }
 
         public override void Initialise()
         {
@@ -39,19 +30,9 @@
             renderSurface.Show();
         }
 
-        public override void Render(Color[][] data)
-        {
-            // If used as a single source renderer, logic goes here.
-        }
-
         public override void Dispose()
         {
             this.renderSurface.Dispose();
-
-            foreach (var slot in ScannerSlots)
-            {
-                slot.Dispose();
-            }
 
             base.Dispose();
         }

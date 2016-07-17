@@ -1,6 +1,5 @@
 ﻿namespace BlockScanner.Detectors
 {
-    using Config;
     using System;
     using System.Drawing;
 
@@ -9,8 +8,6 @@
         protected Func<int, int, int> CoordinatesToIndex { get; private set; }
 
         public Type DetectedPointOutputType => typeof(T);
-
-        public IConfig Configuration { get; private set; }
 
         public virtual void Initialise()
         {
@@ -25,7 +22,7 @@
             this.CoordinatesToIndex = coordinatesToIndexFunc;
         }
 
-        public virtual T Detect(Bitmap bitmap) =>            default(T);        
+        public virtual T Detect(Bitmap bitmap) => default(T);        
 
         public virtual void HighlightSamplePoints(Bitmap frame)
         {

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MultiSourceGDIRenderer.cs" />
+    <Compile Include="PlayfieldRoughRenderer.cs" />
     <Compile Include="RenderSurfaceForm.cs">
       <SubType>Form</SubType>
     </Compile>

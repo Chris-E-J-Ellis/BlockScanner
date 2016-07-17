@@ -99,7 +99,8 @@
                 capturedRegions.AddOrUpdate(region, subRegion, (x, y) => subRegion); // We can lose some information here (may be problematic).
             }
 
-            return MainCapturedRegion.Clone(new Rectangle(0, 0, rect.Width, rect.Height), PixelFormat.Format24bppRgb);
+            // return requested region (transformed relative to capture area).
+            return MainCapturedRegion.Clone(new Rectangle(rect.X - CaptureArea.X, rect.Y - CaptureArea.Y, rect.Width, rect.Height), PixelFormat.Format24bppRgb);
         }
 
         private void RecalculateCaptureArea()

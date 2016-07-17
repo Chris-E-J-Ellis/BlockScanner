@@ -77,7 +77,8 @@
             Renderer.Initialise();
 
             // Assign a new Scanner.
-            var scannerVm = CreateScannerViewModel(selectedDetector);
+            // May be wise to instantiate new detectors if complex logic starts getting embedded.
+            var scannerVm = CreateScannerViewModel(selectedDetector); 
             SelectedScannerSlot.Assign(scannerVm.Scanner);
 
             scannerVm.SetScanArea(GetSelectionArea());

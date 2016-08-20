@@ -41,7 +41,7 @@
             cancellationTokenSource.Cancel();
 
             cancellationTokenSource = new CancellationTokenSource();
-            
+
             Task scanTask = new Task(() => Scanner.Scan(cancellationTokenSource.Token), cancellationTokenSource.Token);
 
             scanTask.Start();
@@ -61,10 +61,22 @@
 
         public void DumpScanArea()
         {
-            var previewLocation = Path.Combine(Environment.CurrentDirectory, "Images", "cap.bmp");
+            var previewLocation = "Images";
+            var previewName = "cap.bmp";
+            var previewPath = Path.Combine(Environment.CurrentDirectory, previewLocation);
+
+            // Not an ideal side effect to have here, may warrent a move.
+            try
+            {
+                Directory.CreateDirectory(previewPath);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine($"An exception occurred whilst creating a directory to store the captured image: {ex}");
+            }
 
             // TODO: Move path to config.
-            var preview = Scanner.DumpScanArea(previewLocation);
+            var preview = Scanner.DumpScanArea(Path.Combine(previewPath, previewName));
 
             // Quick preview: http://stackoverflow.com/questions/94456/load-a-wpf-bitmapimage-from-a-system-drawing-bitmap
             using (MemoryStream memory = new MemoryStream())

@@ -25,7 +25,8 @@
             var files = Directory.GetFiles(pluginFolder, searchPattern).ToList();
 
             var assemblies = files
-                .Select(a => Assembly.LoadFile(a));
+                .Select(LoadAssembly)
+                .Where(a => a != null);
 
             return assemblies;
         }
@@ -42,6 +43,22 @@
                 && !p.IsAbstract
                 && !p.ContainsGenericParameters)); 
             return types;
+        }
+
+        private static Assembly LoadAssembly(string filePath)
+        {
+            Assembly assembly = null;
+
+            try
+            {
+                assembly = Assembly.LoadFile(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An exception occurred whilst loading assembly '{filePath}': {ex}");
+            }
+
+            return assembly;
         }
     }
 }

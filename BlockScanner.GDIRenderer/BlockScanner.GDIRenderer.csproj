@@ -90,8 +90,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*GDIRenderer.*" "$(SolutionDir)\BlockScanner\bin\Debug\Plugins\" /Y
-xcopy "$(TargetDir)*GDIRenderer.*" "$(SolutionDir)\BlockScanner.Wpf\bin\Debug\Plugins\" /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)*GDIRenderer.*" "$(SolutionDir)\BlockScanner\bin\$(ConfigurationName)\Plugins\" /Y
+xcopy "$(TargetDir)*GDIRenderer.*" "$(SolutionDir)\BlockScanner.Wpf\bin\$(ConfigurationName)\Plugins\" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

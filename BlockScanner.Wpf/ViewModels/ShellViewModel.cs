@@ -7,7 +7,7 @@ namespace BlockScanner.Wpf.ViewModels
     using Helpers;
     using Caliburn.Micro;
     using Rendering;
-
+    using System;
     public class ShellViewModel : PropertyChangedBase, IShell
     {
         private readonly List<IDetector> detectors = new List<IDetector>();
@@ -34,7 +34,7 @@ namespace BlockScanner.Wpf.ViewModels
             }
         }
 
-        public IEnumerable<IRendererViewModel> RendererSetups => rendererSetups; 
+        public IEnumerable<IRendererViewModel> RendererSetups => rendererSetups;
 
         public void Initialise()
         {
@@ -60,17 +60,31 @@ namespace BlockScanner.Wpf.ViewModels
 
         private void LoadDetectors()
         {
-            var loadedDetectors = DetectorFactory.Instance.LoadConcreteObjects();
+            try
+            {
+                var loadedDetectors = DetectorFactory.Instance.LoadConcreteObjects();
 
-            detectors.AddRange(loadedDetectors);
+                detectors.AddRange(loadedDetectors);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An exception occurred whilst loading detectors: {ex}");
+            }
         }
 
         private void LoadRendererSetups()
         {
-            var loadedRenderers = RendererFactory.Instance.LoadConcreteObjects();
+            try
+            {
+                var loadedRenderers = RendererFactory.Instance.LoadConcreteObjects();
 
-            rendererSetups.AddRange(loadedRenderers.OfType<ISingleSourceRenderer>().Select(r => new SingleSourceRendererViewModel(r, detectors)));
-            rendererSetups.AddRange(loadedRenderers.OfType<IMultiSourceRenderer>().Select(r => new MultiSourceRendererViewModel(r, detectors)));
+                rendererSetups.AddRange(loadedRenderers.OfType<ISingleSourceRenderer>().Select(r => new SingleSourceRendererViewModel(r, detectors)));
+                rendererSetups.AddRange(loadedRenderers.OfType<IMultiSourceRenderer>().Select(r => new MultiSourceRendererViewModel(r, detectors)));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An exception occurred whilst loading renderers: {ex}");
+            }
         }
     }
 }

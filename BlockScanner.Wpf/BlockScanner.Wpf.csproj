@@ -76,11 +76,15 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="ViewModels\CaptureRegionViewModel.cs" />
     <Compile Include="ViewModels\IRendererViewModel.cs" />
     <Compile Include="ViewModels\MultiSourceRendererViewModel.cs" />
     <Compile Include="ViewModels\SingleSourceRendererViewModel.cs" />
     <Compile Include="ViewModels\ScannerViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\PersistentCaptureWindow.xaml.cs">
+      <DependentUpon>PersistentCaptureWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MultiSourceRendererView.xaml.cs">
       <DependentUpon>MultiSourceRendererView.xaml</DependentUpon>
     </Compile>
@@ -93,6 +97,10 @@
     <Page Include="Themes\Dark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PersistentCaptureWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CaptureWindow.xaml">
       <SubType>Designer</SubType>

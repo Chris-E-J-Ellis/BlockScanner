@@ -80,7 +80,7 @@
             var entireCaptureRegion = provider.MainCapturedRegion;
 
             // Assert.
-            // Check the size, although doesn't eplicity check the contents.
+            // Check the size, although doesn't explicity check the contents.
             Assert.AreEqual(rectTwo.Width, captureRegion.Width);
             Assert.AreEqual(rectTwo.Height, captureRegion.Height);
             Assert.AreEqual(entireCaptureRegion.Width, expectedCaptureArea.Width);

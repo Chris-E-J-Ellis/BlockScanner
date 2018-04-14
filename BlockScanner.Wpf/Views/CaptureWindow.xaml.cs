@@ -20,8 +20,8 @@
 
         public double SelectionX { get; private set; }
         public double SelectionY { get; private set; }
-        public double SelectionWidth { get; private set;}
-        public double SelectionHeight { get; private set;}
+        public double SelectionWidth { get; private set; }
+        public double SelectionHeight { get; private set; }
 
         public Rect SelectionArea { get; private set; }
 
@@ -87,7 +87,7 @@
 
                     // Convert from Wpf coordinates;
                     Point topLeft = this.PointToScreen(new Point(Canvas.GetLeft(r), Canvas.GetTop(r)));
-                    
+
                     this.SelectionHeight = r.Height;
                     this.SelectionWidth = r.Width;
                     this.SelectionX = topLeft.X;

@@ -62,7 +62,7 @@
             Renderer.AttachScanner(scanner);
 
             // TODO: Remove view dependency.
-            var captureZone = new CaptureWindow();
+            var captureZone = new PersistentCaptureWindow();
             captureZone.ShowDialog();
 
             Scanner.SetScanArea(captureZone.SelectionAreaRectangle);

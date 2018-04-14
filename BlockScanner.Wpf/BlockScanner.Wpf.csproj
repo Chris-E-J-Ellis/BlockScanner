@@ -88,6 +88,9 @@
     <Compile Include="Views\MultiSourceRendererView.xaml.cs">
       <DependentUpon>MultiSourceRendererView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ResizableRegion.xaml.cs">
+      <DependentUpon>ResizableRegion.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SingleSourceRendererView.xaml.cs">
       <DependentUpon>SingleSourceRendererView.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <DependentUpon>CaptureWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MultiSourceRendererView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResizableRegion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

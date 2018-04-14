@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace BlockScanner.Wpf.Views
@@ -6,12 +7,22 @@ namespace BlockScanner.Wpf.Views
     /// <summary>
     /// Interaction logic for ResizableRegion.xaml
     /// </summary>
-    public partial class ResizableRegion : UserControl
+    public partial class ResizableRegion : UserControl, INotifyPropertyChanged
     {
         public ResizableRegion()
         {
             InitializeComponent();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int ResizeHandleWidth => 10;
+
+        public int ResizeHandleHeight => 10;
+
+        public int TranslateHandleX => ResizeHandleWidth;
+
+        public int TranslateHandleY => ResizeHandleHeight;
 
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -32,34 +43,33 @@ namespace BlockScanner.Wpf.Views
             // Resize rectangle.
             switch (thumb.Name)
             {
-                case "ThumbTL":
+                case nameof(ThumbTL):
                     newRegionX = newThumbX;
                     newRegionY = newThumbY;
                     newRegionWidth = newRegionWidth - e.HorizontalChange;
                     newRegionHeight = newRegionHeight - e.VerticalChange;
                     break;
-                case "ThumbTR":
+                case nameof(ThumbTR):
                     newRegionY = newThumbY;
                     newRegionWidth = newRegionWidth + e.HorizontalChange;
                     newRegionHeight = newRegionHeight - e.VerticalChange;
                     break;
-                case "ThumbBL":
+                case nameof(ThumbBL):
                     newRegionX = newThumbX;
                     newRegionWidth = newRegionWidth - e.HorizontalChange;
                     newRegionHeight = newRegionHeight + e.VerticalChange;
                     break;
-                case "ThumbBR":
+                case nameof(ThumbBR):
                     newRegionWidth = newRegionWidth + e.HorizontalChange;
                     newRegionHeight = newRegionHeight + e.VerticalChange;
                     break;
-                case "Region":
+                case nameof(Region):
                     newRegionX = newThumbX;
                     newRegionY = newThumbY;
                     break;
                 default:
                     break;
             }
-
 
             UpdateRegion(newRegionX, newRegionY, newRegionWidth, newRegionHeight);
             UpdateHandlePositions();
@@ -70,8 +80,8 @@ namespace BlockScanner.Wpf.Views
             Canvas.SetLeft(Region, x);
             Canvas.SetTop(Region, y);
 
-            Region.Width = width >= 0 ? width : Region.Width;
-            Region.Height = height >= 0 ? height : Region.Height;
+            Region.Width = width > 0 ? width : Region.Width;
+            Region.Height = height > 0 ? height : Region.Height;
         }
 
         private void UpdateHandlePositions()

@@ -13,22 +13,22 @@
         </ControlTemplate>
     </UserControl.Resources>
     <Canvas x:Name="canvas">
-        <Thumb Width="10" Height="10" DragDelta="Thumb_DragDelta" x:Name="ThumbTL" Canvas.Left="10" Canvas.Top="10">
+        <Thumb x:Name="ThumbTL" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" Canvas.Left="{Binding TranslateHandleX}" Canvas.Top="{Binding TranslateHandleY}">
             <Thumb.RenderTransform>
                 <TranslateTransform  X="-10" Y="-10"/>
             </Thumb.RenderTransform>
         </Thumb>
-        <Thumb Width="10" Height="10" DragDelta="Thumb_DragDelta" x:Name="ThumbTR" Canvas.Left="100" Canvas.Top="10" >
+        <Thumb x:Name="ThumbTR" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" Canvas.Left="100" Canvas.Top="10">
             <Thumb.RenderTransform>
                 <TranslateTransform  X="10" Y="-10"/>
             </Thumb.RenderTransform>
         </Thumb>
-        <Thumb Width="10" Height="10" DragDelta="Thumb_DragDelta" x:Name="ThumbBL" Canvas.Left="10" Canvas.Top="100" >
+        <Thumb x:Name="ThumbBL" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" Canvas.Left="10" Canvas.Top="100">
             <Thumb.RenderTransform>
                 <TranslateTransform  X="-10" Y="10"/>
             </Thumb.RenderTransform>
         </Thumb>
-        <Thumb Width="10" Height="10" DragDelta="Thumb_DragDelta" x:Name="ThumbBR" Canvas.Left="100" Canvas.Top="100" >
+        <Thumb x:Name="ThumbBR" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" Canvas.Left="100" Canvas.Top="100">
             <Thumb.RenderTransform>
                 <TranslateTransform  X="10" Y="10"/>
             </Thumb.RenderTransform>

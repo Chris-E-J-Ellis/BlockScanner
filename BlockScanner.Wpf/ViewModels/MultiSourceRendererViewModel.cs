@@ -126,11 +126,7 @@
 
         private Rectangle GetSelectionArea()
         {
-            var captureZone = new CaptureWindow();
-
-            captureZone.ShowDialog();
-
-            return captureZone.SelectionAreaRectangle;
+            return new Rectangle();
         }
     }
 }

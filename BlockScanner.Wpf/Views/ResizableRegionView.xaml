@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="BlockScanner.Wpf.Views.ResizableRegionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+            DataContext="{Binding RelativeSource={RelativeSource Self}}" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ThumbTemplate" TargetType="{x:Type Thumb}">
+            <Rectangle Fill="White" />
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Canvas x:Name="canvas">
+        <Thumb x:Name="ThumbTL" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" >
+            <Thumb.RenderTransform>
+                <TranslateTransform  X="-10" Y="-10"/>
+            </Thumb.RenderTransform>
+        </Thumb>
+        <Thumb x:Name="ThumbTR" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" >
+            <Thumb.RenderTransform>
+                <TranslateTransform  X="10" Y="-10"/>
+            </Thumb.RenderTransform>
+        </Thumb>
+        <Thumb x:Name="ThumbBL" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" >
+            <Thumb.RenderTransform>
+                <TranslateTransform  X="-10" Y="10"/>
+            </Thumb.RenderTransform>
+        </Thumb>
+        <Thumb x:Name="ThumbBR" DragDelta="Thumb_DragDelta" Width="{Binding ResizeHandleWidth}" Height="{Binding ResizeHandleHeight}" >
+            <Thumb.RenderTransform>
+                <TranslateTransform  X="10" Y="10"/>
+            </Thumb.RenderTransform>
+        </Thumb>
+        <Thumb x:Name="MainRegion" Width="{Binding Width}" Height="{Binding Region.Height}" Canvas.Left="{Binding Region.Left}" Canvas.Top="{Binding Region.Top}"
+               Template="{StaticResource ThumbTemplate}"  DragDelta="Thumb_DragDelta" />
+    </Canvas>
+</UserControl>

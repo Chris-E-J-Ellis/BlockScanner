@@ -62,14 +62,17 @@
             Renderer.AttachScanner(scanner);
 
             // TODO: Remove view dependency.
-            var captureZone = new PersistentCaptureWindow();
-            captureZone.ShowDialog();
+            var windowManager = new WindowManager();
 
-            Scanner.SetScanArea(captureZone.SelectionAreaRectangle);
+            var captureZone = new CaptureWindowViewModel(); 
+            windowManager.ShowDialog(captureZone);
 
-            Scanner.DumpScanArea();
+            var rect = captureZone.CaptureRegions.First().Region;
+            //Scanner.SetScanArea(captureZone.CaptureRegions.First().Region);
 
-            Scanner.Scan();
+            //Scanner.DumpScanArea();
+
+            //Scanner.Scan();
         }
 
         public override string ToString()

@@ -1,7 +1,6 @@
-﻿<Window x:Class="BlockScanner.Wpf.Views.PersistentCaptureWindow"
+﻿<Window x:Class="BlockScanner.Wpf.Views.CaptureWindowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:BlockScanner.Wpf.Views"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Opacity=".3"
@@ -10,7 +9,7 @@
         Title="CaptureWindow"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Canvas x:Name="canvas">
-        <local:ResizableRegion x:Name="CaptureTest"/>
+        <ItemsControl x:Name="CaptureRegions" />
         <Button Content="OK" Width="100" Height="40" Canvas.Left="250" Click="Button_Click"/>
     </Canvas>
 </Window>

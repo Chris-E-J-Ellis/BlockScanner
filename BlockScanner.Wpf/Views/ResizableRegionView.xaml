@@ -33,7 +33,8 @@
                 <TranslateTransform  X="10" Y="10"/>
             </Thumb.RenderTransform>
         </Thumb>
-        <Thumb x:Name="MainRegion" Width="{Binding Width}" Height="{Binding Region.Height}" Canvas.Left="{Binding Region.Left}" Canvas.Top="{Binding Region.Top}"
+        <Thumb x:Name="MainRegion" Width="{Binding Width, Mode=TwoWay}" Height="{Binding Height, Mode=TwoWay}" 
+               Canvas.Left="{Binding X, Mode=TwoWay}" Canvas.Top="{Binding Y, Mode=TwoWay}"
                Template="{StaticResource ThumbTemplate}"  DragDelta="Thumb_DragDelta" />
     </Canvas>
 </UserControl>

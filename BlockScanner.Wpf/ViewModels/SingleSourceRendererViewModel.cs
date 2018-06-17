@@ -68,11 +68,12 @@
             windowManager.ShowDialog(captureZone);
 
             var rect = captureZone.CaptureRegions.First().Region;
-            //Scanner.SetScanArea(captureZone.CaptureRegions.First().Region);
 
-            //Scanner.DumpScanArea();
+            Scanner.SetScanArea(rect);
 
-            //Scanner.Scan();
+            Scanner.DumpScanArea();
+
+            Scanner.Scan();
         }
 
         public override string ToString()

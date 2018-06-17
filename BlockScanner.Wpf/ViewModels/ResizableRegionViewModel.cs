@@ -1,11 +1,19 @@
-﻿using System.Windows;
+﻿using System.Drawing;
 using Caliburn.Micro;
 
 namespace BlockScanner.Wpf.ViewModels
 {
-    public class ResizableRegionViewModel : PropertyChangedBase 
+    public class ResizableRegionViewModel : PropertyChangedBase
     {
-        public Rect Region { get; set; }
+        public Rectangle Region => new Rectangle(X, Y, Width, Height);
+
+        public int X { get; set; } = 8;
+
+        public int Y { get; set; } = 8;
+
+        public int Width { get; set; } = 100;
+
+        public int Height { get; set; } = 100;
 
         public int ResizeHandleWidth => 10;
 
@@ -14,10 +22,5 @@ namespace BlockScanner.Wpf.ViewModels
         public int TranslateHandleX => ResizeHandleWidth;
 
         public int TranslateHandleY => ResizeHandleHeight;
-
-        public ResizableRegionViewModel()
-        {
-            Region = new Rect(200, 200, 100, 100);
-        }
     }
 }

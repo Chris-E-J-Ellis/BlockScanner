@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Opacity=".3"
+        Opacity=".4"
         AllowsTransparency="True"
         Background="Black"
         Title="CaptureWindow"

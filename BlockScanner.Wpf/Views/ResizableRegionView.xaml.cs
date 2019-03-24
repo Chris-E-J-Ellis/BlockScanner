@@ -1,8 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace BlockScanner.Wpf.Views
 {
@@ -56,8 +55,6 @@ namespace BlockScanner.Wpf.Views
                     newRegionHeight = newRegionHeight + e.VerticalChange;
                     break;
                 case nameof(MainRegion):
-                    newRegionX = newThumbX;
-                    newRegionY = newThumbY;
                     break;
                 default:
                     break;
@@ -97,7 +94,31 @@ namespace BlockScanner.Wpf.Views
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
+            AddScreenCorrectionTransforms();
+
             UpdateHandlePositions();
+        }
+
+        private void AddScreenCorrectionTransforms()
+        {
+            // A slight hack to deal with Windows and variable window borders. 
+            // I'm not sure this will work well, or at all with DPI scaling.
+            var screenDelta =  MainRegion.PointToScreen(new Point(0,0));
+            var screenCorrectionTransform = new TranslateTransform(-screenDelta.X, -screenDelta.Y);
+
+            MainRegion.RenderTransform = new TransformGroup() { Children = new TransformCollection() { screenCorrectionTransform } };
+            AddTransform(ThumbBL, screenCorrectionTransform);
+            AddTransform(ThumbBR, screenCorrectionTransform);
+            AddTransform(ThumbTL, screenCorrectionTransform);
+            AddTransform(ThumbTR, screenCorrectionTransform);
+        }
+
+        private void AddTransform(Thumb item, TranslateTransform transform)
+        {
+            var transformGroup = new TransformGroup();
+            transformGroup.Children.Add(item.RenderTransform);
+            transformGroup.Children.Add(transform);
+            item.RenderTransform = transformGroup;
         }
     }
 }
